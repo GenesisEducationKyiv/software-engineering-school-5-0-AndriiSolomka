@@ -1,5 +1,6 @@
+import * as fs from 'fs';
 import { Injectable, LoggerService } from '@nestjs/common';
-import pino, { Logger } from 'pino';
+import pino, { Logger, multistream } from 'pino';
 import { LOG_FILE_PATH } from '../utils/logger/logger.config';
 
 @Injectable()
@@ -7,15 +8,21 @@ export class AppLogger implements LoggerService {
   private readonly logger: Logger;
 
   constructor() {
+    const streams = [
+      { stream: fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' }) },
+      {
+        stream: pino.transport({
+          target: 'pino-pretty',
+          options: { colorize: true },
+        }) as NodeJS.WritableStream,
+      },
+    ];
     this.logger = pino(
       {
         level: 'info',
-        transport: {
-          target: 'pino-pretty',
-          options: { colorize: true },
-        },
+        timestamp: pino.stdTimeFunctions.isoTime,
       },
-      pino.destination(LOG_FILE_PATH),
+      multistream(streams),
     );
   }
 
