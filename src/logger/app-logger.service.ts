@@ -1,30 +1,10 @@
-import * as fs from 'fs';
 import { Injectable, LoggerService } from '@nestjs/common';
-import pino, { Logger, multistream } from 'pino';
-import { LOG_FILE_PATH } from '../utils/logger/logger.config';
+import { APP_LOG_FILE_PATH } from '../utils/logger/logger.config';
+import { createPinoLogger } from 'src/utils/logger/logger.factory';
 
 @Injectable()
 export class AppLoggerService implements LoggerService {
-  private readonly logger: Logger;
-
-  constructor() {
-    const streams = [
-      { stream: fs.createWriteStream(LOG_FILE_PATH, { flags: 'a' }) },
-      {
-        stream: pino.transport({
-          target: 'pino-pretty',
-          options: { colorize: true },
-        }) as NodeJS.WritableStream,
-      },
-    ];
-    this.logger = pino(
-      {
-        level: 'info',
-        timestamp: pino.stdTimeFunctions.isoTime,
-      },
-      multistream(streams),
-    );
-  }
+  private readonly logger = createPinoLogger(APP_LOG_FILE_PATH, true);
 
   log(message: string, ...args: unknown[]): void {
     this.logger.info(message, ...args);

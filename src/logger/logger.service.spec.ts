@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppLoggerService } from './logger.service';
+import { AppLoggerService } from './app-logger.service';
 
 describe('AppLogger', () => {
   let logger: AppLoggerService;
