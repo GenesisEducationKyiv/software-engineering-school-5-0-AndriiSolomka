@@ -1,0 +1,9 @@
+import * as path from 'path';
+import * as fs from 'fs';
+
+export const LOG_DIR = path.resolve(process.cwd(), 'logs');
+export const LOG_FILE_PATH = path.join(LOG_DIR, 'app.log');
+
+export function ensureLogDirExists(): void {
+  if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
+}
