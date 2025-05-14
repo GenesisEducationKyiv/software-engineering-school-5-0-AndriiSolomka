@@ -5,6 +5,7 @@ import { WeatherModule } from './weather/weather.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { WeatherApiClientModule } from './weather-api-client/weather-api-client.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { WeatherApiClientModule } from './weather-api-client/weather-api-client.
       isGlobal: true,
     }),
     WeatherApiClientModule,
+    RedisModule,
   ],
   controllers: [],
   providers: [],
