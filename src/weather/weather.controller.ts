@@ -7,7 +7,7 @@ export class WeatherController {
   constructor(private readonly weatherService: WeatherService) {}
 
   @Get()
-  findAll(@Query() query: WeatherQueryDto) {
-    return this.weatherService.getWeather(query.city);
+  async getWeather(@Query() query: WeatherQueryDto) {
+    return await this.weatherService.getWeather(query.city);
   }
 }

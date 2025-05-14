@@ -13,8 +13,8 @@ export class WeatherApiClientService {
     private readonly fetch: FetchService,
     private readonly config: ConfigService,
   ) {
-    this.apiKey = this.config.get<string>('WEATHER_API_KEY') || '';
-    this.baseUrl = this.config.get<string>('BASE_WEATHER_URL') || '';
+    this.apiKey = this.config.get<string>('WEATHER_API_KEY', '');
+    this.baseUrl = this.config.get<string>('BASE_WEATHER_URL', '');
   }
 
   async getCityWeather(city: string): Promise<WeatherApiResponse> {

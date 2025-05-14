@@ -14,17 +14,17 @@ export class WeatherService {
     const cached = await this.cache.get(city);
     if (cached) return cached;
 
-    const data = await this.client.getCityWeather(city);
+    const apiResponse = await this.client.getCityWeather(city);
 
     const {
       temp_c: temperature,
       humidity,
       condition: { text: description },
-    } = data.current;
+    } = apiResponse.current;
 
-    const result = { temperature, humidity, description };
+    const weatherData = { temperature, humidity, description };
 
-    await this.cache.set(city, result);
-    return result;
+    await this.cache.set(city, weatherData);
+    return weatherData;
   }
 }
