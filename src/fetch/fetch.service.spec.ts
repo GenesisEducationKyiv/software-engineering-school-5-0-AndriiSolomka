@@ -43,7 +43,7 @@ describe('FetchService', () => {
 
     await expect(service.get(url)).rejects.toThrowError(
       new HttpException(
-        `Failed to fetch data from ${url}: Bad Request`,
+        `Failed to fetch data: Bad Request`,
         HttpStatus.BAD_GATEWAY,
       ),
     );

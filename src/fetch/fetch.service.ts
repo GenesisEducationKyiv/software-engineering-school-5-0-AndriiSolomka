@@ -7,7 +7,7 @@ export class FetchService {
 
     if (!response.ok) {
       throw new HttpException(
-        `Failed to fetch data from ${url}: ${response.statusText}`,
+        `Failed to fetch data: ${response.statusText}`,
         HttpStatus.BAD_GATEWAY,
       );
     }

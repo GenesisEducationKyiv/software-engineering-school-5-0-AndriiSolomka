@@ -4,7 +4,7 @@ import pino, { Logger, multistream } from 'pino';
 import { LOG_FILE_PATH } from '../utils/logger/logger.config';
 
 @Injectable()
-export class AppLogger implements LoggerService {
+export class AppLoggerService implements LoggerService {
   private readonly logger: Logger;
 
   constructor() {
