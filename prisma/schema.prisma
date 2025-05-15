@@ -24,7 +24,6 @@ model Subscription {
 model Token {
   token_id        Int          @id @default(autoincrement())
   token           String       @unique
-  type            TokenType
   subscription_id Int
   subscription    Subscription @relation(fields: [subscription_id], references: [subscription_id], onDelete: Cascade)
   createdAt       DateTime     @default(now())
@@ -36,9 +35,4 @@ model Token {
 enum Frequency {
   hourly
   daily
-}
-
-enum TokenType {
-  CONFIRMATION
-  UNSUBSCRIBE
 }
