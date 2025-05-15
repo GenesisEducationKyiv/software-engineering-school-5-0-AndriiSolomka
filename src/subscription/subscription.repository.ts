@@ -7,7 +7,7 @@ import { Subscription } from '@prisma/client';
 export class SubscriptionRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(dto: CreateSubscriptionDto) {
+  async create(dto: CreateSubscriptionDto): Promise<Subscription> {
     const { email, city, frequency } = dto;
     return await this.prisma.subscription.create({
       data: { email, city, frequency },
@@ -18,13 +18,13 @@ export class SubscriptionRepository {
     return this.prisma.subscription.findFirst({ where: { email, city } });
   }
 
-  async delete(subscription_id: number) {
+  async delete(subscription_id: number): Promise<Subscription> {
     return await this.prisma.subscription.delete({
       where: { subscription_id },
     });
   }
 
-  async confirmSubscription(subscription_id: number) {
+  async confirmSubscription(subscription_id: number): Promise<Subscription> {
     return this.prisma.subscription.update({
       where: { subscription_id },
       data: { confirmed: true },
