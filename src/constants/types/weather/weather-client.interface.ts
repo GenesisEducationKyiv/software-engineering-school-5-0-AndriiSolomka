@@ -1,4 +1,4 @@
-export interface WeatherApiResponse {
+export interface IWeatherApiResponse {
   location: {
     name: string;
     region: string;
@@ -54,4 +54,14 @@ export interface WeatherApiResponse {
       'gb-defra-index': number;
     };
   };
+}
+
+export interface ILocation {
+  id: number;
+  name: string;
+  region: string;
+  country: string;
+  lat: number;
+  lon: number;
+  url: string;
 }

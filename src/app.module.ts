@@ -13,10 +13,14 @@ import { WeatherApiClientModule } from './weather-api-client/weather-api-client.
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { HttpLoggerService } from './logger/http-logger.service';
-import { WeatherCashModule } from './weather-cash/weather-cash.module';
+import { CashModule } from './cash/cash.module';
 import { TokenModule } from './token/token.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
+import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
+import { ScheduleModule } from './schedule/schedule.module';
+import { NotificationModule } from './notification/notification.module';
+import { CityModule } from './city/city.module';
 
 @Module({
   imports: [
@@ -28,13 +32,17 @@ import { SubscribeModule } from './subscribe/subscribe.module';
     RedisModule,
     EmailModule,
     LoggerModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
-    WeatherCashModule,
+    CashModule,
     TokenModule,
     SubscriptionModule,
     SubscribeModule,
+    ScheduleModule,
+    NotificationModule,
+    ScheduleNestModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    CityModule,
   ],
   controllers: [],
   providers: [],
