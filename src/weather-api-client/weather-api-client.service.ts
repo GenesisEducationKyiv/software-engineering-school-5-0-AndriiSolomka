@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { WeatherApiResponse } from '../constants/types/weather.interface';
+import { WeatherApiResponse } from '../constants/types/weather/weather-client.interface';
 import { FetchService } from '../fetch/fetch.service';
 import { WEATHER_API } from 'src/constants/enums/weather-api/weather-api.enum';
 

@@ -11,13 +11,13 @@ export class TokenService {
     return randomByteGenerator();
   }
 
-  async createToken(subscription_id: number): Promise<string> {
+  async create(subscription_id: number): Promise<string> {
     const token = this.generateToken();
     await this.tokenRepo.create(token, subscription_id);
     return token;
   }
 
-  async getTokenEntity(token: string): Promise<Token> {
+  async getEntity(token: string): Promise<Token> {
     const tokenEntity = await this.tokenRepo.findOne(token);
     if (!tokenEntity) throw new NotFoundException('Invalid token');
     return tokenEntity;

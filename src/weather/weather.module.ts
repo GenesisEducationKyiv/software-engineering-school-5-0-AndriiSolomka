@@ -9,5 +9,6 @@ import { WeatherCashModule } from 'src/weather-cash/weather-cash.module';
   imports: [WeatherApiClientModule, RedisModule, WeatherCashModule],
   controllers: [WeatherController],
   providers: [WeatherService],
+  exports: [WeatherService],
 })
 export class WeatherModule {}

@@ -13,23 +13,21 @@ export class SubscribeService {
   ) {}
 
   async subscribe(dto: CreateSubscriptionDto): Promise<{ message: string }> {
-    const subscription = await this.subService.createSubscription(dto);
-    const token = await this.tokenService.createToken(
-      subscription.subscription_id,
-    );
+    const subscription = await this.subService.create(dto);
+    const token = await this.tokenService.create(subscription.subscription_id);
     await this.mailService.sendConfirmationEmail(dto.email, token);
     return { message: 'Confirmation email sent' };
   }
 
   async confirm(token: string): Promise<{ message: string }> {
-    const tokenEntity = await this.tokenService.getTokenEntity(token);
-    await this.subService.confirmSubscription(tokenEntity.subscription_id);
+    const tokenEntity = await this.tokenService.getEntity(token);
+    await this.subService.confirm(tokenEntity.subscription_id);
     return { message: 'Subscription confirmed' };
   }
 
   async unsubscribe(token: string): Promise<{ message: string }> {
-    const tokenEntity = await this.tokenService.getTokenEntity(token);
-    await this.subService.deleteSubscription(tokenEntity.subscription_id);
+    const tokenEntity = await this.tokenService.getEntity(token);
+    await this.subService.delete(tokenEntity.subscription_id);
     return { message: 'Subscription delete successfully' };
   }
 }
