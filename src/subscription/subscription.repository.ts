@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateSubscriptionDto } from '../subscribe/dto/create-subscribe.dto';
-import { Subscription } from '@prisma/client';
+import { Frequency, Subscription } from '@prisma/client';
+import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
 @Injectable()
 export class SubscriptionRepository {
@@ -24,10 +25,23 @@ export class SubscriptionRepository {
     });
   }
 
-  async confirmSubscription(subscription_id: number): Promise<Subscription> {
+  async confirm(subscription_id: number): Promise<Subscription> {
     return this.prisma.subscription.update({
       where: { subscription_id },
       data: { confirmed: true },
+    });
+  }
+
+  async findUnconfirmed(): Promise<Subscription[]> {
+    return this.prisma.subscription.findMany({
+      where: { confirmed: false },
+    });
+  }
+
+  async findByFrequency(frequency: Frequency): Promise<SubWithTokens[]> {
+    return this.prisma.subscription.findMany({
+      where: { confirmed: true, frequency },
+      include: { tokens: true },
     });
   }
 }
