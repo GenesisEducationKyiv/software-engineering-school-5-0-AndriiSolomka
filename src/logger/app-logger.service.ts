@@ -1,23 +1,10 @@
 import { Injectable, LoggerService } from '@nestjs/common';
-import pino, { Logger } from 'pino';
-import { LOG_FILE_PATH } from '../utils/logger/logger.config';
+import { APP_LOG_FILE_PATH } from '../utils/logger/logger.config';
+import { createPinoLogger } from 'src/utils/logger/logger.factory';
 
 @Injectable()
-export class AppLogger implements LoggerService {
-  private readonly logger: Logger;
-
-  constructor() {
-    this.logger = pino(
-      {
-        level: 'info',
-        transport: {
-          target: 'pino-pretty',
-          options: { colorize: true },
-        },
-      },
-      pino.destination(LOG_FILE_PATH),
-    );
-  }
+export class AppLoggerService implements LoggerService {
+  private readonly logger = createPinoLogger(APP_LOG_FILE_PATH, true);
 
   log(message: string, ...args: unknown[]): void {
     this.logger.info(message, ...args);
