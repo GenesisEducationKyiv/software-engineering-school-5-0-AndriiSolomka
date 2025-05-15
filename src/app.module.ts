@@ -17,6 +17,9 @@ import { WeatherCashModule } from './weather-cash/weather-cash.module';
 import { TokenModule } from './token/token.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
+import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
+import { ScheduleModule } from './schedule/schedule.module';
+import { NotificationModule } from './notification/notification.module';
 
 @Module({
   imports: [
@@ -28,13 +31,16 @@ import { SubscribeModule } from './subscribe/subscribe.module';
     RedisModule,
     EmailModule,
     LoggerModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
     WeatherCashModule,
     TokenModule,
     SubscriptionModule,
     SubscribeModule,
+    ScheduleModule,
+    NotificationModule,
+    ScheduleNestModule.forRoot(),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [],
   providers: [],
