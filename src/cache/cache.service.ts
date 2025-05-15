@@ -5,7 +5,7 @@ import { WEATHER_CASH } from 'src/constants/enums/redis/weather-cash.enum';
 import { ILocation } from 'src/constants/types/weather/weather-client.interface';
 
 @Injectable()
-export class CashService {
+export class CacheService {
   constructor(private readonly redis: RedisRepository) {}
 
   private async getFromCache<T>(city: string): Promise<T | null> {

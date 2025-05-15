@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { WeatherApiClientService } from 'src/weather-api-client/weather-api-client.service';
-import { CashService } from 'src/cash/cash.service';
+import { CacheService } from 'src/cache/cache.service';
 
 @Injectable()
 export class CityService {
   constructor(
     private readonly client: WeatherApiClientService,
-    private readonly cache: CashService,
+    private readonly cache: CacheService,
   ) {}
 
   async checkCityLocations(city: string) {

@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { CashService } from './cash.service';
+import { CacheService } from './cache.service';
 import { RedisModule } from 'src/redis/redis.module';
 
 @Module({
   imports: [RedisModule],
-  providers: [CashService],
-  exports: [CashService],
+  providers: [CacheService],
+  exports: [CacheService],
 })
-export class CashModule {}
+export class CacheModule {}

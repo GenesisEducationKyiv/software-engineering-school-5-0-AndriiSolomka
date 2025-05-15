@@ -13,7 +13,7 @@ import { WeatherApiClientModule } from './weather-api-client/weather-api-client.
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { HttpLoggerService } from './logger/http-logger.service';
-import { CashModule } from './cash/cash.module';
+import { CacheModule } from './cache/cache.module';
 import { TokenModule } from './token/token.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
@@ -32,7 +32,7 @@ import { CityModule } from './city/city.module';
     RedisModule,
     EmailModule,
     LoggerModule,
-    CashModule,
+    CacheModule,
     TokenModule,
     SubscriptionModule,
     SubscribeModule,
