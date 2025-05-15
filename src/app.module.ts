@@ -13,7 +13,6 @@ import { WeatherApiClientModule } from './weather-api-client/weather-api-client.
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { HttpLoggerService } from './logger/http-logger.service';
-import { CacheModule } from './cache/cache.module';
 import { TokenModule } from './token/token.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { SubscribeModule } from './subscribe/subscribe.module';
@@ -21,6 +20,9 @@ import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 import { ScheduleModule } from './schedule/schedule.module';
 import { NotificationModule } from './notification/notification.module';
 import { CityModule } from './city/city.module';
+import { CacheWeatherModule } from './cache-weather/cache-weather.module';
+import { CacheCityService } from './cache-city/cache-city.service';
+import { CacheCityModule } from './cache-city/cache-city.module';
 
 @Module({
   imports: [
@@ -32,7 +34,6 @@ import { CityModule } from './city/city.module';
     RedisModule,
     EmailModule,
     LoggerModule,
-    CacheModule,
     TokenModule,
     SubscriptionModule,
     SubscribeModule,
@@ -43,9 +44,11 @@ import { CityModule } from './city/city.module';
       isGlobal: true,
     }),
     CityModule,
+    CacheWeatherModule,
+    CacheCityModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [CacheCityService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
