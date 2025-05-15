@@ -1,27 +1,20 @@
-import { Injectable } from '@nestjs/common';
-import { CreateSubscribeDto } from './dto/create-subscribe.dto';
-import { EmailService } from '../email/email.service';
+import { ConflictException, Injectable } from '@nestjs/common';
+import { SubscriptionRepository } from './subscription.repository';
+import { CreateSubscriptionDto } from 'src/subscribe/dto/create-subscribe.dto';
 
 @Injectable()
 export class SubscriptionService {
-  constructor(private readonly emailService: EmailService) {}
+  constructor(private readonly subscriptionRepo: SubscriptionRepository) {}
 
-  async subscribe(dto: CreateSubscribeDto) {
-    // Здесь должна быть проверка: если email уже подписан на этот город — выбросить ошибку
-    // Например:
-    // const exists = await this.prisma.subscription.findUnique({ where: { email_city: { email: dto.email, city: dto.city } } });
-    // if (exists) throw new ConflictException('Email already subscribed');
+  async createSubscriptionDto(dto: CreateSubscriptionDto) {
+    const { email, city, frequency } = dto;
+    const subscription = await this.subscriptionRepo.findOne(email, city);
+    if (subscription) throw new ConflictException('Email already exists');
 
-    // Здесь должна быть логика создания подписки в базе (и генерация токена подтверждения)
-    // const subscription = await this.prisma.subscription.create({ data: { ...dto, confirmed: false } });
-    // const token = ... // сгенерировать токен
+    return await this.subscriptionRepo.create({ email, city, frequency });
+  }
 
-    // Отправляем письмо с подтверждением (здесь token должен быть реальным)
-    await this.emailService.sendConfirmationEmail(
-      dto.email,
-      'confirmation-token',
-    );
-
-    return { message: 'Subscription successful. Confirmation email sent.' };
+  async confirmSubscription(subscription_id: number) {
+    return await this.subscriptionRepo.confirmSubscription(subscription_id);
   }
 }

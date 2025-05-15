@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
+import { SubscriptionRepository } from './subscription.repository';
+import { PrismaModule } from 'src/prisma/prisma.module';
 import { SubscriptionService } from './subscription.service';
-import { SubscriptionController } from './subscription.controller';
+import { TokenModule } from 'src/token/token.module';
 import { EmailModule } from 'src/email/email.module';
 
 @Module({
-  imports: [EmailModule],
-  providers: [SubscriptionService],
-  controllers: [SubscriptionController],
+  imports: [PrismaModule, TokenModule, EmailModule],
+  providers: [SubscriptionRepository, SubscriptionService],
+  exports: [SubscriptionService],
 })
 export class SubscriptionModule {}
