@@ -3,6 +3,6 @@ export enum NOTIFICATION {
   DAILY = '0 0 0 * * *',
 }
 
-//TEST = '5 * * * * *',
+//TEST = '1 * * * * *',
 // HOURLY = '0 0 * * * *',
 // DAILY = '0 0 0 * * *',
