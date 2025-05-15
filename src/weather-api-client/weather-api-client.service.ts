@@ -2,8 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { WeatherApiResponse } from '../constants/types/weather.interface';
 import { FetchService } from '../fetch/fetch.service';
-
-const WEATHER_CURRENT_PATH = '/current.json';
+import { WEATHER_API } from 'src/constants/enums/weather-api/weather-api.enum';
 
 @Injectable()
 export class WeatherApiClientService {
@@ -18,7 +17,7 @@ export class WeatherApiClientService {
   }
 
   async getCityWeather(city: string): Promise<WeatherApiResponse> {
-    const url = `${this.baseUrl}${WEATHER_CURRENT_PATH}?key=${this.apiKey}&q=${city}&aqi=yes`;
+    const url = `${this.baseUrl}${WEATHER_API.PATH}?key=${this.apiKey}&q=${city}&aqi=yes`;
     return await this.fetch.get<WeatherApiResponse>(url);
   }
 }
