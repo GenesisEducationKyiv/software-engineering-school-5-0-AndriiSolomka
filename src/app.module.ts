@@ -14,6 +14,7 @@ import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { HttpLoggerService } from './logger/http-logger.service';
+import { WeatherCashModule } from './weather-cash/weather-cash.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { HttpLoggerService } from './logger/http-logger.service';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    WeatherCashModule,
   ],
   controllers: [],
   providers: [],

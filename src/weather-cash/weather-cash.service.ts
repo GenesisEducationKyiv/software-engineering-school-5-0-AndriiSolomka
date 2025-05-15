@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { RedisRepository } from '../redis/redis.repository';
-import { CreateWeatherDto } from './dto/create-weather.dto';
+import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 
 const WEATHER_PREFIX = 'weather';
 const WEATHER_TTL = 600;
 
 @Injectable()
-export class WeatherCacheService {
+export class WeatherCashService {
   constructor(private readonly redis: RedisRepository) {}
 
   async get(city: string): Promise<CreateWeatherDto | null> {

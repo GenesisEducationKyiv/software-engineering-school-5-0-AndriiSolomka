@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { WeatherApiClientService } from '../weather-api-client/weather-api-client.service';
-import { WeatherCacheService } from './weather-cache.service';
 import { CreateWeatherDto } from './dto/create-weather.dto';
+import { WeatherCashService } from 'src/weather-cash/weather-cash.service';
 
 @Injectable()
 export class WeatherService {
   constructor(
     private readonly client: WeatherApiClientService,
-    private readonly cache: WeatherCacheService,
+    private readonly cache: WeatherCashService,
   ) {}
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
