@@ -3,7 +3,6 @@ import { CreateSubscriptionDto } from './dto/create-subscribe.dto';
 import { TokenService } from 'src/token/token.service';
 import { EmailService } from 'src/email/email.service';
 import { SubscriptionService } from 'src/subscription/subscription.service';
-import { WeatherService } from 'src/weather/weather.service';
 
 @Injectable()
 export class SubscribeService {
@@ -11,7 +10,6 @@ export class SubscribeService {
     private readonly subService: SubscriptionService,
     private readonly tokenService: TokenService,
     private readonly mailService: EmailService,
-    private readonly weatherService: WeatherService,
   ) {}
 
   async subscribe(dto: CreateSubscriptionDto): Promise<{ message: string }> {
@@ -24,12 +22,12 @@ export class SubscribeService {
   async confirm(token: string): Promise<{ message: string }> {
     const tokenEntity = await this.tokenService.getEntity(token);
     await this.subService.confirm(tokenEntity.subscription_id);
-    return { message: 'Subscription confirmed' };
+    return { message: 'Subscription confirmed successfully' };
   }
 
   async unsubscribe(token: string): Promise<{ message: string }> {
     const tokenEntity = await this.tokenService.getEntity(token);
     await this.subService.delete(tokenEntity.subscription_id);
-    return { message: 'Subscription delete successfully' };
+    return { message: 'Subscription deleted successfully' };
   }
 }

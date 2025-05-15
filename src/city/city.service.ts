@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { WeatherApiClientService } from 'src/weather-api-client/weather-api-client.service';
-import { CashService } from 'src/cash/cash.service';
+import { ILocation } from 'src/constants/types/weather/weather-client.interface';
+import { CacheCityService } from 'src/cache-city/cache-city.service';
 
 @Injectable()
 export class CityService {
   constructor(
     private readonly client: WeatherApiClientService,
-    private readonly cache: CashService,
+    private readonly cache: CacheCityService,
   ) {}
 
-  async checkCityLocations(city: string) {
-    const cached = await this.cache.getCity(city);
+  async checkCityLocations(city: string): Promise<ILocation[]> {
+    const cached = await this.cache.get(city);
     if (cached) return cached;
     const location = await this.client.findCity(city);
-    await this.cache.setCity(city, location);
+    await this.cache.set(city, location);
 
     return location;
   }
