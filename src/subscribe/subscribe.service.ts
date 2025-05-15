@@ -3,6 +3,7 @@ import { CreateSubscriptionDto } from './dto/create-subscribe.dto';
 import { TokenService } from 'src/token/token.service';
 import { EmailService } from 'src/email/email.service';
 import { SubscriptionService } from 'src/subscription/subscription.service';
+import { WeatherService } from 'src/weather/weather.service';
 
 @Injectable()
 export class SubscribeService {
@@ -10,6 +11,7 @@ export class SubscribeService {
     private readonly subService: SubscriptionService,
     private readonly tokenService: TokenService,
     private readonly mailService: EmailService,
+    private readonly weatherService: WeatherService,
   ) {}
 
   async subscribe(dto: CreateSubscriptionDto): Promise<{ message: string }> {

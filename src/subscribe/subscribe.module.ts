@@ -5,9 +5,18 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { TokenModule } from 'src/token/token.module';
 import { EmailModule } from 'src/email/email.module';
 import { SubscriptionModule } from 'src/subscription/subscription.module';
+import { WeatherModule } from 'src/weather/weather.module';
+import { CityModule } from 'src/city/city.module';
 
 @Module({
-  imports: [PrismaModule, TokenModule, EmailModule, SubscriptionModule],
+  imports: [
+    PrismaModule,
+    TokenModule,
+    EmailModule,
+    SubscriptionModule,
+    WeatherModule,
+    CityModule,
+  ],
   providers: [SubscribeService],
   controllers: [SubscribeController],
 })

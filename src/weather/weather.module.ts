@@ -3,10 +3,10 @@ import { WeatherService } from './weather.service';
 import { WeatherController } from './weather.controller';
 import { WeatherApiClientModule } from 'src/weather-api-client/weather-api-client.module';
 import { RedisModule } from 'src/redis/redis.module';
-import { WeatherCashModule } from 'src/weather-cash/weather-cash.module';
+import { CashModule } from 'src/cash/cash.module';
 
 @Module({
-  imports: [WeatherApiClientModule, RedisModule, WeatherCashModule],
+  imports: [WeatherApiClientModule, RedisModule, CashModule],
   controllers: [WeatherController],
   providers: [WeatherService],
   exports: [WeatherService],
