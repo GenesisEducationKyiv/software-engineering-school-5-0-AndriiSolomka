@@ -1,0 +1,3 @@
+export enum SCHEDULE {
+  DELETE_UNCONFIRMED_SUBSCRIPTIONS = '5 * * * * *',
+}
