@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { SubscribeService } from './subscribe.service';
 import { CreateSubscriptionDto } from './dto/create-subscribe.dto';
