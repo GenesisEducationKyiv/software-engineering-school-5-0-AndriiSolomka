@@ -22,7 +22,7 @@ import { CityModule } from './city/city.module';
 import { CacheWeatherModule } from './cache-weather/cache-weather.module';
 import { CacheCityService } from './cache-city/cache-city.service';
 import { CacheCityModule } from './cache-city/cache-city.module';
-import { HttpLoggerMiddleware } from './common/middleware/http-logger.middleware';
+import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 
 @Module({
   imports: [
