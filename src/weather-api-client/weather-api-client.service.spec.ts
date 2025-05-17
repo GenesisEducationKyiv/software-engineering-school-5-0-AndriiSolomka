@@ -28,12 +28,22 @@ describe('WeatherApiClientService', () => {
     fetchService = module.get<FetchService>(FetchService);
   });
 
-  it('should call fetch.get with correct URL', async () => {
+  it('should call fetch.get with correct URL for getCityWeather', async () => {
     (fetchService.get as jest.Mock).mockResolvedValueOnce({ some: 'data' });
     await service.getCityWeather('London');
     const getSpy = jest.spyOn(fetchService, 'get');
     expect(getSpy).toHaveBeenCalledWith(
       'http://test-url//current.json?key=test-key&q=London&aqi=yes',
+    );
+  });
+
+  it('should call fetch.get with correct URL for findCity', async () => {
+    const mockCity = 'Paris';
+    (fetchService.get as jest.Mock).mockResolvedValueOnce([{ name: 'Paris' }]);
+    await service.findCity(mockCity);
+    const getSpy = jest.spyOn(fetchService, 'get');
+    expect(getSpy).toHaveBeenCalledWith(
+      'http://test-url//search.json?key=test-key&q=Paris&aqi=yes',
     );
   });
 });

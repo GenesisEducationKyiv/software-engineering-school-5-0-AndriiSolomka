@@ -25,20 +25,11 @@ export class SubscriptionService {
     return await this.subscriptionRepo.delete(subscription_id);
   }
 
-  async getUnconfirmed(): Promise<Subscription[]> {
-    return await this.subscriptionRepo.findUnconfirmed();
-  }
-
   async getByFrequency(frequency: Frequency): Promise<SubWithTokens[]> {
     return this.subscriptionRepo.findByFrequency(frequency);
   }
 
-  async deleteUnconfirmed(): Promise<void> {
-    const unconfirmed = await this.getUnconfirmed();
-    if (unconfirmed.length) {
-      for (const subscription of unconfirmed) {
-        await this.delete(subscription.subscription_id);
-      }
-    }
+  async deleteUnconfirmed(): Promise<{ count: number }> {
+    return await this.subscriptionRepo.deleteUnconfirmed();
   }
 }
