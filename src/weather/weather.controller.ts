@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Query, UsePipes } from '@nestjs/common';
 import { WeatherService } from './weather.service';
 import { WeatherQueryDto } from './dto/weather-query.dto';
