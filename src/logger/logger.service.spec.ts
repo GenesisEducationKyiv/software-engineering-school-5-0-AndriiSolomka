@@ -1,53 +1,51 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { AppLoggerService } from './app-logger.service';
+import { createPinoLogger } from 'src/utils/logger/logger.factory';
 
-describe('AppLogger', () => {
-  let logger: AppLoggerService;
+jest.mock('src/utils/logger/logger.factory');
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AppLoggerService],
-    }).compile();
+describe('AppLoggerService', () => {
+  let service: AppLoggerService;
+  const mockLogger = {
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+    trace: jest.fn(),
+  };
 
-    logger = module.get<AppLoggerService>(AppLoggerService);
+  beforeEach(() => {
+    (createPinoLogger as jest.Mock).mockReturnValue(mockLogger);
+    service = new AppLoggerService();
+    jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
-    expect(logger).toBeDefined();
+  it('should call logger.info on log()', () => {
+    service.log('Log message', { extra: 'data' });
+    expect(mockLogger.info).toHaveBeenCalledWith('Log message', {
+      extra: 'data',
+    });
   });
 
-  it('should log info', () => {
-    const spy = jest.spyOn(logger['logger'], 'info').mockImplementation();
-    logger.log('test info');
-    expect(spy).toHaveBeenCalledWith('test info');
-    spy.mockRestore();
+  it('should call logger.error on error()', () => {
+    service.error('Error message', new Error('Oops'));
+    expect(mockLogger.error).toHaveBeenCalledWith(
+      'Error message',
+      new Error('Oops'),
+    );
   });
 
-  it('should log error', () => {
-    const spy = jest.spyOn(logger['logger'], 'error').mockImplementation();
-    logger.error('test error');
-    expect(spy).toHaveBeenCalledWith('test error');
-    spy.mockRestore();
+  it('should call logger.warn on warn()', () => {
+    service.warn('Warning message');
+    expect(mockLogger.warn).toHaveBeenCalledWith('Warning message');
   });
 
-  it('should log warn', () => {
-    const spy = jest.spyOn(logger['logger'], 'warn').mockImplementation();
-    logger.warn('test warn');
-    expect(spy).toHaveBeenCalledWith('test warn');
-    spy.mockRestore();
+  it('should call logger.debug on debug()', () => {
+    service.debug('Debug message');
+    expect(mockLogger.debug).toHaveBeenCalledWith('Debug message');
   });
 
-  it('should log debug', () => {
-    const spy = jest.spyOn(logger['logger'], 'debug').mockImplementation();
-    logger.debug('test debug');
-    expect(spy).toHaveBeenCalledWith('test debug');
-    spy.mockRestore();
-  });
-
-  it('should log verbose (trace)', () => {
-    const spy = jest.spyOn(logger['logger'], 'trace').mockImplementation();
-    logger.verbose('test verbose');
-    expect(spy).toHaveBeenCalledWith('test verbose');
-    spy.mockRestore();
+  it('should call logger.trace on verbose()', () => {
+    service.verbose('Verbose message');
+    expect(mockLogger.trace).toHaveBeenCalledWith('Verbose message');
   });
 });

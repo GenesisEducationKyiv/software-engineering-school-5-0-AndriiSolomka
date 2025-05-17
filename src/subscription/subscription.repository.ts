@@ -16,7 +16,7 @@ export class SubscriptionRepository {
   }
 
   async findOne(email: string, city: string): Promise<Subscription | null> {
-    return this.prisma.subscription.findFirst({ where: { email, city } });
+    return await this.prisma.subscription.findFirst({ where: { email, city } });
   }
 
   async delete(subscription_id: number): Promise<Subscription> {
@@ -26,22 +26,22 @@ export class SubscriptionRepository {
   }
 
   async confirm(subscription_id: number): Promise<Subscription> {
-    return this.prisma.subscription.update({
+    return await this.prisma.subscription.update({
       where: { subscription_id },
       data: { confirmed: true },
     });
   }
 
-  async findUnconfirmed(): Promise<Subscription[]> {
-    return this.prisma.subscription.findMany({
-      where: { confirmed: false },
+  async findByFrequency(frequency: Frequency): Promise<SubWithTokens[]> {
+    return await this.prisma.subscription.findMany({
+      where: { confirmed: true, frequency },
+      include: { tokens: true },
     });
   }
 
-  async findByFrequency(frequency: Frequency): Promise<SubWithTokens[]> {
-    return this.prisma.subscription.findMany({
-      where: { confirmed: true, frequency },
-      include: { tokens: true },
+  async deleteUnconfirmed(): Promise<{ count: number }> {
+    return await this.prisma.subscription.deleteMany({
+      where: { confirmed: false },
     });
   }
 }
