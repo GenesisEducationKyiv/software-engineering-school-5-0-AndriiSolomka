@@ -20,43 +20,43 @@ jobs:
         run: npm run lint
 
   test:
-  runs-on: ubuntu-latest
-  services:
-    postgres:
-      image: postgres:17-alpine
-      env:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: test
-        POSTGRES_DB: test
-      ports:
-        - 5432:5432
-      options: >-
-        --health-cmd="pg_isready -d test"
-        --health-interval=5s
-        --health-timeout=5s
-        --health-retries=10
-    redis:
-      image: redis:7-alpine
-      ports:
-        - 6379:6379
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test
+          POSTGRES_DB: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -d test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=10
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
 
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Create .env.test file
-      working-directory: ./weather_api
-      run: |
-        echo "${{ secrets.ENV_TEST_CONTENTS }}" > .env.test
+      - name: Create .env.test file
+        working-directory: ./weather_api
+        run: |
+          echo "${{ secrets.ENV_TEST_CONTENTS }}" > .env.test
 
-    - name: Build and run unit tests
-      run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-unit
+      - name: Build and run unit tests
+        run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-unit
 
-    - name: Build and run integration tests
-      run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-integration
+      - name: Build and run integration tests
+        run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-integration
 
-    - name: Build and run e2e tests
-      run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-e2e
+      - name: Build and run e2e tests
+        run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-e2e
 
-    - name: Cleanup
-      run: docker compose -f docker-compose.test.yml down -v
+      - name: Cleanup
+        run: docker compose -f docker-compose.test.yml down -v
