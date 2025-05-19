@@ -1,16 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { SubscribeService } from './subscribe.service';
-import { CreateSubscriptionDto } from './dto/create-subscribe.dto';
+import { SubscriptionHandlersService } from './subscription-handlers.service';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
 import { ApiDocs } from 'src/common/decorators/doc.decorator';
 import { SUBSCRIBE_DOCS } from 'src/constants/documentation/subscribe/controller';
 
 @Controller()
-export class SubscribeController {
-  constructor(private readonly subscribeService: SubscribeService) {}
+export class SubscriptionHandlersController {
+  constructor(private readonly subscribeService: SubscriptionHandlersService) {}
 
-  //@UsePipes(CityValidationPipe)
+  @UsePipes(CityValidationPipe)
   @ApiDocs(SUBSCRIBE_DOCS.subscribe)
   @Post('subscribe')
   async subscribe(@Body() dto: CreateSubscriptionDto) {

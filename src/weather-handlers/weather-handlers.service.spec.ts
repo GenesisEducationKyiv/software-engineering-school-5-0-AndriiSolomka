@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WeatherService } from './weather.service';
-import { WeatherApiClientService } from '../weather-api-client/weather-api-client.service';
+import { WeatherHandlersService } from './weather-handlers.service';
+import { WeatherDomainService } from '../weather-domain/weather-domain.service';
 import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
 import { CreateWeatherDto } from './dto/create-weather.dto';
 
 describe('WeatherService', () => {
-  let service: WeatherService;
+  let service: WeatherHandlersService;
 
   const mockApiResponse = {
     current: {
@@ -35,18 +35,18 @@ describe('WeatherService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        WeatherService,
+        WeatherHandlersService,
         {
-          provide: WeatherApiClientService,
+          provide: WeatherDomainService,
           useValue: mockWeatherApiClientService,
         },
         { provide: CacheWeatherService, useValue: mockCacheService },
       ],
     }).compile();
 
-    service = module.get<WeatherService>(WeatherService);
-    service = module.get<WeatherService>(WeatherService);
-    service = module.get<WeatherService>(WeatherService);
+    service = module.get<WeatherHandlersService>(WeatherHandlersService);
+    service = module.get<WeatherHandlersService>(WeatherHandlersService);
+    service = module.get<WeatherHandlersService>(WeatherHandlersService);
     jest.clearAllMocks();
   });
 

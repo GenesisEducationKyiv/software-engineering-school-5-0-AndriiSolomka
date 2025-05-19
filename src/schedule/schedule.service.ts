@@ -4,12 +4,12 @@ import { Frequency } from '@prisma/client';
 import { NOTIFICATION } from 'src/constants/enums/schedule/notification.enum';
 import { SCHEDULE } from 'src/constants/enums/schedule/unconfirmed.enum';
 import { NotificationService } from 'src/notification/notification.service';
-import { SubscriptionService } from 'src/subscription/subscription.service';
+import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
 
 @Injectable()
 export class ScheduleService {
   constructor(
-    private readonly subService: SubscriptionService,
+    private readonly subService: SubscriptionDomainService,
     private readonly notificationService: NotificationService,
   ) {}
 

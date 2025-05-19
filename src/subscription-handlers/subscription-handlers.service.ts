@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSubscriptionDto } from './dto/create-subscribe.dto';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { TokenService } from 'src/token/token.service';
 import { EmailService } from 'src/email/email.service';
-import { SubscriptionService } from 'src/subscription/subscription.service';
+import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
 
 @Injectable()
-export class SubscribeService {
+export class SubscriptionHandlersService {
   constructor(
-    private readonly subService: SubscriptionService,
+    private readonly subService: SubscriptionDomainService,
     private readonly tokenService: TokenService,
     private readonly mailService: EmailService,
   ) {}

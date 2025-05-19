@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { NotificationService } from './notification.service';
-import { SubscriptionService } from 'src/subscription/subscription.service';
-import { WeatherService } from 'src/weather/weather.service';
+import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
+import { WeatherHandlersService } from 'src/weather-handlers/weather-handlers.service';
 import { EmailService } from 'src/email/email.service';
 import { Frequency } from '@prisma/client';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
-import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
+import { CreateWeatherDto } from 'src/weather-handlers/dto/create-weather.dto';
 /* eslint-disable @typescript-eslint/unbound-method */
 
 jest.mock('src/utils/notification/notification-builder', () => ({
@@ -14,8 +14,8 @@ jest.mock('src/utils/notification/notification-builder', () => ({
 
 describe('NotificationService', () => {
   let notificationService: NotificationService;
-  let subscriptionService: jest.Mocked<SubscriptionService>;
-  let weatherService: jest.Mocked<WeatherService>;
+  let subscriptionService: jest.Mocked<SubscriptionDomainService>;
+  let weatherService: jest.Mocked<WeatherHandlersService>;
   let emailService: jest.Mocked<EmailService>;
 
   beforeEach(async () => {
@@ -23,13 +23,13 @@ describe('NotificationService', () => {
       providers: [
         NotificationService,
         {
-          provide: SubscriptionService,
+          provide: SubscriptionDomainService,
           useValue: {
             getByFrequency: jest.fn(),
           },
         },
         {
-          provide: WeatherService,
+          provide: WeatherHandlersService,
           useValue: {
             getWeather: jest.fn(),
           },
@@ -44,8 +44,8 @@ describe('NotificationService', () => {
     }).compile();
 
     notificationService = module.get<NotificationService>(NotificationService);
-    subscriptionService = module.get(SubscriptionService);
-    weatherService = module.get(WeatherService);
+    subscriptionService = module.get(SubscriptionDomainService);
+    weatherService = module.get(WeatherHandlersService);
     emailService = module.get(EmailService);
   });
 

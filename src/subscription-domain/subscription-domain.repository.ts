@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateSubscriptionDto } from '../subscribe/dto/create-subscribe.dto';
+import { CreateSubscriptionDto } from '../subscription-handlers/dto/create-subscription.dto';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 

@@ -8,7 +8,7 @@ import { FetchService } from '../fetch/fetch.service';
 import { WEATHER_API_PATH } from 'src/constants/enums/weather-api/weather-api.enum';
 
 @Injectable()
-export class WeatherApiClientService {
+export class WeatherDomainService {
   private apiKey: string;
   private baseUrl: string;
   constructor(

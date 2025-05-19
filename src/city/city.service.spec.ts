@@ -1,12 +1,12 @@
 import { CityService } from './city.service';
-import { WeatherApiClientService } from 'src/weather-api-client/weather-api-client.service';
+import { WeatherDomainService } from 'src/weather-domain/weather-domain.service';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
 import { ILocation } from 'src/constants/types/weather/weather-client.interface';
 /* eslint-disable @typescript-eslint/unbound-method */
 
 describe('CityService', () => {
   let service: CityService;
-  let client: WeatherApiClientService;
+  let client: WeatherDomainService;
   let cache: CacheCityService;
 
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('CityService', () => {
       config: {},
       getCityWeather: jest.fn(),
       findCity: jest.fn(),
-    } as unknown as WeatherApiClientService;
+    } as unknown as WeatherDomainService;
 
     cache = {
       get: jest.fn(),

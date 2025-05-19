@@ -1,24 +1,12 @@
 volumes:
   postgres-db:
-  redis-data: 
+  redis-data:
+
+networks:
+  dev-network:
+    driver: bridge
 
 services:
-  node-server:
-    container_name: node-server
-    build:
-      context: .
-      dockerfile: Dockerfile
-    env_file:
-      - .env
-    ports:
-      - 3000:3000
-    depends_on:
-      db:
-        condition: service_healthy
-    volumes:
-      - ./src:/home/node/app/src
-    command: sh -c "npx prisma migrate deploy --schema ./prisma/schema.prisma && npm run start:dev"
-
   db:
     container_name: db
     image: postgres:17-alpine
@@ -40,6 +28,9 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    networks:
+      - dev-network
+
   redis:
     container_name: redis
     image: redis:7-alpine
@@ -49,9 +40,32 @@ services:
     volumes:
       - redis-data:/data
     command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
+    networks:
+      - dev-network
+
   adminer:
     container_name: adminer
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - dev-network
+
+  node-server:
+    container_name: node-server
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src:/home/node/app/src
+    command: sh -c "npx prisma migrate deploy --schema ./prisma/schema.prisma && npm run start:dev"
+    networks:
+      - dev-network
