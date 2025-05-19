@@ -20,6 +20,17 @@ async function bootstrap(): Promise<void> {
     .addTag(SWAGGER.TAG)
     .build();
 
+  app.enableCors({
+    origin: [
+      'http://localhost:5500',
+      'http://127.0.0.1:5500',
+      'http://localhost:3000',
+    ],
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: '*',
+  });
+
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
 
