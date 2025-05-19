@@ -7,6 +7,7 @@ A robust, production-ready NestJS backend with a minimalistic frontend for weath
 
 ## ✨ Features
 
+- **Production-ready deployment:** Backend API is served to the public via an Nginx reverse proxy on Google Cloud
 - **REST API** for weather and subscription management
 - **Swagger/OpenAPI** documentation ([`/api/docs`](http://35.207.129.35:3000/api/docs))
 - **Email notifications** for weather updates
@@ -15,9 +16,10 @@ A robust, production-ready NestJS backend with a minimalistic frontend for weath
 - **PostgreSQL** and **Redis** support (via Docker)
 - **Prisma ORM** for type-safe DB access
 - **Comprehensive testing:** unit, integration, e2e (with Docker Compose)
-- **Frontend:** simple HTML/JS client in `/public` ([Live Demo](https://weather-api-application-tau.vercel.app/))
+- **Frontend:** simple HTML/JS client in `/public` ([Live Demo](https://35.207.129.35))
 - **CI/CD:** ready for GitHub Actions
 
+---
 ---
 
 ## 🌐 Live API on Google Cloud
