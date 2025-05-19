@@ -20,7 +20,6 @@ A robust, production-ready NestJS backend with a minimalistic frontend for weath
 - **CI/CD:** ready for GitHub Actions
 
 ---
----
 
 ## 🌐 Live API on Google Cloud
 
@@ -31,6 +30,10 @@ http://35.207.129.35:3000/api
 ```
 
 You can use this endpoint for all API requests from your frontend or API client.
+
+> ⚠️ **Warning:**  
+> If you use the solution deployed on my server, please note that I did **not purchase a domain**—SSL certificates are bound directly to the IP address.  
+> Because of this, clicking links may not always work in your browser; you may need to **copy the link and open it in a new tab** for proper access.
 
 ---
 
@@ -68,7 +71,7 @@ docker compose -f docker-compose.dev.yml up --build
 
 - Backend: [http://localhost:3000](http://localhost:3000)
 - Swagger: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-- Frontend: serve `/public` via a static server or use ([Live Demo](https://weather-api-application-tau.vercel.app/))
+- Frontend: serve `/public` via a static server or use https://35.207.129.35
 
 **Stop and remove containers:**
 
@@ -135,8 +138,6 @@ npm run start:dev
 ## 📚 API Documentation
 
 - **Swagger UI:** [http://35.207.129.35:3000/api/docs](http://35.207.129.35:3000/api/docs)
-- **Production API:** [http://35.207.129.35:3000/api/docs](http://35.207.129.35:3000/api/docs)
-
 ### Main Endpoints
 
 | Method | Endpoint                | Description                                 |
