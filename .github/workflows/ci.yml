@@ -45,7 +45,6 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env.test file
-        working-directory: ./weather_api
         run: |
           echo "${{ secrets.ENV_TEST_CONTENTS }}" > .env.test
 
