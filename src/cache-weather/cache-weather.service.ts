@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WEATHER_CASH } from 'src/constants/enums/redis/weather-cash.enum';
 import { RedisRepository } from 'src/redis/redis.repository';
-import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
+import { CreateWeatherDto } from 'src/weather-handlers/dto/create-weather.dto';
 
 @Injectable()
 export class CacheWeatherService {

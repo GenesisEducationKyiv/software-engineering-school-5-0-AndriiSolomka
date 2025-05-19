@@ -3,7 +3,7 @@ import {
   EMAIL_SUBJECTS,
 } from 'src/constants/email-templates/weather-email.template';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
-import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
+import { CreateWeatherDto } from 'src/weather-handlers/dto/create-weather.dto';
 
 export function buildWeatherNotification(
   sub: SubWithTokens,

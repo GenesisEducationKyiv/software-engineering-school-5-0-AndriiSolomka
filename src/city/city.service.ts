@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { WeatherApiClientService } from 'src/weather-api-client/weather-api-client.service';
+import { WeatherDomainService } from 'src/weather-domain/weather-domain.service';
 import { ILocation } from 'src/constants/types/weather/weather-client.interface';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
 
 @Injectable()
 export class CityService {
   constructor(
-    private readonly client: WeatherApiClientService,
+    private readonly client: WeatherDomainService,
     private readonly cache: CacheCityService,
   ) {}
 

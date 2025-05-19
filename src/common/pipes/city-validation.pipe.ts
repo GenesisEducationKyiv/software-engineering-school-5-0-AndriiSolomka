@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
 import { CityService } from 'src/city/city.service';
-import { CreateSubscriptionDto } from 'src/subscribe/dto/create-subscribe.dto';
+import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 
 @Injectable()
 export class CityValidationPipe implements PipeTransform {

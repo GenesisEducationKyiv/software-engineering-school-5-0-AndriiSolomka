@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/unbound-method */
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException } from '@nestjs/common';
-import { SubscriptionService } from './subscription.service';
-import { SubscriptionRepository } from './subscription.repository';
+import { SubscriptionDomainService } from './subscription-domain.service';
+import { SubscriptionRepository } from './subscription-domain.repository';
 import { Frequency, Subscription } from '@prisma/client';
-import { CreateSubscriptionDto } from 'src/subscribe/dto/create-subscribe.dto';
+import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
 describe('SubscriptionService', () => {
-  let service: SubscriptionService;
+  let service: SubscriptionDomainService;
   let repository: jest.Mocked<SubscriptionRepository>;
 
   const mockSubscription: Subscription = {
@@ -29,7 +29,7 @@ describe('SubscriptionService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        SubscriptionService,
+        SubscriptionDomainService,
         {
           provide: SubscriptionRepository,
           useValue: {
@@ -45,7 +45,7 @@ describe('SubscriptionService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionService>(SubscriptionService);
+    service = module.get<SubscriptionDomainService>(SubscriptionDomainService);
     repository = module.get(SubscriptionRepository);
 
     jest.clearAllMocks();

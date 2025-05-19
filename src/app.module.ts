@@ -6,15 +6,15 @@ import {
 } from '@nestjs/common';
 import { LoggerModule } from './logger/logger.module';
 import { FetchModule } from './fetch/fetch.module';
-import { WeatherModule } from './weather/weather.module';
+import { WeatherHandlersModule } from './weather-handlers/weather-handlers.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
-import { WeatherApiClientModule } from './weather-api-client/weather-api-client.module';
+import { WeatherDomainModule } from './weather-domain/weather-domain.module';
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { TokenModule } from './token/token.module';
-import { SubscriptionModule } from './subscription/subscription.module';
-import { SubscribeModule } from './subscribe/subscribe.module';
+import { SubscriptionDomainModule } from './subscription-domain/subscription-domain.module';
+import { SubscriptionHandlersModule } from './subscription-handlers/subscription-handlers.module';
 import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 import { ScheduleModule } from './schedule/schedule.module';
 import { NotificationModule } from './notification/notification.module';
@@ -28,15 +28,15 @@ import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middlewar
   imports: [
     LoggerModule,
     FetchModule,
-    WeatherModule,
+    WeatherHandlersModule,
     PrismaModule,
-    WeatherApiClientModule,
+    WeatherDomainModule,
     RedisModule,
     EmailModule,
     LoggerModule,
     TokenModule,
-    SubscriptionModule,
-    SubscribeModule,
+    SubscriptionDomainModule,
+    SubscriptionHandlersModule,
     ScheduleModule,
     NotificationModule,
     ScheduleNestModule.forRoot(),

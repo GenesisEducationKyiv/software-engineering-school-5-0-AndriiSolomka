@@ -1,11 +1,11 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { SubscriptionRepository } from './subscription.repository';
-import { CreateSubscriptionDto } from 'src/subscribe/dto/create-subscribe.dto';
+import { SubscriptionRepository } from './subscription-domain.repository';
+import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
 @Injectable()
-export class SubscriptionService {
+export class SubscriptionDomainService {
   constructor(private readonly subscriptionRepo: SubscriptionRepository) {}
 
   async create(dto: CreateSubscriptionDto): Promise<Subscription> {
