@@ -37,7 +37,7 @@ You can use this endpoint for all API requests from your frontend or API client.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/Weather_API_Application.git
+git clone https://github.com/AndriiSolomka/Weather_API_Application.git
 cd Weather_API_Application
 ```
 
