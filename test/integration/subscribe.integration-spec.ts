@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { SubscribeService } from 'src/subscribe/subscribe.service';
-import { CreateSubscriptionDto } from 'src/subscribe/dto/create-subscribe.dto';
+import { SubscriptionHandlersService } from 'src/subscription-handlers/subscription-handlers.service';
+import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 import { Frequency } from '@prisma/client';
 import { AppModule } from 'src/app.module';
 
 describe('SubscribeService (integration, real DB)', () => {
   let prisma: PrismaService;
-  let subscribeService: SubscribeService;
+  let subscribeService: SubscriptionHandlersService;
   let module: TestingModule;
 
   beforeAll(async () => {
@@ -16,7 +16,7 @@ describe('SubscribeService (integration, real DB)', () => {
     }).compile();
 
     prisma = module.get(PrismaService);
-    subscribeService = module.get(SubscribeService);
+    subscribeService = module.get(SubscriptionHandlersService);
   });
 
   afterAll(async () => {

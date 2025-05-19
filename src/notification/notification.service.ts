@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { Frequency } from '@prisma/client';
-import { SubscriptionService } from 'src/subscription/subscription.service';
-import { WeatherService } from 'src/weather/weather.service';
+import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
+import { WeatherHandlersService } from 'src/weather-handlers/weather-handlers.service';
 import { EmailService } from 'src/email/email.service';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
 
 @Injectable()
 export class NotificationService {
   constructor(
-    private readonly subService: SubscriptionService,
-    private readonly weatherService: WeatherService,
+    private readonly subService: SubscriptionDomainService,
+    private readonly weatherService: WeatherHandlersService,
     private readonly emailService: EmailService,
   ) {}
 

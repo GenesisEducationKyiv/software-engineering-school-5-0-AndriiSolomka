@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { NotificationService } from './notification.service';
-import { SubscriptionModule } from 'src/subscription/subscription.module';
+import { SubscriptionDomainModule } from 'src/subscription-domain/subscription-domain.module';
 import { EmailModule } from 'src/email/email.module';
-import { WeatherModule } from 'src/weather/weather.module';
+import { WeatherHandlersModule } from 'src/weather-handlers/weather-handlers.module';
 
 @Module({
-  imports: [SubscriptionModule, EmailModule, WeatherModule],
+  imports: [SubscriptionDomainModule, EmailModule, WeatherHandlersModule],
   providers: [NotificationService],
   exports: [NotificationService],
 })

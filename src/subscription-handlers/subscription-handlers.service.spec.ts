@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SubscribeService } from './subscribe.service';
-import { SubscriptionService } from 'src/subscription/subscription.service';
+import { SubscriptionHandlersService } from './subscription-handlers.service';
+import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
 import { TokenService } from 'src/token/token.service';
 import { EmailService } from 'src/email/email.service';
-import { CreateSubscriptionDto } from './dto/create-subscribe.dto';
+import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { Frequency, Subscription, Token } from '@prisma/client';
 /* eslint-disable @typescript-eslint/unbound-method */
 
 describe('SubscribeService', () => {
-  let service: SubscribeService;
-  let subService: jest.Mocked<SubscriptionService>;
+  let service: SubscriptionHandlersService;
+  let subService: jest.Mocked<SubscriptionDomainService>;
   let tokenService: jest.Mocked<TokenService>;
   let mailService: jest.Mocked<EmailService>;
 
@@ -34,9 +34,9 @@ describe('SubscribeService', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        SubscribeService,
+        SubscriptionHandlersService,
         {
-          provide: SubscriptionService,
+          provide: SubscriptionDomainService,
           useValue: {
             create: jest.fn(),
             confirm: jest.fn(),
@@ -59,8 +59,10 @@ describe('SubscribeService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscribeService>(SubscribeService);
-    subService = module.get(SubscriptionService);
+    service = module.get<SubscriptionHandlersService>(
+      SubscriptionHandlersService,
+    );
+    subService = module.get(SubscriptionDomainService);
     tokenService = module.get(TokenService);
     mailService = module.get(EmailService);
   });
