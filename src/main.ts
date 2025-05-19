@@ -25,6 +25,7 @@ async function bootstrap(): Promise<void> {
       'http://localhost:5500',
       'http://127.0.0.1:5500',
       'http://localhost:3000',
+      'https://weather-api-application-tau.vercel.app',
     ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
