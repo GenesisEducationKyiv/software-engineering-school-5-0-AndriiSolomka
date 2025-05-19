@@ -62,10 +62,6 @@ To ensure the project runs smoothly, you need to provide the following secrets i
 - `WEATHER_API_KEY` – Obtain your free Weather API key from [weatherapi.com](https://www.weatherapi.com/).
 - `EMAIL_USER` and `EMAIL_PASSWORD` – Use your Gmail address and generate an [App Password](https://support.google.com/accounts/answer/185833) for secure email sending with Nodemailer.
 
-Be sure to fill in all required variables for database, Redis, and any other integrations as described in the `.env.example` file.
-
-Edit values as needed (Postgres, Redis, email, API keys).
-
 ---
 
 ### 3. Local Development (with Docker)
