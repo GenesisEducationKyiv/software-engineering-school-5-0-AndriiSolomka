@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Controller, Get, Query, UsePipes } from '@nestjs/common';
 import { WeatherService } from './weather.service';
 import { WeatherQueryDto } from './dto/weather-query.dto';
@@ -10,7 +9,7 @@ import { WEATHER_DOCS } from 'src/constants/documentation/weather/controller';
 export class WeatherController {
   constructor(private readonly weatherService: WeatherService) {}
 
-  //@UsePipes(CityValidationPipe)
+  @UsePipes(CityValidationPipe)
   @ApiDocs(WEATHER_DOCS.getWeather)
   @Get()
   async getWeather(@Query() query: WeatherQueryDto) {
