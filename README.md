@@ -8,15 +8,27 @@ A robust, production-ready NestJS backend with a minimalistic frontend for weath
 ## ✨ Features
 
 - **REST API** for weather and subscription management
-- **Swagger/OpenAPI** documentation ([`/api/docs`](http://localhost:3000/api/docs))
+- **Swagger/OpenAPI** documentation ([`/api/docs`](http://35.207.129.35:3000/api/docs))
 - **Email notifications** for weather updates
 - **Subscription confirmation** and unsubscribe via email token
 - **⏳ Auto-cleanup:** Unconfirmed subscriptions are deleted after 5 minutes
 - **PostgreSQL** and **Redis** support (via Docker)
 - **Prisma ORM** for type-safe DB access
 - **Comprehensive testing:** unit, integration, e2e (with Docker Compose)
-- **Frontend:** simple HTML/JS client in `/public` ([`weather-api-application`](https://weather-api-application-tau.vercel.app/))
+- **Frontend:** simple HTML/JS client in `/public` ([Live Demo](https://weather-api-application-tau.vercel.app/))
 - **CI/CD:** ready for GitHub Actions
+
+---
+
+## 🌐 Live API on Google Cloud
+
+The backend API is deployed on **Google Cloud** and available at:
+
+```
+http://35.207.129.35:3000/api
+```
+
+You can use this endpoint for all API requests from your frontend or API client.
 
 ---
 
@@ -54,7 +66,7 @@ docker compose -f docker-compose.dev.yml up --build
 
 - Backend: [http://localhost:3000](http://localhost:3000)
 - Swagger: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
-- Frontend: serve `/public` via a static server or use ([`weather-api-application`](https://weather-api-application-tau.vercel.app/))
+- Frontend: serve `/public` via a static server or use ([Live Demo](https://weather-api-application-tau.vercel.app/))
 
 **Stop and remove containers:**
 
@@ -120,7 +132,9 @@ npm run start:dev
 
 ## 📚 API Documentation
 
-- **Swagger UI:** [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- **Swagger UI:** [http://35.207.129.35:3000/api/docs](http://35.207.129.35:3000/api/docs)
+- **Production API:** [http://35.207.129.35:3000/api/docs](http://35.207.129.35:3000/api/docs)
+
 ### Main Endpoints
 
 | Method | Endpoint                | Description                                 |
@@ -158,7 +172,6 @@ npm run start:dev
 
 ---
 
-
 ## 🤖 CI/CD
 
 - **Workflow:** `.github/workflows/ci.yml`
@@ -173,4 +186,4 @@ npm run start:dev
 
 ---
 
-> Built with ❤️
+> Built with ❤️ using NestJS, Prisma, PostgreSQL, Redis, Docker, and deployed on Google Cloud.
