@@ -2,9 +2,10 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
+import { Server } from 'http';
 
 describe('Weather (e2e)', () => {
-  let app: INestApplication;
+  let app: INestApplication<Server>;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
