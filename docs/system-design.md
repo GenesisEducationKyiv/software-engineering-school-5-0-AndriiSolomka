@@ -127,22 +127,30 @@ Horizontal scaling via Docker.
 
 **PostgreSQL Schema:**
 
-- **Table:** `subscription`
-  - `subscription_id` (int, primary key, auto-increment)
-  - `email` (string) — User's email
-  - `city` (string) — City for subscription
-  - `frequency` (enum: hourly, daily) — Update frequency
-  - `confirmed` (boolean, default: false) — Subscription confirmation status
-  - `createdAt` (timestamp, default: now()) — Record creation time
-  - `updatedAt` (timestamp, auto-updated) — Record update time
-  - **Unique Constraint:** email + city (to prevent duplicate subscriptions)
+| Column           | Type                    | Constraints                          |
+|------------------|-------------------------|--------------------------------------|
+| `subscription_id`| `SERIAL`                | Primary key                          |
+| `email`          | `TEXT`                  | Not null, unique with `city`         |
+| `city`           | `TEXT`                  | Not null                             |
+| `frequency`      | `ENUM('hourly','daily')`| Not null                             |
+| `confirmed`      | `BOOLEAN`               | Default: false                       |
+| `created_at`     | `TIMESTAMP`             | Default: now()                       |
+| `updated_at`     | `TIMESTAMP`             | Auto-updated                         |
 
-- **Table:** `token`
-  - `token_id` (int, primary key, auto-increment)
-  - `token` (string) — Unique token for confirmation or unsubscription
-  - `subscription_id` (int, foreign key to subscription.subscription_id)
-  - `createdAt` (timestamp, default: now()) — Token creation time
-  - `expiresAt` (timestamp, nullable) — Token expiration time
+> Unique constraint: (`email`, `city`)
+
+---
+
+#### Table: `token`
+
+| Column           | Type        | Constraints                            |
+|------------------|-------------|----------------------------------------|
+| `token_id`       | `SERIAL`    | Primary key                            |
+| `token`          | `TEXT`      | Unique, not null                       |
+| `subscription_id`| `INTEGER`   | Foreign key to `subscription` (CASCADE)|
+| `created_at`     | `TIMESTAMP` | Default: now()                         |
+| `expires_at`     | `TIMESTAMP` | Optional                               |
+
 
 **Redis Keys:**
 - `weather:{city}`: Cached weather data (TTL: 5 minutes)
