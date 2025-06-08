@@ -1,4 +1,4 @@
-# ADR-001: Choosing Node.js as the Main Platform
+# ADR-001: Choosing the Main Backend Platform
 
 **Status:** Accepted  
 **Date:** 2025-06-08  
@@ -41,14 +41,14 @@ We needed to choose a platform for developing the backend of the weather subscri
 
 ## Decision
 
-**Node.js** was chosen as the main backend platform.
+After evaluating the available options, **Node.js** was chosen as the main backend platform. The decision was based on the team's strong experience with Node.js, its large ecosystem, and the ability to quickly develop and scale modern REST APIs. Node.js also provides access to a wide range of libraries and tools, which speeds up development and testing. 
 
 ---
 
 ## Consequences
 
 **Positive:**  
-- Fast development with a modern stack
+- Fast development with a modern stack  
 - Easy scaling and integration with other services  
 - Many ready-to-use libraries for integrations and testing
 
@@ -57,7 +57,7 @@ We needed to choose a platform for developing the backend of the weather subscri
 
 ---
 
-# ADR-002: Choosing NestJS as the Main Framework
+# ADR-002: Choosing the Main Backend Framework
 
 **Status:** Accepted  
 **Date:** 2025-06-08  
@@ -125,7 +125,7 @@ To develop the backend of the weather subscription service on Node.js, we needed
 
 ---
 
-# ADR-003: Choosing PostgreSQL as the Main Database
+# ADR-003: Choosing the Main Database
 
 **Status:** Accepted  
 **Date:** 2025-06-08  
@@ -165,7 +165,7 @@ We needed to choose a database for storing users, subscriptions, notification hi
 
 ## Decision
 
-**PostgreSQL** was chosen as the main database.
+After evaluating the options, **PostgreSQL** was chosen as the main database. The decision was based on its reliability, strong consistency, powerful query capabilities, and readiness for production workloads. While MongoDB and SQLite have their advantages, PostgreSQL best fits the requirements for data integrity and scalability.
 
 ---
 
@@ -183,7 +183,7 @@ We needed to choose a database for storing users, subscriptions, notification hi
 
 ---
 
-# ADR-004: Choosing Redis for Weather Data Caching
+# ADR-004: Choosing the Weather Data Caching Solution
 
 **Status:** Accepted  
 **Date:** 2025-06-08  
@@ -223,7 +223,7 @@ We needed to quickly cache weather data to reduce load on external APIs and spee
 
 ## Decision
 
-**Redis** was chosen for weather data caching.
+After evaluating the options, **Redis** was chosen for weather data caching. The decision was based on its high performance, support for TTL, and readiness for horizontal scaling, which are essential for handling frequent weather data requests efficiently.
 
 ---
 
@@ -240,7 +240,7 @@ We needed to quickly cache weather data to reduce load on external APIs and spee
 
 ---
 
-# ADR-005: Choosing Google Cloud Platform for Deployment
+# ADR-005: Choosing the Cloud Platform for Deployment
 
 **Status:** Accepted  
 **Date:** 2025-06-08  
@@ -280,7 +280,7 @@ We needed to choose a cloud platform for deploying the service, considering CI/C
 
 ## Decision
 
-**Google Cloud Platform** was chosen for deployment and hosting.
+After evaluating the options, **Google Cloud Platform** was chosen for deployment and hosting. The decision was based on its seamless integration with Docker and Kubernetes, powerful managed services, and straightforward CI/CD setup. While AWS and Azure offer strong alternatives, GCP best matches the team's experience and project needs for rapid deployment and scalability.
 
 ---
 
