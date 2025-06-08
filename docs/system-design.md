@@ -155,10 +155,10 @@ Horizontal scaling via Docker.
 - **Secret Management:** Store `WEATHER_API_KEY`, `EMAIL_USER`, and `EMAIL_PASSWORD` in `.env` and GitHub Secrets.
   - Support unsubscription via `GET /api/unsubscribe/{token}`
   - Delete unconfirmed subscriptions after 5 minutes.
-- **TLS:** Deployed on Google Cloud with SSL tied to IP (35.207.129.35).
-Vulnerabilities:
-SQL Injection: Prevented by Prisma ORM.
-XSS: No user-generated HTML.
+- **TLS:** Deployed on Google Cloud with SSL tied to a domain name (e.g., `weatherapi.example.com`)
+- **Vulnerabilities**:
+  - SQL Injection: Prevented by Prisma ORM.
+  - XSS: No user-generated HTML.
 
 ---
 
