@@ -3,7 +3,7 @@ export interface SwaggerParameter {
   name: string;
   description?: string;
   required?: boolean;
-  type?: any;
+  type?: 'string' | 'number' | 'boolean' | 'integer' | 'array' | 'object';
   enum?: string[];
 }
 
