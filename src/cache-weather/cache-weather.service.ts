@@ -1,27 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { WEATHER_CASH } from 'src/constants/enums/redis/weather-cash.enum';
-import { RedisRepository } from 'src/redis/redis.repository';
+import { Injectable, Inject } from '@nestjs/common';
+import { CacheService } from 'src/cache/cache.service';
 import { CreateWeatherDto } from 'src/weather-handlers/dto/create-weather.dto';
+import {
+  ICacheRepository,
+  ICacheRepositoryToken,
+} from 'src/cache/interfaces/cache-repository.interface';
+import { WEATHER_CASH } from 'src/constants/enums/cache/weather-cash.enum';
 
 @Injectable()
-export class CacheWeatherService {
-  constructor(private readonly redis: RedisRepository) {}
-
-  private getKey(city: string): string {
-    return `weather:${city.toLowerCase()}`;
-  }
-
-  async get(city: string): Promise<CreateWeatherDto | null> {
-    const data = await this.redis.get(WEATHER_CASH.PREFIX, this.getKey(city));
-    return data ? (JSON.parse(data) as CreateWeatherDto) : null;
-  }
-
-  async set(city: string, value: CreateWeatherDto): Promise<void> {
-    await this.redis.setWithExpiry(
-      WEATHER_CASH.PREFIX,
-      this.getKey(city),
-      JSON.stringify(value),
-      WEATHER_CASH.TTL,
-    );
+export class CacheWeatherService extends CacheService<CreateWeatherDto> {
+  constructor(
+    @Inject(ICacheRepositoryToken)
+    cache: ICacheRepository,
+  ) {
+    super(cache, WEATHER_CASH.PREFIX, WEATHER_CASH.TTL);
   }
 }
