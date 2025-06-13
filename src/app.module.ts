@@ -24,6 +24,7 @@ import { CacheCityService } from './cache-city/cache-city.service';
 import { CacheCityModule } from './cache-city/cache-city.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheModule } from './cache/cache.module';
+import { NodemailerModule } from './nodemailer/nodemailer.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { CacheModule } from './cache/cache.module';
     CacheWeatherModule,
     CacheCityModule,
     CacheModule,
+    NodemailerModule,
   ],
   controllers: [],
   providers: [CacheCityService],
