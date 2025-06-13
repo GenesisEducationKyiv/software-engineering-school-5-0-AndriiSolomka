@@ -1,11 +1,17 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { TokenRepository } from './token.repository';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { randomByteGenerator } from 'src/utils/generator/random-generator';
 import { Token } from '@prisma/client';
+import {
+  ITokenRepository,
+  ITokenRepositoryToken,
+} from './interfaces/token-repository.interface';
 
 @Injectable()
 export class TokenService {
-  constructor(private readonly tokenRepo: TokenRepository) {}
+  constructor(
+    @Inject(ITokenRepositoryToken)
+    private readonly tokenRepo: ITokenRepository,
+  ) {}
 
   async create(subscription_id: number): Promise<string> {
     const token = randomByteGenerator();
