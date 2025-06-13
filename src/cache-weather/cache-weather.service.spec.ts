@@ -1,7 +1,7 @@
+import { WEATHER_CASH } from 'src/constants/enums/cache/weather-cash.enum';
 import { CacheWeatherService } from './cache-weather.service';
 import { RedisRepository } from 'src/redis/redis.repository';
 import { CreateWeatherDto } from 'src/weather-handlers/dto/create-weather.dto';
-import { WEATHER_CASH } from 'src/constants/enums/redis/weather-cash.enum';
 /* eslint-disable @typescript-eslint/unbound-method */
 
 describe('CacheWeatherService', () => {

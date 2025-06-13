@@ -1,7 +1,7 @@
 import { CacheCityService } from './cache-city.service';
 import { RedisRepository } from 'src/redis/redis.repository';
 import { ILocation } from 'src/constants/types/weather/weather-client.interface';
-import { WEATHER_CASH } from 'src/constants/enums/redis/weather-cash.enum';
+import { CITY_CASH } from 'src/constants/enums/cache/city-cash.enum';
 /* eslint-disable @typescript-eslint/unbound-method */
 
 describe('CacheCityService', () => {
@@ -35,10 +35,7 @@ describe('CacheCityService', () => {
 
     const result = await service.get(city);
 
-    expect(redis.get).toHaveBeenCalledWith(
-      WEATHER_CASH.PREFIX,
-      'location:kyiv',
-    );
+    expect(redis.get).toHaveBeenCalledWith(CITY_CASH.PREFIX, 'location:kyiv');
     expect(result).toEqual(locationData);
   });
 
@@ -48,10 +45,7 @@ describe('CacheCityService', () => {
 
     const result = await service.get(city);
 
-    expect(redis.get).toHaveBeenCalledWith(
-      WEATHER_CASH.PREFIX,
-      'location:lviv',
-    );
+    expect(redis.get).toHaveBeenCalledWith(CITY_CASH.PREFIX, 'location:lviv');
     expect(result).toBeNull();
   });
 
@@ -72,10 +66,10 @@ describe('CacheCityService', () => {
     await service.set(city, locationData);
 
     expect(redis.setWithExpiry).toHaveBeenCalledWith(
-      WEATHER_CASH.PREFIX,
+      CITY_CASH.PREFIX,
       'location:odesa',
       JSON.stringify(locationData),
-      WEATHER_CASH.TTL,
+      CITY_CASH.TTL,
     );
   });
 });
