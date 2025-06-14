@@ -15,8 +15,8 @@ export class WeatherDomainService {
     private readonly fetch: FetchService,
     private readonly config: ConfigService,
   ) {
-    this.apiKey = this.config.get<string>('WEATHER_API_KEY', '');
-    this.baseUrl = this.config.get<string>('BASE_WEATHER_URL', '');
+    this.apiKey = this.config.getOrThrow<string>('WEATHER.API_KEY');
+    this.baseUrl = this.config.getOrThrow<string>('WEATHER.BASE_URL');
   }
 
   async getCityWeather(city: string): Promise<IWeatherApiResponse> {
