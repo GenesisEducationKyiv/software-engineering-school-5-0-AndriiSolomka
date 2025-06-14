@@ -3,14 +3,14 @@ import { CacheService } from 'src/cache/cache.service';
 import { CreateWeatherDto } from 'src/weather-handlers/dto/create-weather.dto';
 import {
   CacheRepository,
-  ICacheRepositoryToken,
+  CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CacheWeatherService extends CacheService<CreateWeatherDto> {
   constructor(
-    @Inject(ICacheRepositoryToken)
+    @Inject(CacheRepositoryToken)
     cache: CacheRepository,
     private readonly config: ConfigService,
   ) {

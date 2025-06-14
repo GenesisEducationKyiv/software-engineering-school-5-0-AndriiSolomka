@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CacheRepository,
-  ICacheRepositoryToken,
+  CacheRepositoryToken,
 } from './interfaces/cache-repository.interface';
 
 @Injectable()
 export class CacheService<T> {
   constructor(
-    @Inject(ICacheRepositoryToken)
+    @Inject(CacheRepositoryToken)
     private readonly cache: CacheRepository,
     private readonly prefix: string,
     private readonly ttl: number,

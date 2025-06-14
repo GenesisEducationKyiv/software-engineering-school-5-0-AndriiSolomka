@@ -9,4 +9,4 @@ export interface CacheRepository {
   ): Promise<void>;
 }
 
-export const ICacheRepositoryToken = Symbol('ICacheRepository');
+export const CacheRepositoryToken = Symbol('ICacheRepository');
