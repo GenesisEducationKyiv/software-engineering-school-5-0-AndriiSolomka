@@ -3,13 +3,15 @@ import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
 import { AppLoggerService } from '../logger/app-logger.service';
 
+export const REDIS_CLIENT = Symbol('RedisClient');
+
 export const redisClientFactory: FactoryProvider<Redis> = {
-  provide: 'RedisClient',
+  provide: REDIS_CLIENT,
   useFactory: (configService: ConfigService, logger: AppLoggerService) => {
     try {
       const redis = new Redis({
-        host: configService.get<string>('REDIS_HOST', 'localhost'),
-        port: configService.get<number>('REDIS_PORT', 6379),
+        host: configService.getOrThrow<string>('REDIS_HOST'),
+        port: configService.getOrThrow<number>('REDIS_PORT'),
       });
 
       redis.on('error', (e) => {

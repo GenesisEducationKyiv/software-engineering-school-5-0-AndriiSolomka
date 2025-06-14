@@ -1,20 +1,32 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { SubscriptionRepository } from './subscription-domain.repository';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
+import {
+  SubscriptionRepository,
+  SubscriptionRepositoryToken,
+} from './interfaces/subscription-repository.interface';
+import type { ISubscriptionDomainService } from 'src/subscription-domain/interfaces/subscription-service.interface';
 
 @Injectable()
-export class SubscriptionDomainService {
-  constructor(private readonly subscriptionRepo: SubscriptionRepository) {}
+export class SubscriptionDomainService implements ISubscriptionDomainService {
+  constructor(
+    @Inject(SubscriptionRepositoryToken)
+    private readonly subscriptionRepo: SubscriptionRepository,
+  ) {}
 
   async create(dto: CreateSubscriptionDto): Promise<Subscription> {
     const { email, city, frequency } = dto;
+    await this.findUnique(email, city);
+    return await this.subscriptionRepo.create({ email, city, frequency });
+  }
+
+  async findUnique(email: string, city: string): Promise<Subscription | null> {
     const subscription = await this.subscriptionRepo.findOne(email, city);
     if (subscription) {
       throw new ConflictException(`Email already subscribed to ${city}`);
     }
-    return await this.subscriptionRepo.create({ email, city, frequency });
+    return subscription;
   }
 
   async confirm(subscription_id: number): Promise<Subscription> {

@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Token } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { TokenRepository } from './interfaces/token-repository.interface';
 
 @Injectable()
-export class TokenRepository {
+export class PrismaTokenRepository implements TokenRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async create(token: string, subscription_id: number): Promise<Token> {
