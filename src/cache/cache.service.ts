@@ -14,7 +14,7 @@ export class CacheService<T> {
   ) {}
 
   private getKey(key: string): string {
-    return `${this.prefix}:${key.toLowerCase()}`;
+    return key.toLowerCase();
   }
 
   async get(key: string): Promise<T | null> {
