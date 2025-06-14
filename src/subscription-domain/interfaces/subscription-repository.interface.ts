@@ -2,7 +2,7 @@ import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subs
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
-export interface ISubscriptionRepository {
+export interface SubscriptionRepository {
   create(dto: CreateSubscriptionDto): Promise<Subscription>;
   findOne(email: string, city: string): Promise<Subscription | null>;
   delete(subscription_id: number): Promise<Subscription>;
@@ -11,4 +11,4 @@ export interface ISubscriptionRepository {
   deleteUnconfirmed(): Promise<{ count: number }>;
 }
 
-export const ISubscriptionRepositoryToken = Symbol('ISubscriptionRepository');
+export const SubscriptionRepositoryToken = Symbol('ISubscriptionRepository');

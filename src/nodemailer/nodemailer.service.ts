@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { ConfigService } from '@nestjs/config';
-import { IEmailTransport } from 'src/email/interfaces/email-transport.interface';
+import { EmailTransport } from 'src/email/interfaces/email-transport.interface';
 
 @Injectable()
-export class NodemailerService implements IEmailTransport {
+export class NodemailerService implements EmailTransport {
   private transporter: nodemailer.Transporter;
   private readonly sender: string;
 

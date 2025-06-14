@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { EmailService } from './email.service';
 import { NodemailerModule } from 'src/nodemailer/nodemailer.module';
-import { IEmailTransportToken } from './interfaces/email-transport.interface';
+import { EmailTransportToken } from './interfaces/email-transport.interface';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 
 @Module({
@@ -9,7 +9,7 @@ import { NodemailerService } from 'src/nodemailer/nodemailer.service';
   providers: [
     EmailService,
     {
-      provide: IEmailTransportToken,
+      provide: EmailTransportToken,
       useClass: NodemailerService,
     },
   ],

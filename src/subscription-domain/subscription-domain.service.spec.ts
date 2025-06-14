@@ -2,14 +2,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConflictException } from '@nestjs/common';
 import { SubscriptionDomainService } from './subscription-domain.service';
-import { SubscriptionRepository } from './subscription-domain.repository';
+import { PrismaSubscriptionRepository } from './subscription-domain.repository';
 import { Frequency, Subscription } from '@prisma/client';
 import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
 describe('SubscriptionService', () => {
   let service: SubscriptionDomainService;
-  let repository: jest.Mocked<SubscriptionRepository>;
+  let repository: jest.Mocked<PrismaSubscriptionRepository>;
 
   const mockSubscription: Subscription = {
     subscription_id: 1,
@@ -31,7 +31,7 @@ describe('SubscriptionService', () => {
       providers: [
         SubscriptionDomainService,
         {
-          provide: SubscriptionRepository,
+          provide: PrismaSubscriptionRepository,
           useValue: {
             prisma: {},
             findOne: jest.fn(),
@@ -46,7 +46,7 @@ describe('SubscriptionService', () => {
     }).compile();
 
     service = module.get<SubscriptionDomainService>(SubscriptionDomainService);
-    repository = module.get(SubscriptionRepository);
+    repository = module.get(PrismaSubscriptionRepository);
 
     jest.clearAllMocks();
   });

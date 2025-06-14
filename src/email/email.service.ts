@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import {
-  IEmailTransport,
-  IEmailTransportToken,
+  EmailTransport,
+  EmailTransportToken,
 } from './interfaces/email-transport.interface';
 import { EMAIL } from 'src/constants/enums/email/email.enum';
 import { IEmailPayload } from 'src/constants/types/email/email.interface';
@@ -12,8 +12,8 @@ export class EmailService {
   private readonly confirmLink: string;
 
   constructor(
-    @Inject(IEmailTransportToken)
-    private readonly transport: IEmailTransport,
+    @Inject(EmailTransportToken)
+    private readonly transport: EmailTransport,
     private readonly config: ConfigService,
   ) {
     this.confirmLink = this.config.getOrThrow<string>('EMAIL.CONFIRM_LINK');

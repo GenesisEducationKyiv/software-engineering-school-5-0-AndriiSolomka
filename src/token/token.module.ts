@@ -1,17 +1,17 @@
 import { Module } from '@nestjs/common';
-import { TokenRepository } from './token.repository';
+import { PrismaTokenRepository } from './token.repository';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { TokenService } from './token.service';
-import { ITokenRepositoryToken } from './interfaces/token-repository.interface';
+import { TokenRepositoryToken } from './interfaces/token-repository.interface';
 
 @Module({
   imports: [PrismaModule],
   providers: [
-    TokenRepository,
+    PrismaTokenRepository,
     TokenService,
     {
-      provide: ITokenRepositoryToken,
-      useClass: TokenRepository,
+      provide: TokenRepositoryToken,
+      useClass: PrismaTokenRepository,
     },
   ],
   exports: [TokenService],

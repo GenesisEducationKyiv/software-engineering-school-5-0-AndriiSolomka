@@ -1,4 +1,4 @@
-export interface IEmailTransport {
+export interface EmailTransport {
   send(mailOptions: {
     to: string;
     subject: string;
@@ -6,4 +6,4 @@ export interface IEmailTransport {
   }): Promise<void>;
 }
 
-export const IEmailTransportToken = Symbol('IEmailTransport');
+export const EmailTransportToken = Symbol('IEmailTransport');

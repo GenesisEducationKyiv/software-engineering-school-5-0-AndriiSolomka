@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  ICacheRepository,
+  CacheRepository,
   ICacheRepositoryToken,
 } from './interfaces/cache-repository.interface';
 
@@ -8,7 +8,7 @@ import {
 export class CacheService<T> {
   constructor(
     @Inject(ICacheRepositoryToken)
-    private readonly cache: ICacheRepository,
+    private readonly cache: CacheRepository,
     private readonly prefix: string,
     private readonly ttl: number,
   ) {}

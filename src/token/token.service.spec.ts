@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TokenService } from './token.service';
-import { TokenRepository } from './token.repository';
+import { PrismaTokenRepository } from './token.repository';
 import { NotFoundException } from '@nestjs/common';
 import { Token } from '@prisma/client';
 import * as generator from 'src/utils/generator/random-generator';
@@ -17,7 +17,7 @@ describe('TokenService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TokenService,
-        { provide: TokenRepository, useValue: mockTokenRepository },
+        { provide: PrismaTokenRepository, useValue: mockTokenRepository },
       ],
     }).compile();
 

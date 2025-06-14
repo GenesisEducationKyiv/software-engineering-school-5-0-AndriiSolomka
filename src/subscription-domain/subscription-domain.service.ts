@@ -3,15 +3,15 @@ import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subs
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 import {
-  ISubscriptionRepository,
-  ISubscriptionRepositoryToken,
+  SubscriptionRepository,
+  SubscriptionRepositoryToken,
 } from './interfaces/subscription-repository.interface';
 
 @Injectable()
 export class SubscriptionDomainService {
   constructor(
-    @Inject(ISubscriptionRepositoryToken)
-    private readonly subscriptionRepo: ISubscriptionRepository,
+    @Inject(SubscriptionRepositoryToken)
+    private readonly subscriptionRepo: SubscriptionRepository,
   ) {}
 
   async create(dto: CreateSubscriptionDto): Promise<Subscription> {

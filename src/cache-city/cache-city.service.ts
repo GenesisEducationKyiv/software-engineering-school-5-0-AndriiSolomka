@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CacheService } from 'src/cache/cache.service';
 import {
-  ICacheRepository,
+  CacheRepository,
   ICacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
 import { ILocation } from 'src/constants/types/weather/weather-client.interface';
@@ -11,7 +11,7 @@ import { ILocation } from 'src/constants/types/weather/weather-client.interface'
 export class CacheCityService extends CacheService<ILocation[]> {
   constructor(
     @Inject(ICacheRepositoryToken)
-    cache: ICacheRepository,
+    cache: CacheRepository,
     private readonly config: ConfigService,
   ) {
     super(
