@@ -6,9 +6,10 @@ import {
   SubscriptionRepository,
   SubscriptionRepositoryToken,
 } from './interfaces/subscription-repository.interface';
+import type { ISubscriptionDomainService } from 'src/subscription-domain/interfaces/subscription-service.interface';
 
 @Injectable()
-export class SubscriptionDomainService {
+export class SubscriptionDomainService implements ISubscriptionDomainService {
   constructor(
     @Inject(SubscriptionRepositoryToken)
     private readonly subscriptionRepo: SubscriptionRepository,

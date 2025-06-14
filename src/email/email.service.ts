@@ -6,9 +6,10 @@ import {
 import { EMAIL } from 'src/constants/enums/email/email.enum';
 import { IEmailPayload } from 'src/constants/types/email/email.interface';
 import { ConfigService } from '@nestjs/config';
+import type { IEmailService } from 'src/email/interfaces/email-service.interface';
 
 @Injectable()
-export class EmailService {
+export class EmailService implements IEmailService {
   private readonly confirmLink: string;
 
   constructor(

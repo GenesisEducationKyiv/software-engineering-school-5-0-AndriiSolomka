@@ -1,8 +1,9 @@
 import { HttpException, Injectable } from '@nestjs/common';
+import type { IFetchService } from 'src/fetch/interfaces/fetch-service.interface';
 import { AppLoggerService } from 'src/logger/app-logger.service';
 
 @Injectable()
-export class FetchService {
+export class FetchService implements IFetchService {
   constructor(private readonly logger: AppLoggerService) {}
 
   async get<T>(url: string): Promise<T> {

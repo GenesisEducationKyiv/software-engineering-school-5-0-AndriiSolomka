@@ -5,9 +5,10 @@ import {
   TokenRepository,
   TokenRepositoryToken,
 } from './interfaces/token-repository.interface';
+import type { ITokenService } from 'src/token/interfaces/token-service.interface';
 
 @Injectable()
-export class TokenService {
+export class TokenService implements ITokenService {
   constructor(
     @Inject(TokenRepositoryToken)
     private readonly tokenRepo: TokenRepository,
