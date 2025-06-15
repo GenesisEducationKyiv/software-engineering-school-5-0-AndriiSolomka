@@ -6,9 +6,10 @@ import {
 } from '../constants/types/weather/weather-client.interface';
 import { FetchService } from '../fetch/fetch.service';
 import { WEATHER_API_PATH } from 'src/constants/enums/weather-api/weather-api.enum';
+import { IWeatherDomainService } from './interfaces/weather-domain.service.interface';
 
 @Injectable()
-export class WeatherDomainService {
+export class WeatherDomainService implements IWeatherDomainService {
   private apiKey: string;
   private baseUrl: string;
   constructor(
