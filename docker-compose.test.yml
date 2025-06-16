@@ -76,8 +76,6 @@ services:
         condition: service_healthy
       redis-test:
         condition: service_started
-    volumes:
-      - logs-data-test:/home/node/app/logs
     command: sh -c "npx prisma migrate deploy --schema ./prisma/schema.prisma && npm run test:e2e"
     networks:
       - test-network
