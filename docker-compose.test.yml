@@ -42,11 +42,6 @@ services:
       dockerfile: Dockerfile.test
     env_file:
       - .env.test
-    depends_on:
-      db-test:
-        condition: service_healthy
-      redis-test:
-        condition: service_started
     volumes:
       - logs-data-test:/home/node/app/logs
     command: npm run test:unit
@@ -73,7 +68,7 @@ services:
   test-e2e:
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: Dockerfile.playwright
     env_file:
       - .env.test
     depends_on:

@@ -1,0 +1,9 @@
+FROM mcr.microsoft.com/playwright:v1.40.0-jammy
+WORKDIR /home/node/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npx prisma generate --schema ./prisma/schema.prisma
+RUN mkdir -p /home/node/app/logs /home/node/app/test-results /home/node/app/playwright-report \
+    && chown -R node:node /home/node/app
+USER node
