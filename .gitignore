@@ -46,6 +46,7 @@ lerna-debug.log*
 .temp
 .tmp
 test-results
+playwright-report
 
 # Runtime data
 pids
