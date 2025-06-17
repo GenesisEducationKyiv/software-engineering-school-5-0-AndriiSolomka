@@ -1,6 +1,6 @@
 import { CityService } from '../city.service';
 import { ICityService } from '../interfaces/city-service.interface';
-import { ILocation } from 'src/constants/types/weather/weather-client.interface';
+import { Location } from 'src/constants/types/weather/weather-client.interface';
 import { WeatherDomainService } from 'src/weather-domain/weather-domain.service';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
 
@@ -25,7 +25,7 @@ describe('CityService', () => {
 
   it('should return cached locations if present', async () => {
     const city = 'Kyiv';
-    const cached: ILocation[] = [{ name: 'Kyiv', country: 'UA' } as ILocation];
+    const cached: Location[] = [{ name: 'Kyiv', country: 'UA' } as Location];
     cacheCityMock.get.mockResolvedValueOnce(cached);
 
     const result = await service.checkCityLocations(city);
@@ -39,7 +39,7 @@ describe('CityService', () => {
   it('should fetch locations and cache them if not cached', async () => {
     const city = 'Lviv';
     cacheCityMock.get.mockResolvedValueOnce(null);
-    const found: ILocation[] = [{ name: 'Lviv', country: 'UA' } as ILocation];
+    const found: Location[] = [{ name: 'Lviv', country: 'UA' } as Location];
     weatherDomainMock.findCity.mockResolvedValueOnce(found);
 
     const result = await service.checkCityLocations(city);

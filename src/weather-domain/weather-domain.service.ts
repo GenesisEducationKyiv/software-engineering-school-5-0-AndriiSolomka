@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-  ILocation,
-  IWeatherApiResponse,
+  Location,
+  WeatherApiResponse,
 } from '../constants/types/weather/weather-client.interface';
 import { FetchService } from '../fetch/fetch.service';
 import { WEATHER_API_PATH } from 'src/constants/enums/weather-api/weather-api.enum';
@@ -20,13 +20,13 @@ export class WeatherDomainService implements IWeatherDomainService {
     this.baseUrl = this.config.getOrThrow<string>('WEATHER.BASE_URL');
   }
 
-  async getCityWeather(city: string): Promise<IWeatherApiResponse> {
+  async getCityWeather(city: string): Promise<WeatherApiResponse> {
     const url = `${this.baseUrl}${WEATHER_API_PATH.CURRENT}?key=${this.apiKey}&q=${city}&aqi=yes`;
-    return await this.fetch.get<IWeatherApiResponse>(url);
+    return await this.fetch.get<WeatherApiResponse>(url);
   }
 
   async findCity(city: string) {
     const url = `${this.baseUrl}${WEATHER_API_PATH.SEARCH}?key=${this.apiKey}&q=${city}&aqi=yes`;
-    return await this.fetch.get<ILocation[]>(url);
+    return await this.fetch.get<Location[]>(url);
   }
 }

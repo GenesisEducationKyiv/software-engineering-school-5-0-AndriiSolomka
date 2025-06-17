@@ -1,5 +1,5 @@
-import { ILocation } from 'src/constants/types/weather/weather-client.interface';
+import { Location } from 'src/constants/types/weather/weather-client.interface';
 
 export interface ICityService {
-  checkCityLocations(city: string): Promise<ILocation[]>;
+  checkCityLocations(city: string): Promise<Location[]>;
 }
