@@ -2,7 +2,7 @@ import { WeatherHandlersService } from '../weather-handlers.service';
 import { WeatherDomainService } from 'src/weather-domain/weather-domain.service';
 import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
 import { CreateWeatherDto } from '../dto/create-weather.dto';
-import { IWeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
+import { WeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
 import { IWeatherHandlersService } from '../interfaces/weather-handlers.service.interface';
 
 describe('WeatherHandlersService', () => {
@@ -12,7 +12,7 @@ describe('WeatherHandlersService', () => {
 
   beforeEach(() => {
     clientMock = {
-      getCityWeather: jest.fn<Promise<IWeatherApiResponse>, [string]>(),
+      getCityWeather: jest.fn<Promise<WeatherApiResponse>, [string]>(),
     };
     cacheMock = {
       get: jest.fn(),
@@ -45,7 +45,7 @@ describe('WeatherHandlersService', () => {
     const city = 'Lviv';
     cacheMock.get.mockResolvedValueOnce(null);
 
-    const apiResponse: IWeatherApiResponse = {
+    const apiResponse: WeatherApiResponse = {
       location: {
         name: 'Lviv',
         region: 'Lvivska',

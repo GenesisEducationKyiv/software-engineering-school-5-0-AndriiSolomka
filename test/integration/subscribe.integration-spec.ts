@@ -1,10 +1,11 @@
 import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Server } from 'http';
 import { Frequency } from '@prisma/client';
+import { setupApp } from 'src/common/setup/setup';
 
 describe('SubscriptionHandlersController (integration)', () => {
   let app: INestApplication<Server>;
@@ -25,9 +26,8 @@ describe('SubscriptionHandlersController (integration)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
-    );
+    setupApp(app);
+    await app.init();
     await app.init();
 
     prisma = app.get(PrismaService);
@@ -50,7 +50,7 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should subscribe successfully', async () => {
       const dto = makeDto();
       const res = await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(201);
 
@@ -66,11 +66,11 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should return 409 if subscription already exists', async () => {
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(201);
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(409);
     });
@@ -78,7 +78,7 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should return 404 for invalid city', async () => {
       const dto = makeDto({ city: 'InvalidCity' });
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(404);
     });
@@ -86,14 +86,14 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should return 400 for invalid email', async () => {
       const dto = makeDto({ email: 'invalid-email' });
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(400);
     });
 
     it('should return 400 for missing required fields', async () => {
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send({ city: 'Kyiv' })
         .expect(400);
     });
@@ -101,7 +101,7 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should return 400 for invalid frequency', async () => {
       const dto = makeDto({ frequency: 'weekly' });
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(400);
     });
@@ -111,7 +111,7 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should confirm subscription', async () => {
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(201);
       const tokenEntity = await prisma.token.findFirst({
@@ -119,7 +119,7 @@ describe('SubscriptionHandlersController (integration)', () => {
       });
       expect(tokenEntity).not.toBeNull();
       const res = await request(app.getHttpServer())
-        .get(`/confirm/${tokenEntity!.token}`)
+        .get(`/api/confirm/${tokenEntity!.token}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('message');
@@ -131,7 +131,7 @@ describe('SubscriptionHandlersController (integration)', () => {
 
     it('should return 404 for invalid token', async () => {
       await request(app.getHttpServer())
-        .get('/confirm/invalid-token')
+        .get('/api/confirm/invalid-token')
         .expect(404);
     });
   });
@@ -140,7 +140,7 @@ describe('SubscriptionHandlersController (integration)', () => {
     it('should unsubscribe successfully', async () => {
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(201);
       const tokenEntity = await prisma.token.findFirst({
@@ -148,10 +148,10 @@ describe('SubscriptionHandlersController (integration)', () => {
       });
       expect(tokenEntity).not.toBeNull();
       await request(app.getHttpServer())
-        .get(`/confirm/${tokenEntity!.token}`)
+        .get(`/api/confirm/${tokenEntity!.token}`)
         .expect(200);
       const res = await request(app.getHttpServer())
-        .get(`/unsubscribe/${tokenEntity!.token}`)
+        .get(`/api/unsubscribe/${tokenEntity!.token}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('message');
@@ -163,14 +163,14 @@ describe('SubscriptionHandlersController (integration)', () => {
 
     it('should return 404 for invalid token', async () => {
       await request(app.getHttpServer())
-        .get('/unsubscribe/invalid-token')
+        .get('/api/unsubscribe/invalid-token')
         .expect(404);
     });
 
     it('should return 404 when already unsubscribed', async () => {
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/subscribe')
+        .post('/api/subscribe')
         .send(dto)
         .expect(201);
       const tokenEntity = await prisma.token.findFirst({
@@ -178,13 +178,13 @@ describe('SubscriptionHandlersController (integration)', () => {
       });
       expect(tokenEntity).not.toBeNull();
       await request(app.getHttpServer())
-        .get(`/confirm/${tokenEntity!.token}`)
+        .get(`/api/confirm/${tokenEntity!.token}`)
         .expect(200);
       await request(app.getHttpServer())
-        .get(`/unsubscribe/${tokenEntity!.token}`)
+        .get(`/api/unsubscribe/${tokenEntity!.token}`)
         .expect(200);
       await request(app.getHttpServer())
-        .get(`/unsubscribe/${tokenEntity!.token}`)
+        .get(`/api/unsubscribe/${tokenEntity!.token}`)
         .expect(404);
     });
   });

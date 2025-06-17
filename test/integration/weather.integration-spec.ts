@@ -1,6 +1,6 @@
 import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
 import { Server } from 'http';
 import {
@@ -8,6 +8,7 @@ import {
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
 import { CityService } from 'src/city/city.service';
+import { setupApp } from 'src/common/setup/setup';
 
 describe('WeatherHandlersController (integration)', () => {
   let app: INestApplication<Server>;
@@ -24,9 +25,7 @@ describe('WeatherHandlersController (integration)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }),
-    );
+    setupApp(app);
     await app.init();
 
     cacheRepository = app.get(CacheRepositoryToken);
@@ -40,7 +39,7 @@ describe('WeatherHandlersController (integration)', () => {
   describe('GET /weather', () => {
     it('should return weather for a valid city', async () => {
       const res = await request(app.getHttpServer())
-        .get('/weather')
+        .get('/api/weather')
         .query({ city: 'Kyiv' })
         .expect(200);
 
@@ -51,13 +50,13 @@ describe('WeatherHandlersController (integration)', () => {
 
     it('should return 404 for an invalid city', async () => {
       await request(app.getHttpServer())
-        .get('/weather')
+        .get('/api/weather')
         .query({ city: 'InvalidCityNameForTest' })
         .expect(404);
     });
 
     it('should return 400 for missing city param', async () => {
-      await request(app.getHttpServer()).get('/weather').expect(400);
+      await request(app.getHttpServer()).get('/api/weather').expect(400);
     });
 
     it('should cache weather data and return cached value on second request', async () => {
@@ -71,7 +70,7 @@ describe('WeatherHandlersController (integration)', () => {
       };
 
       await request(app.getHttpServer())
-        .get('/weather')
+        .get('/api/weather')
         .query({ city })
         .expect(200);
 
@@ -83,7 +82,7 @@ describe('WeatherHandlersController (integration)', () => {
       );
 
       const res2 = await request(app.getHttpServer())
-        .get('/weather')
+        .get('/api/weather')
         .query({ city })
         .expect(200);
 
@@ -101,7 +100,7 @@ describe('WeatherHandlersController (integration)', () => {
       await cacheRepository.set(CITY_CACHE_PREFIX, key, '');
 
       await request(app.getHttpServer())
-        .get('/weather')
+        .get('/api/weather')
         .query({ city: invalidCity })
         .expect(404);
 
@@ -112,7 +111,7 @@ describe('WeatherHandlersController (integration)', () => {
       const checkCitySpy = jest.spyOn(cityService, 'checkCityLocations');
 
       await request(app.getHttpServer())
-        .get('/weather')
+        .get('/api/weather')
         .query({ city: invalidCity })
         .expect(404);
 
