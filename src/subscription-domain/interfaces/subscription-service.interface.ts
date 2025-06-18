@@ -4,7 +4,7 @@ import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
 export interface ISubscriptionDomainService {
   create(dto: CreateSubscriptionDto): Promise<Subscription>;
-  findUnique(email: string, city: string): Promise<Subscription | null>;
+  preventDuplicate(email: string, city: string): Promise<void>;
   confirm(subscription_id: number): Promise<Subscription>;
   delete(subscription_id: number): Promise<Subscription>;
   getByFrequency(frequency: Frequency): Promise<SubWithTokens[]>;

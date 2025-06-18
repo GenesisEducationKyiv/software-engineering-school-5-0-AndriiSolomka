@@ -81,20 +81,20 @@ describe('SubscriptionDomainService', () => {
     });
   });
 
-  describe('findUnique', () => {
+  describe('preventDuplicate', () => {
     it('should throw ConflictException if subscription exists', async () => {
       repoMock.findOne.mockResolvedValueOnce({} as Subscription);
 
       await expect(
-        service.findUnique('test@mail.com', 'Kyiv'),
+        service.preventDuplicate('test@mail.com', 'Kyiv'),
       ).rejects.toBeInstanceOf(ConflictException);
     });
 
     it('should return null if subscription does not exist', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
 
-      const result = await service.findUnique('test@mail.com', 'Kyiv');
-      expect(result).toBeNull();
+      const result = await service.preventDuplicate('test@mail.com', 'Kyiv');
+      expect(result).toBeUndefined();
     });
   });
 
