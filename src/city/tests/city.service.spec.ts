@@ -1,15 +1,14 @@
 import { CityService } from '../city.service';
-import { ICityService } from '../interfaces/city-service.interface';
-import { Location } from 'src/constants/types/weather/weather-client.interface';
 import { WeatherDomainService } from 'src/weather-domain/weather-domain.service';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
+import { Test } from '@nestjs/testing';
 
 describe('CityService', () => {
-  let service: ICityService;
+  let service: CityService;
   let weatherDomainMock: jest.Mocked<Pick<WeatherDomainService, 'findCity'>>;
   let cacheCityMock: jest.Mocked<Pick<CacheCityService, 'get' | 'set'>>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     weatherDomainMock = {
       findCity: jest.fn(),
     };
@@ -17,15 +16,36 @@ describe('CityService', () => {
       get: jest.fn(),
       set: jest.fn(),
     };
-    service = new CityService(
-      weatherDomainMock as unknown as WeatherDomainService,
-      cacheCityMock as unknown as CacheCityService,
-    );
+    const module = await Test.createTestingModule({
+      providers: [
+        CityService,
+        {
+          provide: WeatherDomainService,
+          useValue: weatherDomainMock,
+        },
+        {
+          provide: CacheCityService,
+          useValue: cacheCityMock,
+        },
+      ],
+    }).compile();
+
+    service = module.get<CityService>(CityService);
   });
 
   it('should return cached locations if present', async () => {
     const city = 'Kyiv';
-    const cached: Location[] = [{ name: 'Kyiv', country: 'UA' } as Location];
+    const cached = [
+      {
+        id: 1,
+        name: 'Kyiv',
+        region: 'Kyiv City',
+        country: 'UA',
+        lat: 50.45,
+        lon: 30.523,
+        url: 'kyiv-ukraine',
+      },
+    ];
     cacheCityMock.get.mockResolvedValueOnce(cached);
 
     const result = await service.checkCityLocations(city);
@@ -39,7 +59,17 @@ describe('CityService', () => {
   it('should fetch locations and cache them if not cached', async () => {
     const city = 'Lviv';
     cacheCityMock.get.mockResolvedValueOnce(null);
-    const found: Location[] = [{ name: 'Lviv', country: 'UA' } as Location];
+    const found = [
+      {
+        id: 2,
+        name: 'Lviv',
+        region: 'Lviv Region',
+        country: 'UA',
+        lat: 49.8397,
+        lon: 24.0297,
+        url: 'lviv-ukraine',
+      },
+    ];
     weatherDomainMock.findCity.mockResolvedValueOnce(found);
 
     const result = await service.checkCityLocations(city);

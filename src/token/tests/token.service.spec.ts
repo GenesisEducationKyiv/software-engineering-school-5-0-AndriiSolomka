@@ -1,8 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
 import { TokenService } from '../token.service';
-import { TokenRepository } from '../interfaces/token-repository.interface';
+import {
+  TokenRepository,
+  TokenRepositoryToken,
+} from '../interfaces/token-repository.interface';
 import { Token } from '@prisma/client';
 import { ITokenService } from '../interfaces/token-service.interface';
+import { Test } from '@nestjs/testing';
 
 jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
@@ -12,12 +16,23 @@ describe('TokenService', () => {
   let service: ITokenService;
   let repoMock: jest.Mocked<Pick<TokenRepository, 'create' | 'findOne'>>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     repoMock = {
       create: jest.fn(),
       findOne: jest.fn(),
     };
-    service = new TokenService(repoMock as unknown as TokenRepository);
+
+    const module = await Test.createTestingModule({
+      providers: [
+        TokenService,
+        {
+          provide: TokenRepositoryToken,
+          useValue: repoMock,
+        },
+      ],
+    }).compile();
+
+    service = module.get<TokenService>(TokenService);
   });
 
   describe('create', () => {

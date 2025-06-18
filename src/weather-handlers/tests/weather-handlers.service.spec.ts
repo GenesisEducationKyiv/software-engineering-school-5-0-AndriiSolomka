@@ -4,13 +4,14 @@ import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
 import { CreateWeatherDto } from '../dto/create-weather.dto';
 import { WeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
 import { IWeatherHandlersService } from '../interfaces/weather-handlers.service.interface';
+import { Test } from '@nestjs/testing';
 
 describe('WeatherHandlersService', () => {
   let service: IWeatherHandlersService;
   let clientMock: jest.Mocked<Pick<WeatherDomainService, 'getCityWeather'>>;
   let cacheMock: jest.Mocked<Pick<CacheWeatherService, 'get' | 'set'>>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     clientMock = {
       getCityWeather: jest.fn<Promise<WeatherApiResponse>, [string]>(),
     };
@@ -18,10 +19,22 @@ describe('WeatherHandlersService', () => {
       get: jest.fn(),
       set: jest.fn(),
     };
-    service = new WeatherHandlersService(
-      clientMock as unknown as WeatherDomainService,
-      cacheMock as unknown as CacheWeatherService,
-    );
+
+    const module = await Test.createTestingModule({
+      providers: [
+        WeatherHandlersService,
+        {
+          provide: WeatherDomainService,
+          useValue: clientMock,
+        },
+        {
+          provide: CacheWeatherService,
+          useValue: cacheMock,
+        },
+      ],
+    }).compile();
+
+    service = module.get<WeatherHandlersService>(WeatherHandlersService);
   });
 
   it('should return cached weather if present', async () => {
@@ -45,7 +58,7 @@ describe('WeatherHandlersService', () => {
     const city = 'Lviv';
     cacheMock.get.mockResolvedValueOnce(null);
 
-    const apiResponse: WeatherApiResponse = {
+    const apiResponse = {
       location: {
         name: 'Lviv',
         region: 'Lvivska',
@@ -100,7 +113,7 @@ describe('WeatherHandlersService', () => {
     };
     clientMock.getCityWeather.mockResolvedValueOnce(apiResponse);
 
-    const expected: CreateWeatherDto = {
+    const expected = {
       temperature: 15,
       humidity: 60,
       description: 'Cloudy',

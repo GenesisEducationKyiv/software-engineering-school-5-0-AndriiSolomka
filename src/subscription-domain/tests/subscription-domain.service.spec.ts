@@ -1,10 +1,14 @@
 import { ConflictException } from '@nestjs/common';
 import { SubscriptionDomainService } from '../subscription-domain.service';
-import { SubscriptionRepository } from '../interfaces/subscription-repository.interface';
+import {
+  SubscriptionRepository,
+  SubscriptionRepositoryToken,
+} from '../interfaces/subscription-repository.interface';
 import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 import { ISubscriptionDomainService } from '../interfaces/subscription-service.interface';
+import { Test } from '@nestjs/testing';
 
 describe('SubscriptionDomainService', () => {
   let service: ISubscriptionDomainService;
@@ -20,7 +24,7 @@ describe('SubscriptionDomainService', () => {
     >
   >;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     repoMock = {
       create: jest.fn(),
       findOne: jest.fn(),
@@ -29,9 +33,18 @@ describe('SubscriptionDomainService', () => {
       findByFrequency: jest.fn(),
       deleteUnconfirmed: jest.fn(),
     };
-    service = new SubscriptionDomainService(
-      repoMock as unknown as SubscriptionRepository,
-    );
+
+    const module = await Test.createTestingModule({
+      providers: [
+        SubscriptionDomainService,
+        {
+          provide: SubscriptionRepositoryToken,
+          useValue: repoMock,
+        },
+      ],
+    }).compile();
+
+    service = module.get<SubscriptionDomainService>(SubscriptionDomainService);
   });
 
   describe('create', () => {

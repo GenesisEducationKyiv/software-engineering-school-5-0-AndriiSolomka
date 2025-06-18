@@ -1,5 +1,9 @@
+import { Test } from '@nestjs/testing';
 import { CacheService } from '../cache.service';
-import { CacheRepository } from '../interfaces/cache-repository.interface';
+import {
+  CacheRepository,
+  CacheRepositoryToken,
+} from '../interfaces/cache-repository.interface';
 import { ICacheService } from '../interfaces/cache-service.interface';
 
 describe('CacheService', () => {
@@ -11,14 +15,28 @@ describe('CacheService', () => {
   const prefix = 'testPrefix';
   const ttl = 60;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     cacheRepositoryMock = {
       get: jest.fn(),
       set: jest.fn(),
       setWithExpiry: jest.fn(),
     };
 
-    cacheService = new CacheService<unknown>(cacheRepositoryMock, prefix, ttl);
+    const module = await Test.createTestingModule({
+      providers: [
+        {
+          provide: CacheRepositoryToken,
+          useValue: cacheRepositoryMock,
+        },
+        {
+          provide: CacheService,
+          useFactory: () =>
+            new CacheService<unknown>(cacheRepositoryMock, prefix, ttl),
+        },
+      ],
+    }).compile();
+
+    cacheService = module.get<CacheService<unknown>>(CacheService);
   });
 
   describe('get', () => {
