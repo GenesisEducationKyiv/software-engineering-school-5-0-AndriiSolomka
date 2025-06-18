@@ -4,11 +4,35 @@ import {
   SubscriptionRepository,
   SubscriptionRepositoryToken,
 } from '../interfaces/subscription-repository.interface';
-import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
-import { Frequency, Subscription } from '@prisma/client';
-import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
+import { Frequency, Subscription, Token } from '@prisma/client';
 import { ISubscriptionDomainService } from '../interfaces/subscription-service.interface';
 import { Test } from '@nestjs/testing';
+
+function makeSubscription(overrides: Partial<Subscription> = {}): Subscription {
+  const now = new Date();
+  return {
+    subscription_id: 1,
+    email: 'test@mail.com',
+    city: 'Kyiv',
+    frequency: Frequency.daily,
+    confirmed: false,
+    createdAt: now,
+    updatedAt: now,
+    ...overrides,
+  };
+}
+
+function makeToken(overrides: Partial<Token> = {}): Token {
+  const now = new Date();
+  return {
+    token_id: 1,
+    token: 'sometoken',
+    subscription_id: 1,
+    createdAt: now,
+    expiresAt: null,
+    ...overrides,
+  };
+}
 
 describe('SubscriptionDomainService', () => {
   let service: ISubscriptionDomainService;
@@ -49,12 +73,12 @@ describe('SubscriptionDomainService', () => {
 
   describe('create', () => {
     it('should throw ConflictException if subscription exists', async () => {
-      const dto: CreateSubscriptionDto = {
+      const dto = {
         email: 'test@mail.com',
         city: 'Kyiv',
         frequency: Frequency.daily,
       };
-      repoMock.findOne.mockResolvedValueOnce({} as Subscription);
+      repoMock.findOne.mockResolvedValueOnce(makeSubscription());
 
       await expect(service.create(dto)).rejects.toBeInstanceOf(
         ConflictException,
@@ -64,13 +88,13 @@ describe('SubscriptionDomainService', () => {
     });
 
     it('should create subscription if not exists', async () => {
-      const dto: CreateSubscriptionDto = {
+      const dto = {
         email: 'test@mail.com',
         city: 'Kyiv',
         frequency: Frequency.daily,
       };
       repoMock.findOne.mockResolvedValueOnce(null);
-      const created = { subscription_id: 1 } as Subscription;
+      const created = makeSubscription({ subscription_id: 2 });
       repoMock.create.mockResolvedValueOnce(created);
 
       const result = await service.create(dto);
@@ -83,14 +107,16 @@ describe('SubscriptionDomainService', () => {
 
   describe('preventDuplicate', () => {
     it('should throw ConflictException if subscription exists', async () => {
-      repoMock.findOne.mockResolvedValueOnce({} as Subscription);
+      repoMock.findOne.mockResolvedValueOnce(
+        makeSubscription({ subscription_id: 3 }),
+      );
 
       await expect(
         service.preventDuplicate('test@mail.com', 'Kyiv'),
       ).rejects.toBeInstanceOf(ConflictException);
     });
 
-    it('should return null if subscription does not exist', async () => {
+    it('should return undefined if subscription does not exist', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
 
       const result = await service.preventDuplicate('test@mail.com', 'Kyiv');
@@ -100,24 +126,24 @@ describe('SubscriptionDomainService', () => {
 
   describe('confirm', () => {
     it('should confirm subscription', async () => {
-      const confirmed = { subscription_id: 1 } as Subscription;
+      const confirmed = makeSubscription({ subscription_id: 4 });
       repoMock.confirm.mockResolvedValueOnce(confirmed);
 
-      const result = await service.confirm(1);
+      const result = await service.confirm(4);
 
-      expect(repoMock.confirm).toHaveBeenCalledWith(1);
+      expect(repoMock.confirm).toHaveBeenCalledWith(4);
       expect(result).toBe(confirmed);
     });
   });
 
   describe('delete', () => {
     it('should delete subscription', async () => {
-      const deleted = { subscription_id: 1 } as Subscription;
+      const deleted = makeSubscription({ subscription_id: 5 });
       repoMock.delete.mockResolvedValueOnce(deleted);
 
-      const result = await service.delete(1);
+      const result = await service.delete(5);
 
-      expect(repoMock.delete).toHaveBeenCalledWith(1);
+      expect(repoMock.delete).toHaveBeenCalledWith(5);
       expect(result).toBe(deleted);
     });
   });
@@ -125,7 +151,12 @@ describe('SubscriptionDomainService', () => {
   describe('getByFrequency', () => {
     it('should return subscriptions by frequency', async () => {
       const freq = Frequency.daily;
-      const subs: SubWithTokens[] = [{ subscription_id: 1 } as SubWithTokens];
+      const subs = [
+        {
+          ...makeSubscription({ subscription_id: 6 }),
+          tokens: [makeToken({ subscription_id: 6 })],
+        },
+      ];
       repoMock.findByFrequency.mockResolvedValueOnce(subs);
 
       const result = await service.getByFrequency(freq);

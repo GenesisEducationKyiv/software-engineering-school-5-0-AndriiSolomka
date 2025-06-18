@@ -12,6 +12,18 @@ jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
 }));
 
+function makeToken(overrides: Partial<Token> = {}): Token {
+  const now = new Date();
+  return {
+    token_id: 1,
+    token: 'mocked-token',
+    subscription_id: 1,
+    createdAt: now,
+    expiresAt: null,
+    ...overrides,
+  };
+}
+
 describe('TokenService', () => {
   let service: ITokenService;
   let repoMock: jest.Mocked<Pick<TokenRepository, 'create' | 'findOne'>>;
@@ -37,7 +49,7 @@ describe('TokenService', () => {
 
   describe('create', () => {
     it('should generate token and save it', async () => {
-      repoMock.create.mockResolvedValueOnce({} as Token);
+      repoMock.create.mockResolvedValueOnce(makeToken());
 
       const result = await service.create(123);
 
@@ -48,10 +60,10 @@ describe('TokenService', () => {
 
   describe('getEntity', () => {
     it('should return token entity if found', async () => {
-      const tokenEntity = {
+      const tokenEntity = makeToken({
         token: 'mocked-token',
         subscription_id: 1,
-      } as Token;
+      });
       repoMock.findOne.mockResolvedValueOnce(tokenEntity);
 
       const result = await service.getEntity('mocked-token');
