@@ -6,10 +6,17 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server } from 'http';
 import { Frequency } from '@prisma/client';
 import { setupApp } from 'src/common/setup/setup';
+import { setupMswServer } from 'src/common/setup/msw/test.server';
+import { EmailService } from 'src/email/email.service';
 
 describe('SubscriptionHandlersController (integration)', () => {
   let app: INestApplication<Server>;
   let prisma: PrismaService;
+  let emailService: EmailService;
+  let sendConfirmationEmailSpy: jest.SpyInstance;
+  let sendWeatherEmailSpy: jest.SpyInstance;
+
+  setupMswServer();
 
   const makeDto = (
     overrides?: Partial<{ email: string; city: string; frequency: string }>,
@@ -28,12 +35,22 @@ describe('SubscriptionHandlersController (integration)', () => {
     app = moduleFixture.createNestApplication();
     setupApp(app);
     await app.init();
-    await app.init();
 
     prisma = app.get(PrismaService);
+    emailService = app.get(EmailService);
+
+    sendConfirmationEmailSpy = jest
+      .spyOn(emailService, 'sendConfirmationEmail')
+      .mockImplementation(() => Promise.resolve());
+
+    sendWeatherEmailSpy = jest
+      .spyOn(emailService, 'sendWeatherEmail')
+      .mockImplementation(() => Promise.resolve());
   });
 
   afterEach(async () => {
+    sendConfirmationEmailSpy.mockClear();
+    sendWeatherEmailSpy.mockClear();
     await prisma.token.deleteMany({
       where: { subscription: { email: { contains: 'integration+' } } },
     });
@@ -43,6 +60,8 @@ describe('SubscriptionHandlersController (integration)', () => {
   });
 
   afterAll(async () => {
+    sendConfirmationEmailSpy.mockRestore();
+    sendWeatherEmailSpy.mockRestore();
     await app.close();
   });
 

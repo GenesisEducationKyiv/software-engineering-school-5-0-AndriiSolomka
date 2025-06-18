@@ -9,11 +9,14 @@ import {
 } from 'src/cache/interfaces/cache-repository.interface';
 import { CityService } from 'src/city/city.service';
 import { setupApp } from 'src/common/setup/setup';
+import { setupMswServer } from 'src/common/setup/msw/test.server';
 
 describe('WeatherHandlersController (integration)', () => {
   let app: INestApplication<Server>;
   let cacheRepository: CacheRepository;
   let cityService: CityService;
+
+  setupMswServer();
 
   const WEATHER_CACHE_PREFIX = 'weather';
   const WEATHER_CACHE_TTL = 3600;
