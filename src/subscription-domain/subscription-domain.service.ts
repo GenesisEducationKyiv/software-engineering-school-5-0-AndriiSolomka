@@ -17,16 +17,15 @@ export class SubscriptionDomainService implements ISubscriptionDomainService {
 
   async create(dto: CreateSubscriptionDto): Promise<Subscription> {
     const { email, city, frequency } = dto;
-    await this.findUnique(email, city);
+    await this.preventDuplicate(email, city);
     return await this.subscriptionRepo.create({ email, city, frequency });
   }
 
-  async findUnique(email: string, city: string): Promise<Subscription | null> {
+  async preventDuplicate(email: string, city: string): Promise<void> {
     const subscription = await this.subscriptionRepo.findOne(email, city);
     if (subscription) {
       throw new ConflictException(`Email already subscribed to ${city}`);
     }
-    return subscription;
   }
 
   async confirm(subscription_id: number): Promise<Subscription> {
