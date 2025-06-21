@@ -6,10 +6,9 @@ import {
 } from '@nestjs/common';
 import { LoggerModule } from './logger/logger.module';
 import { FetchModule } from './fetch/fetch.module';
-import { WeatherHandlersModule } from './weather-handlers/weather-handlers.module';
+import { WeatherModule } from './weather/weather.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
-import { WeatherDomainModule } from './weather-domain/weather-domain.module';
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { TokenModule } from './token/token.module';
@@ -18,22 +17,22 @@ import { SubscriptionHandlersModule } from './subscription-handlers/subscription
 import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 import { ScheduleModule } from './schedule/schedule.module';
 import { NotificationModule } from './notification/notification.module';
-import { CityModule } from './city/city.module';
 import { CacheWeatherModule } from './cache-weather/cache-weather.module';
 import { CacheCityService } from './cache-city/cache-city.service';
 import { CacheCityModule } from './cache-city/cache-city.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheModule } from './cache/cache.module';
 import { NodemailerModule } from './nodemailer/nodemailer.module';
+import { WeatherProviderModule } from './providers/weather/weather-provider.module';
+import { GeocodingModule } from './geocoding/geocoding.module';
 import config from './config';
 
 @Module({
   imports: [
     LoggerModule,
     FetchModule,
-    WeatherHandlersModule,
+    WeatherModule,
     PrismaModule,
-    WeatherDomainModule,
     RedisModule,
     EmailModule,
     LoggerModule,
@@ -47,11 +46,12 @@ import config from './config';
       isGlobal: true,
       load: config,
     }),
-    CityModule,
     CacheWeatherModule,
     CacheCityModule,
     CacheModule,
     NodemailerModule,
+    WeatherProviderModule,
+    GeocodingModule,
   ],
   controllers: [],
   providers: [CacheCityService],

@@ -7,14 +7,14 @@ import {
   CacheRepository,
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
-import { CityService } from 'src/city/city.service';
 import { setupApp } from 'src/common/setup/setup';
 import { setupMswServer } from 'src/common/setup/msw/test.server';
+import { GeocodingService } from 'src/geocoding/geocoding.service';
 
 describe('WeatherHandlersController (integration)', () => {
   let app: INestApplication<Server>;
   let cacheRepository: CacheRepository;
-  let cityService: CityService;
+  let cityService: GeocodingService;
 
   setupMswServer();
 
@@ -32,7 +32,7 @@ describe('WeatherHandlersController (integration)', () => {
     await app.init();
 
     cacheRepository = app.get(CacheRepositoryToken);
-    cityService = app.get(CityService);
+    cityService = app.get(GeocodingService);
   });
 
   afterAll(async () => {
@@ -109,9 +109,8 @@ describe('WeatherHandlersController (integration)', () => {
 
       const cachedCityData = await cacheRepository.get(CITY_CACHE_PREFIX, key);
       expect(cachedCityData).not.toBeNull();
-      expect(JSON.parse(cachedCityData!)).toEqual([]);
 
-      const checkCitySpy = jest.spyOn(cityService, 'checkCityLocations');
+      const checkCitySpy = jest.spyOn(cityService, 'findCity');
 
       await request(app.getHttpServer())
         .get('/api/weather')

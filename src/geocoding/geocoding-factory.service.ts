@@ -3,7 +3,7 @@ import { FetchService } from 'src/fetch/fetch.service';
 import { ConfigService } from '@nestjs/config';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
 import { GeocodingService } from './geocoding.service';
-import { GeocodingProxyService } from 'src/proxy/city/city-cache-proxy.service';
+import { GeocodingProxyService } from 'src/proxy/geocoding/geocoding-proxy.service';
 
 @Injectable()
 export class GeocodingServiceFactory {
