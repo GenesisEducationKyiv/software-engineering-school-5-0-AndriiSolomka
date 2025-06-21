@@ -1,10 +1,8 @@
-import { Injectable } from '@nestjs/common';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
 import { WeatherProvider } from 'src/providers/weather/weather.provider';
 import { WeatherServiceInterface } from 'src/weather/interfaces/weather.service.interface';
 
-@Injectable()
 export class WeatherCacheProxyService implements WeatherServiceInterface {
   constructor(
     private readonly weatherProvider: WeatherProvider,
