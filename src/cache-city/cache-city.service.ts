@@ -5,10 +5,10 @@ import {
   CacheRepository,
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
-import { Location } from 'src/constants/types/weather/weather-client.interface';
+import { GeocodingResponse } from 'src/constants/types/weather/weather-client.interface';
 
 @Injectable()
-export class CacheCityService extends CacheService<Location[]> {
+export class CacheCityService extends CacheService<GeocodingResponse> {
   constructor(
     @Inject(CacheRepositoryToken)
     cache: CacheRepository,
