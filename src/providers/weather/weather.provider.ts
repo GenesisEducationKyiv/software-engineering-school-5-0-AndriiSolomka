@@ -20,5 +20,5 @@ export abstract class WeatherProvider {
     }
   }
 
-  protected abstract getWeather(city: string): Promise<CreateWeatherDto>;
+  abstract getWeather(city: string): Promise<CreateWeatherDto>;
 }

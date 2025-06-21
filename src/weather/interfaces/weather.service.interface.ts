@@ -1,6 +1,6 @@
 import { CreateWeatherDto } from '../dto/create-weather.dto';
 
-export interface WeatherServiceInterface {
+export interface WeatherInterface {
   getWeather(city: string): Promise<CreateWeatherDto>;
 }
 

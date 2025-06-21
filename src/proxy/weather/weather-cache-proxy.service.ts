@@ -1,9 +1,9 @@
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
 import { WeatherProvider } from 'src/providers/weather/weather.provider';
-import { WeatherServiceInterface } from 'src/weather/interfaces/weather.service.interface';
+import { WeatherInterface } from 'src/weather/interfaces/weather.service.interface';
 
-export class WeatherCacheProxyService implements WeatherServiceInterface {
+export class WeatherCacheProxyService implements WeatherInterface {
   constructor(
     private readonly weatherProvider: WeatherProvider,
     private readonly cache: CacheWeatherService,

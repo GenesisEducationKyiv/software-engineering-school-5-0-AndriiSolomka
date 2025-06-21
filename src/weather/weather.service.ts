@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateWeatherDto } from './dto/create-weather.dto';
 import {
-  WeatherServiceInterface,
+  WeatherInterface,
   WeatherToken,
 } from './interfaces/weather.service.interface';
 
 @Injectable()
-export class WeatherService implements WeatherServiceInterface {
+export class WeatherService implements WeatherInterface {
   constructor(
     @Inject(WeatherToken)
-    private readonly weatherService: WeatherServiceInterface,
+    private readonly weatherService: WeatherInterface,
   ) {}
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
