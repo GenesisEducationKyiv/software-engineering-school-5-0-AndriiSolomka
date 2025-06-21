@@ -4,11 +4,11 @@ import { FetchService } from 'src/fetch/fetch.service';
 import { GeocodingResponse } from 'src/constants/types/weather/weather-client.interface';
 import {
   Coordinates,
-  GeocodingServiceInterface,
+  GeocodingInterface,
 } from './interfaces/geocoding.interface';
 
 @Injectable()
-export class GeocodingService implements GeocodingServiceInterface {
+export class GeocodingService implements GeocodingInterface {
   private readonly geocodingUrl: string;
 
   constructor(

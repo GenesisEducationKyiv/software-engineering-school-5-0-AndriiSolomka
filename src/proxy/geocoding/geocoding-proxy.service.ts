@@ -3,10 +3,10 @@ import { CacheCityService } from 'src/cache-city/cache-city.service';
 import { GeocodingService } from 'src/geocoding/geocoding.service';
 import {
   Coordinates,
-  GeocodingServiceInterface,
+  GeocodingInterface,
 } from 'src/geocoding/interfaces/geocoding.interface';
 
-export class GeocodingProxyService implements GeocodingServiceInterface {
+export class GeocodingProxyService implements GeocodingInterface {
   constructor(
     private readonly geocoding: GeocodingService,
     private readonly cache: CacheCityService,

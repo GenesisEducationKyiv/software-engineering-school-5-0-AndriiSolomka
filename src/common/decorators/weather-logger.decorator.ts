@@ -13,7 +13,6 @@ export class WeatherLoggingDecorator extends WeatherProvider {
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const result = await this.wrapped.getWeather(city);
     const logMessage = this.buildMessage(city, result);
-    console.log(logMessage);
     appendToLogFile(logMessage);
     return result;
   }

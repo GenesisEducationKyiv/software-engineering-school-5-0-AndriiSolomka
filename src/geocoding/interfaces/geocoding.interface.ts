@@ -2,7 +2,7 @@ import { GeocodingResponse } from 'src/constants/types/weather/weather-client.in
 
 export type Coordinates = { latitude: number; longitude: number };
 
-export interface GeocodingServiceInterface {
+export interface GeocodingInterface {
   findCity(city: string): Promise<GeocodingResponse>;
   getCityCoordinates(city: string): Promise<Coordinates>;
 }
