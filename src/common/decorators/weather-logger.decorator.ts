@@ -6,14 +6,17 @@ export class WeatherLoggingDecorator extends WeatherProvider {
   constructor(
     private readonly wrapped: WeatherProvider,
     private readonly providerName: string,
+    private readonly enableLogging: boolean,
   ) {
     super();
   }
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const result = await this.wrapped.getWeather(city);
-    const logMessage = this.buildMessage(city, result);
-    appendToLogFile(logMessage);
+    if (this.enableLogging) {
+      const logMessage = this.buildMessage(city, result);
+      appendToLogFile(logMessage);
+    }
     return result;
   }
 
