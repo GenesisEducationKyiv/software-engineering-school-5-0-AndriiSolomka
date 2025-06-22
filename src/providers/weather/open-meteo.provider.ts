@@ -47,7 +47,11 @@ export class OpenMeteoProviderService extends WeatherProvider {
   }
 
   private buildUrl(latitude: number, longitude: number): string {
-    const currentParams = CURRENT_FIELDS.join(',');
-    return `${this.baseWeatherUrl}/forecast?latitude=${latitude}&longitude=${longitude}&current=${currentParams}`;
+    const params = new URLSearchParams({
+      latitude: latitude.toString(),
+      longitude: longitude.toString(),
+      current: CURRENT_FIELDS.join(','),
+    });
+    return `${this.baseWeatherUrl}/forecast?${params.toString()}`;
   }
 }
