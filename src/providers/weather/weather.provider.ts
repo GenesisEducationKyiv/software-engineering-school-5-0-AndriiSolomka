@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { InternalServerErrorException } from '@nestjs/common';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 
 export abstract class WeatherProvider {
@@ -14,7 +14,7 @@ export abstract class WeatherProvider {
       return await this.getWeather(city);
     } catch {
       if (this.next) return this.next.handle(city);
-      throw new NotFoundException(
+      throw new InternalServerErrorException(
         'No weather provider could handle the request',
       );
     }
