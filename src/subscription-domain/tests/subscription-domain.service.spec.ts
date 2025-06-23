@@ -8,7 +8,7 @@ import { Frequency, Subscription, Token } from '@prisma/client';
 import { ISubscriptionDomainService } from '../interfaces/subscription-service.interface';
 import { Test } from '@nestjs/testing';
 
-function makeSubscription(overrides: Partial<Subscription> = {}): Subscription {
+function makeSubscription(): Subscription {
   const now = new Date();
   return {
     subscription_id: 1,
@@ -18,11 +18,10 @@ function makeSubscription(overrides: Partial<Subscription> = {}): Subscription {
     confirmed: false,
     createdAt: now,
     updatedAt: now,
-    ...overrides,
   };
 }
 
-function makeToken(overrides: Partial<Token> = {}): Token {
+function makeToken(): Token {
   const now = new Date();
   return {
     token_id: 1,
@@ -30,7 +29,6 @@ function makeToken(overrides: Partial<Token> = {}): Token {
     subscription_id: 1,
     createdAt: now,
     expiresAt: null,
-    ...overrides,
   };
 }
 
@@ -94,9 +92,10 @@ describe('SubscriptionDomainService', () => {
         frequency: Frequency.daily,
       };
       repoMock.findOne.mockResolvedValueOnce(null);
-      const created = makeSubscription({ subscription_id: 2 });
-      repoMock.create.mockResolvedValueOnce(created);
+      const created = makeSubscription();
+      created.subscription_id = 2;
 
+      repoMock.create.mockResolvedValueOnce(created);
       const result = await service.create(dto);
 
       expect(repoMock.findOne).toHaveBeenCalledWith(dto.email, dto.city);
@@ -107,10 +106,10 @@ describe('SubscriptionDomainService', () => {
 
   describe('preventDuplicate', () => {
     it('should throw ConflictException if subscription exists', async () => {
-      repoMock.findOne.mockResolvedValueOnce(
-        makeSubscription({ subscription_id: 3 }),
-      );
+      const existing = makeSubscription();
+      existing.subscription_id = 3;
 
+      repoMock.findOne.mockResolvedValueOnce(existing);
       await expect(
         service.preventDuplicate('test@mail.com', 'Kyiv'),
       ).rejects.toBeInstanceOf(ConflictException);
@@ -126,7 +125,10 @@ describe('SubscriptionDomainService', () => {
 
   describe('confirm', () => {
     it('should confirm subscription', async () => {
-      const confirmed = makeSubscription({ subscription_id: 4 });
+      const confirmed = makeSubscription();
+      confirmed.subscription_id = 4;
+
+      repoMock.confirm.mockResolvedValueOnce(confirmed);
       repoMock.confirm.mockResolvedValueOnce(confirmed);
 
       const result = await service.confirm(4);
@@ -138,9 +140,10 @@ describe('SubscriptionDomainService', () => {
 
   describe('delete', () => {
     it('should delete subscription', async () => {
-      const deleted = makeSubscription({ subscription_id: 5 });
-      repoMock.delete.mockResolvedValueOnce(deleted);
+      const deleted = makeSubscription();
+      deleted.subscription_id = 5;
 
+      repoMock.delete.mockResolvedValueOnce(deleted);
       const result = await service.delete(5);
 
       expect(repoMock.delete).toHaveBeenCalledWith(5);
@@ -151,12 +154,11 @@ describe('SubscriptionDomainService', () => {
   describe('getByFrequency', () => {
     it('should return subscriptions by frequency', async () => {
       const freq = Frequency.daily;
-      const subs = [
-        {
-          ...makeSubscription({ subscription_id: 6 }),
-          tokens: [makeToken({ subscription_id: 6 })],
-        },
-      ];
+      const sub = makeSubscription();
+      const token = makeToken();
+      token.subscription_id = 6;
+
+      const subs = [{ ...sub, tokens: [token] }];
       repoMock.findByFrequency.mockResolvedValueOnce(subs);
 
       const result = await service.getByFrequency(freq);
