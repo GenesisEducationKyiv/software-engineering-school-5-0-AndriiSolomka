@@ -9,6 +9,12 @@ import {
 import type { ISubscriptionDomainService } from 'src/subscription-domain/interfaces/subscription-service.interface';
 import { SubscriptionAlreadyExistsException } from 'src/common/errors/subscription.errors';
 
+type SubscriptionModel = {
+  email: string;
+  city: string;
+  frequency: Frequency;
+};
+
 @Injectable()
 export class SubscriptionDomainService implements ISubscriptionDomainService {
   constructor(
@@ -16,8 +22,8 @@ export class SubscriptionDomainService implements ISubscriptionDomainService {
     private readonly subscriptionRepo: SubscriptionRepository,
   ) {}
 
-  async create(dto: CreateSubscriptionDto): Promise<Subscription> {
-    const { email, city, frequency } = dto;
+  async create(data: SubscriptionModel): Promise<Subscription> {
+    const { email, city, frequency } = data;
 
     const subscription = await this.subscriptionRepo.findOne(email, city);
     if (subscription) throw new SubscriptionAlreadyExistsException(email, city);
