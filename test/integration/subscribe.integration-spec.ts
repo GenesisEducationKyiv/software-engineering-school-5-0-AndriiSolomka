@@ -9,6 +9,15 @@ import { setupApp } from 'src/common/setup/setup';
 import { setupMswServer } from 'src/common/setup/msw/test.server';
 import { EmailService } from 'src/email/email.service';
 
+const makeDto = (
+  overrides?: Partial<{ email: string; city: string; frequency: string }>,
+) => ({
+  email: `integration+${Date.now()}@example.com`,
+  city: 'Kyiv',
+  frequency: Frequency.daily,
+  ...overrides,
+});
+
 describe('SubscriptionHandlersController (integration)', () => {
   let app: INestApplication<Server>;
   let prisma: PrismaService;
@@ -17,15 +26,6 @@ describe('SubscriptionHandlersController (integration)', () => {
   let sendWeatherEmailSpy: jest.SpyInstance;
 
   setupMswServer();
-
-  const makeDto = (
-    overrides?: Partial<{ email: string; city: string; frequency: string }>,
-  ) => ({
-    email: `integration+${Date.now()}@example.com`,
-    city: 'Kyiv',
-    frequency: Frequency.daily,
-    ...overrides,
-  });
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
