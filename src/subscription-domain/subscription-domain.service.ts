@@ -1,5 +1,4 @@
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 import {
