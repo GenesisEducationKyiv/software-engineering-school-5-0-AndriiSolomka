@@ -71,35 +71,38 @@ describe('SubscriptionDomainService', () => {
 
   describe('create', () => {
     it('should throw ConflictException if subscription exists', async () => {
-      const dto = {
-        email: 'test@mail.com',
-        city: 'Kyiv',
-        frequency: Frequency.daily,
-      };
       repoMock.findOne.mockResolvedValueOnce(makeSubscription());
 
-      await expect(service.create(dto)).rejects.toBeInstanceOf(
-        ConflictException,
-      );
-      expect(repoMock.findOne).toHaveBeenCalledWith(dto.email, dto.city);
+      await expect(
+        service.create({
+          email: 'test@mail.com',
+          city: 'Kyiv',
+          frequency: Frequency.daily,
+        }),
+      ).rejects.toBeInstanceOf(ConflictException);
+
+      expect(repoMock.findOne).toHaveBeenCalledWith('test@mail.com', 'Kyiv');
       expect(repoMock.create).not.toHaveBeenCalled();
     });
 
     it('should create subscription if not exists', async () => {
-      const dto = {
-        email: 'test@mail.com',
-        city: 'Kyiv',
-        frequency: Frequency.daily,
-      };
       repoMock.findOne.mockResolvedValueOnce(null);
       const created = makeSubscription();
       created.subscription_id = 2;
 
       repoMock.create.mockResolvedValueOnce(created);
-      const result = await service.create(dto);
+      const result = await service.create({
+        email: 'test@mail.com',
+        city: 'Kyiv',
+        frequency: Frequency.daily,
+      });
 
-      expect(repoMock.findOne).toHaveBeenCalledWith(dto.email, dto.city);
-      expect(repoMock.create).toHaveBeenCalledWith(dto);
+      expect(repoMock.findOne).toHaveBeenCalledWith('test@mail.com', 'Kyiv');
+      expect(repoMock.create).toHaveBeenCalledWith({
+        email: 'test@mail.com',
+        city: 'Kyiv',
+        frequency: Frequency.daily,
+      });
       expect(result).toBe(created);
     });
   });
