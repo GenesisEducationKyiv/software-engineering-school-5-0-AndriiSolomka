@@ -5,9 +5,10 @@ import { NOTIFICATION } from 'src/constants/enums/schedule/notification.enum';
 import { SCHEDULE } from 'src/constants/enums/schedule/unconfirmed.enum';
 import { NotificationService } from 'src/notification/notification.service';
 import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
+import { IScheduleService } from './interfaces/schedule.service.interface';
 
 @Injectable()
-export class ScheduleService {
+export class ScheduleService implements IScheduleService {
   constructor(
     private readonly subService: SubscriptionDomainService,
     private readonly notificationService: NotificationService,

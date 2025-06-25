@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { WeatherDomainService } from '../weather-domain/weather-domain.service';
 import { CreateWeatherDto } from './dto/create-weather.dto';
 import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
+import { IWeatherHandlersService } from './interfaces/weather-handlers.service.interface';
 
 @Injectable()
-export class WeatherHandlersService {
+export class WeatherHandlersService implements IWeatherHandlersService {
   constructor(
     private readonly client: WeatherDomainService,
     private readonly cache: CacheWeatherService,

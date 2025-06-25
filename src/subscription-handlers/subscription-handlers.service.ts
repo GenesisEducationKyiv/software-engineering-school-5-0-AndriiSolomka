@@ -3,9 +3,12 @@ import { CreateSubscriptionDto } from './dto/create-subscription.dto';
 import { TokenService } from 'src/token/token.service';
 import { EmailService } from 'src/email/email.service';
 import { SubscriptionDomainService } from 'src/subscription-domain/subscription-domain.service';
+import { ISubscriptionHandlersService } from './interfaces/subscription-handlers.service.interface';
 
 @Injectable()
-export class SubscriptionHandlersService {
+export class SubscriptionHandlersService
+  implements ISubscriptionHandlersService
+{
   constructor(
     private readonly subService: SubscriptionDomainService,
     private readonly tokenService: TokenService,

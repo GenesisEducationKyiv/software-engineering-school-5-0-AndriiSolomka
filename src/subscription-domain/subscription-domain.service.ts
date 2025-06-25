@@ -1,19 +1,32 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { SubscriptionRepository } from './subscription-domain.repository';
-import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
+import {
+  SubscriptionRepository,
+  SubscriptionRepositoryToken,
+} from './interfaces/subscription-repository.interface';
+import type { ISubscriptionDomainService } from 'src/subscription-domain/interfaces/subscription-service.interface';
+import { SubscriptionAlreadyExistsException } from 'src/common/errors/subscription.errors';
+
+type SubscriptionModel = {
+  email: string;
+  city: string;
+  frequency: Frequency;
+};
 
 @Injectable()
-export class SubscriptionDomainService {
-  constructor(private readonly subscriptionRepo: SubscriptionRepository) {}
+export class SubscriptionDomainService implements ISubscriptionDomainService {
+  constructor(
+    @Inject(SubscriptionRepositoryToken)
+    private readonly subscriptionRepo: SubscriptionRepository,
+  ) {}
 
-  async create(dto: CreateSubscriptionDto): Promise<Subscription> {
-    const { email, city, frequency } = dto;
+  async create(data: SubscriptionModel): Promise<Subscription> {
+    const { email, city, frequency } = data;
+
     const subscription = await this.subscriptionRepo.findOne(email, city);
-    if (subscription) {
-      throw new ConflictException(`Email already subscribed to ${city}`);
-    }
+    if (subscription) throw new SubscriptionAlreadyExistsException(email, city);
+
     return await this.subscriptionRepo.create({ email, city, frequency });
   }
 

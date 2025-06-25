@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CacheCityService } from './cache-city.service';
-import { RedisModule } from 'src/redis/redis.module';
+import { CacheModule } from 'src/cache/cache.module';
 
 @Module({
-  imports: [RedisModule],
+  imports: [CacheModule],
   providers: [CacheCityService],
   exports: [CacheCityService],
 })

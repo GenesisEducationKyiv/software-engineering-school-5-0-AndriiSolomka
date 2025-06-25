@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CacheWeatherService } from './cache-weather.service';
-import { RedisModule } from 'src/redis/redis.module';
+import { CacheModule } from 'src/cache/cache.module';
 
 @Module({
-  imports: [RedisModule],
+  imports: [CacheModule],
   providers: [CacheWeatherService],
   exports: [CacheWeatherService],
 })

@@ -23,6 +23,9 @@ import { CacheWeatherModule } from './cache-weather/cache-weather.module';
 import { CacheCityService } from './cache-city/cache-city.service';
 import { CacheCityModule } from './cache-city/cache-city.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
+import { CacheModule } from './cache/cache.module';
+import { NodemailerModule } from './nodemailer/nodemailer.module';
+import config from './config';
 
 @Module({
   imports: [
@@ -42,10 +45,13 @@ import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middlewar
     ScheduleNestModule.forRoot(),
     ConfigModule.forRoot({
       isGlobal: true,
+      load: config,
     }),
     CityModule,
     CacheWeatherModule,
     CacheCityModule,
+    CacheModule,
+    NodemailerModule,
   ],
   controllers: [],
   providers: [CacheCityService],

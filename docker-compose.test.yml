@@ -13,7 +13,7 @@ services:
     restart: always
     shm_size: 128mb
     env_file:
-      - .env.test
+      - .env.example
     volumes:
       - postgres-db-test:/var/lib/postgresql/data
     ports:
@@ -41,12 +41,7 @@ services:
       context: .
       dockerfile: Dockerfile.test
     env_file:
-      - .env.test
-    depends_on:
-      db-test:
-        condition: service_healthy
-      redis-test:
-        condition: service_started
+      - .env.example
     volumes:
       - logs-data-test:/home/node/app/logs
     command: npm run test:unit
@@ -58,7 +53,7 @@ services:
       context: .
       dockerfile: Dockerfile.test
     env_file:
-      - .env.test
+      - .env.example
     depends_on:
       db-test:
         condition: service_healthy
@@ -73,16 +68,14 @@ services:
   test-e2e:
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: Dockerfile.playwright
     env_file:
-      - .env.test
+      - .env.example
     depends_on:
       db-test:
         condition: service_healthy
       redis-test:
         condition: service_started
-    volumes:
-      - logs-data-test:/home/node/app/logs
     command: sh -c "npx prisma migrate deploy --schema ./prisma/schema.prisma && npm run test:e2e"
     networks:
       - test-network

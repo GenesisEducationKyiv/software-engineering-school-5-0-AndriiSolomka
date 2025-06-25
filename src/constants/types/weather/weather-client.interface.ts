@@ -1,4 +1,4 @@
-export interface IWeatherApiResponse {
+export interface WeatherApiResponse {
   location: {
     name: string;
     region: string;
@@ -56,7 +56,7 @@ export interface IWeatherApiResponse {
   };
 }
 
-export interface ILocation {
+export interface Location {
   id: number;
   name: string;
   region: string;
