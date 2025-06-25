@@ -41,17 +41,12 @@ describe('CacheService', () => {
 
   describe('get', () => {
     it('should return parsed value if cache hit', async () => {
-      const key = 'SomeKey';
-      const value = { foo: 'bar' };
-      cacheRepositoryMock.get.mockResolvedValueOnce(JSON.stringify(value));
+      cacheRepositoryMock.get.mockResolvedValueOnce('{ "foo": "bar" }');
 
-      const result = await cacheService.get(key);
+      const result = await cacheService.get('SomeKey');
 
-      expect(cacheRepositoryMock.get).toHaveBeenCalledWith(
-        prefix,
-        key.toLowerCase(),
-      );
-      expect(result).toEqual(value);
+      expect(result).toEqual({ foo: 'bar' });
+      expect(cacheRepositoryMock.get).toHaveBeenCalledWith(prefix, 'somekey');
     });
 
     it('should return null if cache miss', async () => {
