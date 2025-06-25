@@ -1,0 +1,19 @@
+name: Unit Tests
+
+on:
+  push:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run unit tests via Docker Compose
+        run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-unit
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v

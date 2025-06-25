@@ -1,0 +1,19 @@
+name: Integration Tests
+
+on:
+  push:
+
+jobs:
+  integration-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run integration tests via Docker Compose
+        run: docker compose -f docker-compose.test.yml up --build --abort-on-container-exit test-integration
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v
