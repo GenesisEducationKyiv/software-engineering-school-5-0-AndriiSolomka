@@ -21,19 +21,6 @@ export class SubscriptionDomainService implements ISubscriptionDomainService {
     private readonly subscriptionRepo: SubscriptionRepository,
   ) {}
 
-<<<<<<< hw-4-tests
-  async create(dto: CreateSubscriptionDto): Promise<Subscription> {
-    const { email, city, frequency } = dto;
-    await this.preventDuplicate(email, city);
-    return await this.subscriptionRepo.create({ email, city, frequency });
-  }
-
-  async preventDuplicate(email: string, city: string): Promise<void> {
-    const subscription = await this.subscriptionRepo.findOne(email, city);
-    if (subscription) {
-      throw new ConflictException(`Email already subscribed to ${city}`);
-    }
-=======
   async create(data: SubscriptionModel): Promise<Subscription> {
     const { email, city, frequency } = data;
 
@@ -41,7 +28,6 @@ export class SubscriptionDomainService implements ISubscriptionDomainService {
     if (subscription) throw new SubscriptionAlreadyExistsException(email, city);
 
     return await this.subscriptionRepo.create({ email, city, frequency });
->>>>>>> hw-3-solid/grasp
   }
 
   async confirm(subscription_id: number): Promise<Subscription> {

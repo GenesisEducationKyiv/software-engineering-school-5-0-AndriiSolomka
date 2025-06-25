@@ -107,25 +107,6 @@ describe('SubscriptionDomainService', () => {
     });
   });
 
-  describe('preventDuplicate', () => {
-    it('should throw ConflictException if subscription exists', async () => {
-      const existing = makeSubscription();
-      existing.subscription_id = 3;
-
-      repoMock.findOne.mockResolvedValueOnce(existing);
-      await expect(
-        service.preventDuplicate('test@mail.com', 'Kyiv'),
-      ).rejects.toBeInstanceOf(ConflictException);
-    });
-
-    it('should return undefined if subscription does not exist', async () => {
-      repoMock.findOne.mockResolvedValueOnce(null);
-
-      const result = await service.preventDuplicate('test@mail.com', 'Kyiv');
-      expect(result).toBeUndefined();
-    });
-  });
-
   describe('confirm', () => {
     it('should confirm subscription', async () => {
       const confirmed = makeSubscription();

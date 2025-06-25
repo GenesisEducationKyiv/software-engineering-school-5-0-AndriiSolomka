@@ -4,10 +4,6 @@ import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
 
 export interface ISubscriptionDomainService {
   create(dto: CreateSubscriptionDto): Promise<Subscription>;
-<<<<<<< hw-4-tests
-  preventDuplicate(email: string, city: string): Promise<void>;
-=======
->>>>>>> hw-3-solid/grasp
   confirm(subscription_id: number): Promise<Subscription>;
   delete(subscription_id: number): Promise<Subscription>;
   getByFrequency(frequency: Frequency): Promise<SubWithTokens[]>;
