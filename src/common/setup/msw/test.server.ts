@@ -1,14 +1,48 @@
 import { setupServer } from 'msw/node';
-import { createWeatherHandlers } from './handlers';
-import * as process from 'node:process';
+import type { RequestHandler } from 'msw';
 
-export const setupMswServer = () => {
-  const { WEATHER_API_URL } = process.env;
-  const server = setupServer(...createWeatherHandlers(WEATHER_API_URL ?? ''));
+export type MockServer = ReturnType<typeof createMockServer>;
 
-  beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+export function createMockServer() {
+  const server = setupServer();
+  let excludedUrls: string[] = [];
+  const onUnhandledRequest = jest.fn();
 
-  return server;
-};
+  return {
+    onUnhandledRequest,
+    start() {
+      server.listen({
+        onUnhandledRequest(req, print) {
+          const url = new URL(req.url);
+          const href = url.href;
+          const hostname = url.hostname;
+
+          const isLocalhost =
+            hostname === '127.0.0.1' || hostname === 'localhost';
+
+          const isExcluded = excludedUrls.some((excludedUrl) =>
+            href.startsWith(excludedUrl),
+          );
+
+          if (!isExcluded && !isLocalhost) {
+            console.log('[MSW] Unhandled request:', req.method, req.url);
+            onUnhandledRequest();
+            print.error();
+          }
+        },
+      });
+    },
+    setExcludedUrls(urls: string[]) {
+      excludedUrls = urls;
+    },
+    clearHandlers() {
+      server.resetHandlers();
+    },
+    addHandlers(handlers: RequestHandler[]) {
+      server.use(...handlers);
+    },
+    stop() {
+      server.close();
+    },
+  };
+}

@@ -9,7 +9,8 @@ import {
 } from 'src/cache/interfaces/cache-repository.interface';
 import { CityService } from 'src/city/city.service';
 import { setupApp } from 'src/common/setup/setup';
-import { setupMswServer } from 'src/common/setup/msw/test.server';
+import { mockServer } from 'src/common/setup/msw/setup';
+import { searchApi, weatherApi } from 'src/common/setup/msw/handlers';
 
 async function clearCache(cacheRepository: CacheRepository, city: string) {
   await cacheRepository.set('city', city.toLowerCase(), '');
@@ -20,8 +21,6 @@ describe('WeatherHandlersController (integration)', () => {
   let app: INestApplication<Server>;
   let cacheRepository: CacheRepository;
   let cityService: CityService;
-
-  setupMswServer();
 
   const WEATHER_CACHE_PREFIX = 'weather';
   const CITY_CACHE_PREFIX = 'city';
@@ -39,6 +38,10 @@ describe('WeatherHandlersController (integration)', () => {
     cityService = app.get(CityService);
   });
 
+  beforeEach(() => {
+    mockServer.clearHandlers();
+  });
+
   afterAll(async () => {
     await app.close();
   });
@@ -53,6 +56,8 @@ describe('WeatherHandlersController (integration)', () => {
     });
 
     it('should return weather for a valid city', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
+
       const res = await request(app.getHttpServer())
         .get('/api/weather')
         .query({ city: validCity })
@@ -64,6 +69,8 @@ describe('WeatherHandlersController (integration)', () => {
     });
 
     it('should return 404 for an invalid city', async () => {
+      mockServer.addHandlers([searchApi.notFound()]);
+
       await request(app.getHttpServer())
         .get('/api/weather')
         .query({ city: invalidCity })
@@ -75,6 +82,8 @@ describe('WeatherHandlersController (integration)', () => {
     });
 
     it('should cache weather data and return cached value on second request', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
+
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
@@ -95,6 +104,8 @@ describe('WeatherHandlersController (integration)', () => {
     });
 
     it('should cache invalid city data', async () => {
+      mockServer.addHandlers([searchApi.notFound()]);
+
       const key = invalidCity.toLowerCase();
 
       await request(app.getHttpServer())

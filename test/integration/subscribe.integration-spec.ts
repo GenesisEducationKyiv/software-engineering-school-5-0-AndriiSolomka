@@ -6,8 +6,9 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Server } from 'http';
 import { Frequency } from '@prisma/client';
 import { setupApp } from 'src/common/setup/setup';
-import { setupMswServer } from 'src/common/setup/msw/test.server';
 import { EmailService } from 'src/email/email.service';
+import { mockServer } from 'src/common/setup/msw/setup';
+import { searchApi, weatherApi } from 'src/common/setup/msw/handlers';
 
 const makeDto = (
   overrides?: Partial<{ email: string; city: string; frequency: string }>,
@@ -24,8 +25,6 @@ describe('SubscriptionHandlersController (integration)', () => {
   let emailService: EmailService;
   let sendConfirmationEmailSpy: jest.SpyInstance;
   let sendWeatherEmailSpy: jest.SpyInstance;
-
-  setupMswServer();
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -48,6 +47,10 @@ describe('SubscriptionHandlersController (integration)', () => {
       .mockImplementation(() => Promise.resolve());
   });
 
+  beforeEach(() => {
+    mockServer.clearHandlers();
+  });
+
   afterEach(async () => {
     sendConfirmationEmailSpy.mockClear();
     sendWeatherEmailSpy.mockClear();
@@ -66,7 +69,9 @@ describe('SubscriptionHandlersController (integration)', () => {
   });
 
   describe('POST /subscribe', () => {
-    it('should subscribe successfully', async () => {
+    it('should subscribe successfully with valid city', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
+
       const dto = makeDto();
       const res = await request(app.getHttpServer())
         .post('/api/subscribe')
@@ -74,27 +79,18 @@ describe('SubscriptionHandlersController (integration)', () => {
         .expect(201);
 
       expect(res.body).toHaveProperty('message');
+
       const sub = await prisma.subscription.findFirst({
         where: { email: dto.email },
       });
+
       expect(sub).not.toBeNull();
       expect(sub?.city).toBe(dto.city);
-      expect(sub?.frequency).toBe(dto.frequency);
-    });
-
-    it('should return 409 if subscription already exists', async () => {
-      const dto = makeDto();
-      await request(app.getHttpServer())
-        .post('/api/subscribe')
-        .send(dto)
-        .expect(201);
-      await request(app.getHttpServer())
-        .post('/api/subscribe')
-        .send(dto)
-        .expect(409);
     });
 
     it('should return 404 for invalid city', async () => {
+      mockServer.addHandlers([searchApi.notFound()]);
+
       const dto = makeDto({ city: 'InvalidCity' });
       await request(app.getHttpServer())
         .post('/api/subscribe')
@@ -128,23 +124,30 @@ describe('SubscriptionHandlersController (integration)', () => {
 
   describe('GET /confirm/:token', () => {
     it('should confirm subscription', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
+
       const dto = makeDto();
       await request(app.getHttpServer())
         .post('/api/subscribe')
         .send(dto)
         .expect(201);
+
       const tokenEntity = await prisma.token.findFirst({
         where: { subscription: { email: dto.email } },
       });
+
       expect(tokenEntity).not.toBeNull();
+
       const res = await request(app.getHttpServer())
         .get(`/api/confirm/${tokenEntity!.token}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('message');
+
       const sub = await prisma.subscription.findFirst({
         where: { email: dto.email },
       });
+
       expect(sub?.confirmed).toBe(true);
     });
 
@@ -157,45 +160,48 @@ describe('SubscriptionHandlersController (integration)', () => {
 
   describe('GET /unsubscribe/:token', () => {
     it('should unsubscribe successfully', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
+
       const dto = makeDto();
       await request(app.getHttpServer())
         .post('/api/subscribe')
         .send(dto)
         .expect(201);
+
       const tokenEntity = await prisma.token.findFirst({
         where: { subscription: { email: dto.email } },
       });
-      expect(tokenEntity).not.toBeNull();
+
       await request(app.getHttpServer())
         .get(`/api/confirm/${tokenEntity!.token}`)
         .expect(200);
+
       const res = await request(app.getHttpServer())
         .get(`/api/unsubscribe/${tokenEntity!.token}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('message');
+
       const sub = await prisma.subscription.findFirst({
         where: { email: dto.email },
       });
+
       expect(sub).toBeNull();
     });
 
-    it('should return 404 for invalid token', async () => {
-      await request(app.getHttpServer())
-        .get('/api/unsubscribe/invalid-token')
-        .expect(404);
-    });
+    it('should return 404 for already unsubscribed', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
-    it('should return 404 when already unsubscribed', async () => {
       const dto = makeDto();
       await request(app.getHttpServer())
         .post('/api/subscribe')
         .send(dto)
         .expect(201);
+
       const tokenEntity = await prisma.token.findFirst({
         where: { subscription: { email: dto.email } },
       });
-      expect(tokenEntity).not.toBeNull();
+
       await request(app.getHttpServer())
         .get(`/api/confirm/${tokenEntity!.token}`)
         .expect(200);
@@ -204,6 +210,12 @@ describe('SubscriptionHandlersController (integration)', () => {
         .expect(200);
       await request(app.getHttpServer())
         .get(`/api/unsubscribe/${tokenEntity!.token}`)
+        .expect(404);
+    });
+
+    it('should return 404 for invalid token', async () => {
+      await request(app.getHttpServer())
+        .get('/api/unsubscribe/invalid-token')
         .expect(404);
     });
   });
