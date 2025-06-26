@@ -1,6 +1,25 @@
-import { GeocodingResponse } from 'src/constants/types/weather/weather-client.interface';
-
 export type Coordinates = { latitude: number; longitude: number };
+
+export type GeocodingResponse = {
+  results: {
+    id: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+    elevation: number;
+    feature_code: string;
+    country_code: string;
+    admin1_id: number;
+    admin2_id: number;
+    timezone: string;
+    population: number;
+    country_id: number;
+    country: string;
+    admin1: string;
+    admin2: string;
+  }[];
+  generationtime_ms: number;
+};
 
 export interface GeocodingInterface {
   findCity(city: string): Promise<GeocodingResponse>;

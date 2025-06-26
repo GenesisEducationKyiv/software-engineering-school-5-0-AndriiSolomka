@@ -1,9 +1,9 @@
-import { GeocodingResponse } from 'src/constants/types/weather/weather-client.interface';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
 import { GeocodingService } from 'src/geocoding/geocoding.service';
 import {
   Coordinates,
   GeocodingInterface,
+  GeocodingResponse,
 } from 'src/geocoding/interfaces/geocoding.interface';
 
 export class GeocodingProxyService implements GeocodingInterface {

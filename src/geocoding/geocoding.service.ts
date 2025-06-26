@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { FetchService } from 'src/fetch/fetch.service';
-import { GeocodingResponse } from 'src/constants/types/weather/weather-client.interface';
 import {
   Coordinates,
   GeocodingInterface,
+  GeocodingResponse,
 } from './interfaces/geocoding.interface';
 
 @Injectable()
