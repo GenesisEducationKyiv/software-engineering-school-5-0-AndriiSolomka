@@ -26,9 +26,15 @@ import { NodemailerModule } from './nodemailer/nodemailer.module';
 import { WeatherProviderModule } from './providers/weather/weather-provider.module';
 import { GeocodingModule } from './geocoding/geocoding.module';
 import config from './config';
+import { validationSchema } from './config/validation.schema';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: config,
+      validationSchema,
+    }),
     LoggerModule,
     FetchModule,
     WeatherModule,
@@ -42,10 +48,6 @@ import config from './config';
     ScheduleModule,
     NotificationModule,
     ScheduleNestModule.forRoot(),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: config,
-    }),
     CacheWeatherModule,
     CacheCityModule,
     CacheModule,

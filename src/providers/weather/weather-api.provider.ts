@@ -1,21 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { WeatherProvider } from './weather.provider';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 import { FetchService } from 'src/fetch/fetch.service';
-import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { WeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
+import apiConfig from 'src/config/api.config';
 
 @Injectable()
 export class WeatherApiProviderService extends WeatherProvider {
-  private apiKey: string;
-  private baseUrl: string;
   constructor(
     private readonly fetch: FetchService,
-    private readonly config: ConfigService,
+    @Inject(apiConfig.KEY)
+    private readonly config: ConfigType<typeof apiConfig>,
   ) {
     super();
-    this.apiKey = this.config.getOrThrow<string>('WEATHER.API_KEY');
-    this.baseUrl = this.config.getOrThrow<string>('WEATHER.BASE_URL');
   }
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
@@ -34,10 +32,10 @@ export class WeatherApiProviderService extends WeatherProvider {
 
   private buildUrl(city: string): string {
     const params = new URLSearchParams({
-      key: this.apiKey,
+      key: this.config.weatherApiKey,
       q: city,
       aqi: 'yes',
     });
-    return `${this.baseUrl}/current.json?${params.toString()}`;
+    return `${this.config.weatherApiUrl}/current.json?${params.toString()}`;
   }
 }

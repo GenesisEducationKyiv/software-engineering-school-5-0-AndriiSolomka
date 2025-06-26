@@ -5,19 +5,17 @@ import {
   CacheRepository,
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
-import { ConfigService } from '@nestjs/config';
+import cacheConfig from 'src/config/cache.config';
+import { ConfigType } from '@nestjs/config';
 
 @Injectable()
 export class CacheWeatherService extends CacheService<CreateWeatherDto> {
   constructor(
     @Inject(CacheRepositoryToken)
     cache: CacheRepository,
-    private readonly config: ConfigService,
+    @Inject(cacheConfig.KEY)
+    private readonly config: ConfigType<typeof cacheConfig>,
   ) {
-    super(
-      cache,
-      config.getOrThrow<string>('WEATHER_CACHE.PREFIX'),
-      config.getOrThrow<number>('WEATHER_CACHE.TTL'),
-    );
+    super(cache, config.weatherCachePrefix, config.weatherCacheTTL);
   }
 }

@@ -1,15 +1,15 @@
 import emailConfig from './email.config';
 import redisConfig from './redis.config';
-import cityCacheConfig from './cache/city-cache.config';
-import weatherCacheConfig from './cache/weather-cache.config';
-import openMeteoConfig from './weather/open-meteo.config';
-import weatherApiConfig from './weather/weather-api.config';
+import apiConfig from './api.config';
+import appConfig from './app.config';
+import cacheConfig from './cache.config';
+import loggingConfig from './logging.config';
 
 export default [
   emailConfig,
-  weatherApiConfig,
   redisConfig,
-  cityCacheConfig,
-  weatherCacheConfig,
-  openMeteoConfig,
+  cacheConfig,
+  apiConfig,
+  appConfig,
+  loggingConfig,
 ];

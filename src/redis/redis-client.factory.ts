@@ -1,17 +1,21 @@
 import { FactoryProvider } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Redis } from 'ioredis';
 import { AppLoggerService } from '../logger/app-logger.service';
+import { ConfigType } from '@nestjs/config';
+import redisConfig from 'src/config/redis.config';
 
 export const REDIS_CLIENT = Symbol('RedisClient');
 
 export const redisClientFactory: FactoryProvider<Redis> = {
   provide: REDIS_CLIENT,
-  useFactory: (configService: ConfigService, logger: AppLoggerService) => {
+  useFactory: (
+    config: ConfigType<typeof redisConfig>,
+    logger: AppLoggerService,
+  ) => {
     try {
       const redis = new Redis({
-        host: configService.getOrThrow<string>('REDIS_HOST'),
-        port: configService.getOrThrow<number>('REDIS_PORT'),
+        host: config.host,
+        port: config.port,
       });
 
       redis.on('error', (e) => {
@@ -25,5 +29,5 @@ export const redisClientFactory: FactoryProvider<Redis> = {
       process.exit(1);
     }
   },
-  inject: [ConfigService, AppLoggerService],
+  inject: [redisConfig.KEY, AppLoggerService],
 };

@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { WeatherProvider } from './weather.provider';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 import { FetchService } from 'src/fetch/fetch.service';
-import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import {
   openMeteoWeatherCodeMap,
   OpenMeteoResponse,
 } from 'src/constants/types/weather/weather-client.interface';
 import { GeocodingService } from 'src/geocoding/geocoding.service';
+import apiConfig from 'src/config/api.config';
 
 const CURRENT_FIELDS = [
   'temperature_2m',
@@ -17,14 +18,13 @@ const CURRENT_FIELDS = [
 
 @Injectable()
 export class OpenMeteoProviderService extends WeatherProvider {
-  private baseWeatherUrl: string;
   constructor(
     private readonly fetch: FetchService,
-    private readonly config: ConfigService,
+    @Inject(apiConfig.KEY)
+    private readonly baseWeatherUrl: ConfigType<typeof apiConfig>,
     private readonly cityService: GeocodingService,
   ) {
     super();
-    this.baseWeatherUrl = this.config.getOrThrow<string>('OPEN_METEO.BASE_URL');
   }
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
@@ -52,6 +52,6 @@ export class OpenMeteoProviderService extends WeatherProvider {
       longitude: longitude.toString(),
       current: CURRENT_FIELDS.join(','),
     });
-    return `${this.baseWeatherUrl}/forecast?${params.toString()}`;
+    return `${this.baseWeatherUrl.openMeteoApiUrl}/forecast?${params.toString()}`;
   }
 }
