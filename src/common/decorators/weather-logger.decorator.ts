@@ -1,26 +1,20 @@
-import { WeatherProvider } from 'src/providers/weather/weather.provider';
+import { FetchService } from 'src/fetch/fetch.service';
 import { appendToLogFile } from 'src/utils/logger/custom.logger';
-import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 
-export class WeatherLoggingDecorator extends WeatherProvider {
+export class LoggingFetchService extends FetchService {
   constructor(
-    private readonly wrapped: WeatherProvider,
-    private readonly providerName: string,
+    private readonly wrapped: FetchService,
     private readonly enableLogging: boolean,
   ) {
     super();
   }
 
-  async getWeather(city: string): Promise<CreateWeatherDto> {
-    const result = await this.wrapped.getWeather(city);
+  async get<T>(url: string): Promise<T> {
+    const result = await this.wrapped.get<T>(url);
     if (this.enableLogging) {
-      const logMessage = this.buildMessage(city, result);
+      const logMessage = `${url} - Response: ${JSON.stringify(result)}\n`;
       appendToLogFile(logMessage);
     }
     return result;
-  }
-
-  private buildMessage(city: string, result: CreateWeatherDto): string {
-    return `${new Date().toISOString()} | ${this.providerName} - Response for "${city}": ${JSON.stringify(result)}\n`;
   }
 }
