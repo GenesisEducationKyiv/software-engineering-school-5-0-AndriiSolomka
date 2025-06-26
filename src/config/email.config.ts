@@ -1,8 +1,26 @@
-import { registerAs } from '@nestjs/config';
+import { Configuration, Value } from '@itgorillaz/configify';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
-export default registerAs('email', () => ({
-  confirmLink: process.env.EMAIL_CONFIRM_LINK!,
-  sender: process.env.EMAIL_USER!,
-  password: process.env.EMAIL_PASSWORD!,
-  service: process.env.EMAIL_SERVICE!,
-}));
+@Configuration()
+export class EmailConfig {
+  @IsEmail()
+  @IsNotEmpty()
+  @Value('EMAIL_USER')
+  user: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Value('EMAIL_PASSWORD')
+  password: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @Value('EMAIL_SERVICE')
+  service: string;
+
+  @Value('EMAIL_CONFIRM_LINK')
+  confirmLink: string;
+
+  @Value('EMAIL_UNSUBSCRIBE_LINK')
+  unsubscribeLink: string;
+}

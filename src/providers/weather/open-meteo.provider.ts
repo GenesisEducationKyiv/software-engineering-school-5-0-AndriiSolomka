@@ -1,14 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { WeatherProvider } from './weather.provider';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 import { FetchService } from 'src/fetch/fetch.service';
-import { ConfigType } from '@nestjs/config';
 import {
   openMeteoWeatherCodeMap,
   OpenMeteoResponse,
 } from 'src/constants/types/weather/weather-client.interface';
 import { GeocodingService } from 'src/geocoding/geocoding.service';
-import apiConfig from 'src/config/api.config';
+import { ApiConfig } from 'src/config/api.config';
 
 const CURRENT_FIELDS = [
   'temperature_2m',
@@ -20,8 +19,7 @@ const CURRENT_FIELDS = [
 export class OpenMeteoProviderService extends WeatherProvider {
   constructor(
     private readonly fetch: FetchService,
-    @Inject(apiConfig.KEY)
-    private readonly baseWeatherUrl: ConfigType<typeof apiConfig>,
+    private readonly baseWeatherUrl: ApiConfig,
     private readonly cityService: GeocodingService,
   ) {
     super();

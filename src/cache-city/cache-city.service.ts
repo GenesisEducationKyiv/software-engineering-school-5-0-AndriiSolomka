@@ -1,11 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigType } from '@nestjs/config';
 import { CacheService } from 'src/cache/cache.service';
 import {
   CacheRepository,
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
-import cacheConfig from 'src/config/cache.config';
+import { CacheConfig } from 'src/config/cache.config';
 import { GeocodingResponse } from 'src/geocoding/interfaces/geocoding.interface';
 
 @Injectable()
@@ -13,8 +12,7 @@ export class CacheCityService extends CacheService<GeocodingResponse> {
   constructor(
     @Inject(CacheRepositoryToken)
     cache: CacheRepository,
-    @Inject(cacheConfig.KEY)
-    private readonly config: ConfigType<typeof cacheConfig>,
+    private readonly config: CacheConfig,
   ) {
     super(cache, config.cityCachePrefix, config.cityCacheTTL);
   }

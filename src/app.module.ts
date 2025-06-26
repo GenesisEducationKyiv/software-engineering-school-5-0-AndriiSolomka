@@ -8,7 +8,6 @@ import { LoggerModule } from './logger/logger.module';
 import { FetchModule } from './fetch/fetch.module';
 import { WeatherModule } from './weather/weather.module';
 import { PrismaModule } from './prisma/prisma.module';
-import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
 import { EmailModule } from './email/email.module';
 import { TokenModule } from './token/token.module';
@@ -25,16 +24,11 @@ import { CacheModule } from './cache/cache.module';
 import { NodemailerModule } from './nodemailer/nodemailer.module';
 import { WeatherProviderModule } from './providers/weather/weather-provider.module';
 import { GeocodingModule } from './geocoding/geocoding.module';
-import config from './config';
-import { validationSchema } from './config/validation.schema';
+import { ConfigifyModule } from '@itgorillaz/configify';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: config,
-      validationSchema,
-    }),
+    ConfigifyModule.forRootAsync({}),
     LoggerModule,
     FetchModule,
     WeatherModule,

@@ -1,5 +1,10 @@
-import { registerAs } from '@nestjs/config';
+import { Configuration, Value } from '@itgorillaz/configify';
 
-export default registerAs('app', () => ({
-  port: process.env.PORT,
-}));
+@Configuration()
+export class AppConfig {
+  @Value('PORT', {
+    parse: (val: string) => parseInt(val, 10),
+    default: 3000,
+  })
+  port: number;
+}

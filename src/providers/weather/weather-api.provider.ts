@@ -1,17 +1,15 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { WeatherProvider } from './weather.provider';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 import { FetchService } from 'src/fetch/fetch.service';
-import { ConfigType } from '@nestjs/config';
 import { WeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
-import apiConfig from 'src/config/api.config';
+import { ApiConfig } from 'src/config/api.config';
 
 @Injectable()
 export class WeatherApiProviderService extends WeatherProvider {
   constructor(
     private readonly fetch: FetchService,
-    @Inject(apiConfig.KEY)
-    private readonly config: ConfigType<typeof apiConfig>,
+    private readonly config: ApiConfig,
   ) {
     super();
   }

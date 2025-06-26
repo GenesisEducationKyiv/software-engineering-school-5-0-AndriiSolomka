@@ -1,21 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { ConfigType } from '@nestjs/config';
 import { EmailTransport } from 'src/email/interfaces/email-transport.interface';
-import emailConfig from 'src/config/email.config';
+import { EmailConfig } from 'src/config/email.config';
 
 @Injectable()
 export class NodemailerService implements EmailTransport {
   private transporter: nodemailer.Transporter;
 
-  constructor(
-    @Inject(emailConfig.KEY)
-    private readonly config: ConfigType<typeof emailConfig>,
-  ) {
+  constructor(private readonly config: EmailConfig) {
+    console.log(
+      `EmailService initialized with config: ${JSON.stringify(this.config.user)}`,
+    );
     this.transporter = nodemailer.createTransport({
       service: this.config.service,
       auth: {
-        user: this.config.sender,
+        user: this.config.user,
         pass: this.config.password,
       },
     });
@@ -23,7 +22,7 @@ export class NodemailerService implements EmailTransport {
 
   async send(mailOptions: { to: string; subject: string; text: string }) {
     await this.transporter.sendMail({
-      from: this.config.sender,
+      from: this.config.user,
       to: mailOptions.to,
       subject: mailOptions.subject,
       text: mailOptions.text,
