@@ -6,5 +6,3 @@ export interface GeocodingInterface {
   findCity(city: string): Promise<GeocodingResponse>;
   getCityCoordinates(city: string): Promise<Coordinates>;
 }
-
-export const GeocodingToken = Symbol('GeocodingToken');
