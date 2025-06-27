@@ -8,7 +8,13 @@ import {
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
 import { setupApp } from 'src/common/setup/setup';
-import { setupMswServer } from 'src/common/setup/msw/test.server';
+import { mockServer } from 'src/common/setup/msw/setup';
+import { searchApi, weatherApi } from 'src/common/setup/msw/handlers';
+
+async function clearCache(cacheRepository: CacheRepository, city: string) {
+  await cacheRepository.set('city', city.toLowerCase(), '');
+  await cacheRepository.set('weather', city.toLowerCase(), '');
+}
 import { GeocodingService } from 'src/geocoding/geocoding.service';
 
 describe('WeatherHandlersController (integration)', () => {
@@ -16,10 +22,7 @@ describe('WeatherHandlersController (integration)', () => {
   let cacheRepository: CacheRepository;
   let cityService: GeocodingService;
 
-  setupMswServer();
-
   const WEATHER_CACHE_PREFIX = 'weather';
-  const WEATHER_CACHE_TTL = 3600;
   const CITY_CACHE_PREFIX = 'city';
 
   beforeAll(async () => {
@@ -35,15 +38,29 @@ describe('WeatherHandlersController (integration)', () => {
     cityService = app.get(GeocodingService);
   });
 
+  beforeEach(() => {
+    mockServer.clearHandlers();
+  });
+
   afterAll(async () => {
     await app.close();
   });
 
   describe('GET /weather', () => {
+    const validCity = 'Kyiv';
+    const invalidCity = 'NonExistentCityForTest';
+
+    beforeEach(async () => {
+      await clearCache(cacheRepository, validCity);
+      await clearCache(cacheRepository, invalidCity);
+    });
+
     it('should return weather for a valid city', async () => {
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
+
       const res = await request(app.getHttpServer())
         .get('/api/weather')
-        .query({ city: 'Kyiv' })
+        .query({ city: validCity })
         .expect(200);
 
       expect(res.body).toHaveProperty('temperature');
@@ -52,9 +69,11 @@ describe('WeatherHandlersController (integration)', () => {
     });
 
     it('should return 404 for an invalid city', async () => {
+      mockServer.addHandlers([searchApi.notFound()]);
+
       await request(app.getHttpServer())
         .get('/api/weather')
-        .query({ city: 'InvalidCityNameForTest' })
+        .query({ city: invalidCity })
         .expect(404);
     });
 
@@ -63,44 +82,31 @@ describe('WeatherHandlersController (integration)', () => {
     });
 
     it('should cache weather data and return cached value on second request', async () => {
-      const city = 'Kyiv';
-      const key = city.toLowerCase();
+      mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
-      const fakeWeather = {
-        temperature: 123,
-        humidity: 99,
-        description: 'FAKE',
-      };
+      const key = validCity.toLowerCase();
 
-      await request(app.getHttpServer())
+      const res1 = await request(app.getHttpServer())
         .get('/api/weather')
-        .query({ city })
+        .query({ city: validCity })
         .expect(200);
-
-      await cacheRepository.setWithExpiry(
-        WEATHER_CACHE_PREFIX,
-        key,
-        JSON.stringify(fakeWeather),
-        WEATHER_CACHE_TTL,
-      );
 
       const res2 = await request(app.getHttpServer())
         .get('/api/weather')
-        .query({ city })
+        .query({ city: validCity })
         .expect(200);
 
-      expect(res2.body).toEqual(fakeWeather);
+      expect(res2.body).toEqual(res1.body);
 
       const cachedData = await cacheRepository.get(WEATHER_CACHE_PREFIX, key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData!)).toEqual(fakeWeather);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
 
     it('should cache invalid city data', async () => {
-      const invalidCity = 'NonExistentCityForTest';
-      const key = invalidCity.toLowerCase();
+      mockServer.addHandlers([searchApi.notFound()]);
 
-      await cacheRepository.set(CITY_CACHE_PREFIX, key, '');
+      const key = invalidCity.toLowerCase();
 
       await request(app.getHttpServer())
         .get('/api/weather')

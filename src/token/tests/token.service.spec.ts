@@ -12,7 +12,7 @@ jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
 }));
 
-function makeToken(overrides: Partial<Token> = {}): Token {
+function makeToken(): Token {
   const now = new Date();
   return {
     token_id: 1,
@@ -20,7 +20,6 @@ function makeToken(overrides: Partial<Token> = {}): Token {
     subscription_id: 1,
     createdAt: now,
     expiresAt: null,
-    ...overrides,
   };
 }
 
@@ -60,10 +59,10 @@ describe('TokenService', () => {
 
   describe('getEntity', () => {
     it('should return token entity if found', async () => {
-      const tokenEntity = makeToken({
-        token: 'mocked-token',
-        subscription_id: 1,
-      });
+      const tokenEntity = makeToken();
+      tokenEntity.token = 'mocked-token';
+
+      tokenEntity.subscription_id = 1;
       repoMock.findOne.mockResolvedValueOnce(tokenEntity);
 
       const result = await service.getEntity('mocked-token');

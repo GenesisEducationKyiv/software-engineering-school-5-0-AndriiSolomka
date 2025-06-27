@@ -1,4 +1,19 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, Route } from '@playwright/test';
+
+async function mockHttpResponse(
+  page: Page,
+  pattern: string | RegExp,
+  status: number,
+  body: object,
+) {
+  await page.route(pattern, async (route: Route) => {
+    await route.fulfill({
+      status,
+      contentType: 'application/json',
+      body: JSON.stringify(body),
+    });
+  });
+}
 
 test.describe('Weather Updates Service - E2E Test Suite', () => {
   let page: Page;
@@ -10,19 +25,10 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
 
   test.describe('Weather Search API and UI', () => {
     test('should display weather information for a valid city', async () => {
-      await page.route('**/weather*', async (route) => {
-        const url = route.request().url();
-        if (url.includes('city=Kyiv')) {
-          await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-              temperature: 20,
-              humidity: 65,
-              description: 'Partly cloudy',
-            }),
-          });
-        }
+      await mockHttpResponse(page, '**/weather?city=Kyiv', 200, {
+        temperature: 20,
+        humidity: 65,
+        description: 'Partly cloudy',
       });
 
       await page.fill('#citySearch', 'Kyiv');
@@ -36,15 +42,8 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('should display error message for invalid city', async () => {
-      await page.route('**/weather*', async (route) => {
-        const url = route.request().url();
-        if (url.includes('city=InvalidCity')) {
-          await route.fulfill({
-            status: 404,
-            contentType: 'application/json',
-            body: JSON.stringify({ message: 'City not found' }),
-          });
-        }
+      await mockHttpResponse(page, '**/weather?city=InvalidCity', 404, {
+        message: 'City not found',
       });
 
       await page.fill('#citySearch', 'InvalidCity');
@@ -57,16 +56,10 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('search should work when pressing Enter key', async () => {
-      await page.route('**/weather*', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            temperature: 15,
-            humidity: 70,
-            description: 'Rainy',
-          }),
-        });
+      await mockHttpResponse(page, '**/weather?city=London', 200, {
+        temperature: 15,
+        humidity: 70,
+        description: 'Rainy',
       });
 
       await page.fill('#citySearch', 'London');
@@ -79,16 +72,10 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
 
   test.describe('Subscription API and UI', () => {
     test('should show success message after successful subscription', async () => {
-      await page.route('**/subscribe', async (route) => {
-        await route.fulfill({
-          status: 201,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message:
-              'Subscription request sent! Please check your email to confirm.',
-            token: 'test-token-123',
-          }),
-        });
+      await mockHttpResponse(page, '**/subscribe', 201, {
+        message:
+          'Subscription request sent! Please check your email to confirm.',
+        token: 'test-token-123',
       });
 
       await page.fill('#email', 'test@example.com');
@@ -102,14 +89,8 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('should show error for already subscribed email', async () => {
-      await page.route('**/subscribe', async (route) => {
-        await route.fulfill({
-          status: 409,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'This email is already subscribed for this city.',
-          }),
-        });
+      await mockHttpResponse(page, '**/subscribe', 409, {
+        message: 'This email is already subscribed for this city.',
       });
 
       await page.fill('#email', 'existing@example.com');
@@ -125,23 +106,16 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('should display city value from weather search in subscription form', async () => {
-      await page.route('**/weather*', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            temperature: 25,
-            humidity: 50,
-            description: 'Sunny',
-          }),
-        });
+      await mockHttpResponse(page, '**/weather?city=Tokyo', 200, {
+        temperature: 25,
+        humidity: 50,
+        description: 'Sunny',
       });
 
       await page.fill('#citySearch', 'Tokyo');
       await page.click('#searchBtn');
 
       await expect(page.locator('#weatherResult')).toBeVisible();
-
       await expect(page.locator('#city')).toHaveValue('Tokyo');
     });
 
@@ -176,14 +150,8 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
 
   test.describe('Subscription Confirmation API', () => {
     test('should simulate successful subscription confirmation', async () => {
-      await page.route('**/confirm/**', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'Subscription confirmed successfully',
-          }),
-        });
+      await mockHttpResponse(page, '**/confirm/valid-token-123', 200, {
+        message: 'Subscription confirmed successfully',
       });
 
       await page.goto('/confirm/valid-token-123');
@@ -194,14 +162,8 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('should simulate failed subscription confirmation', async () => {
-      await page.route('**/confirm/invalid-token', async (route) => {
-        await route.fulfill({
-          status: 404,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'Token not found or has expired',
-          }),
-        });
+      await mockHttpResponse(page, '**/confirm/invalid-token', 404, {
+        message: 'Token not found or has expired',
       });
 
       await page.goto('/confirm/invalid-token');
@@ -214,14 +176,8 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
 
   test.describe('Unsubscribe API', () => {
     test('should simulate successful unsubscribe', async () => {
-      await page.route('**/unsubscribe/**', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'Subscription deleted successfully',
-          }),
-        });
+      await mockHttpResponse(page, '**/unsubscribe/valid-token-123', 200, {
+        message: 'Subscription deleted successfully',
       });
 
       await page.goto('/unsubscribe/valid-token-123');
@@ -232,14 +188,8 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('should simulate failed unsubscribe', async () => {
-      await page.route('**/unsubscribe/invalid-token', async (route) => {
-        await route.fulfill({
-          status: 404,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message: 'Token not found or subscription already deleted',
-          }),
-        });
+      await mockHttpResponse(page, '**/unsubscribe/invalid-token', 404, {
+        message: 'Token not found or subscription already deleted',
       });
 
       await page.goto('/unsubscribe/invalid-token');
@@ -279,28 +229,16 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
 
   test.describe('Complex User Flows', () => {
     test('should complete full search-then-subscribe flow', async () => {
-      await page.route('**/weather*', async (route) => {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            temperature: 22,
-            humidity: 45,
-            description: 'Clear sky',
-          }),
-        });
+      await mockHttpResponse(page, '**/weather?city=Madrid', 200, {
+        temperature: 22,
+        humidity: 45,
+        description: 'Clear sky',
       });
 
-      await page.route('**/subscribe', async (route) => {
-        await route.fulfill({
-          status: 201,
-          contentType: 'application/json',
-          body: JSON.stringify({
-            message:
-              'Subscription request sent! Please check your email to confirm.',
-            token: 'flow-test-token',
-          }),
-        });
+      await mockHttpResponse(page, '**/subscribe', 201, {
+        message:
+          'Subscription request sent! Please check your email to confirm.',
+        token: 'flow-test-token',
       });
 
       await page.fill('#citySearch', 'Madrid');
@@ -308,7 +246,6 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
 
       await expect(page.locator('#weatherResult')).toBeVisible();
       await expect(page.locator('#cityName')).toHaveText('Madrid');
-
       await expect(page.locator('#city')).toHaveValue('Madrid');
 
       await page.fill('#email', 'flow-test@example.com');
@@ -320,26 +257,13 @@ test.describe('Weather Updates Service - E2E Test Suite', () => {
     });
 
     test('should handle errors correctly when searching for non-existent city then fixing input', async () => {
-      await page.route('**/weather*', async (route) => {
-        const url = route.request().url();
-
-        if (url.includes('city=NonexistentCity')) {
-          await route.fulfill({
-            status: 404,
-            contentType: 'application/json',
-            body: JSON.stringify({ message: 'City not found' }),
-          });
-        } else if (url.includes('city=Paris')) {
-          await route.fulfill({
-            status: 200,
-            contentType: 'application/json',
-            body: JSON.stringify({
-              temperature: 19,
-              humidity: 60,
-              description: 'Cloudy',
-            }),
-          });
-        }
+      await mockHttpResponse(page, '**/weather?city=NonexistentCity', 404, {
+        message: 'City not found',
+      });
+      await mockHttpResponse(page, '**/weather?city=Paris', 200, {
+        temperature: 19,
+        humidity: 60,
+        description: 'Cloudy',
       });
 
       await page.fill('#citySearch', 'NonexistentCity');

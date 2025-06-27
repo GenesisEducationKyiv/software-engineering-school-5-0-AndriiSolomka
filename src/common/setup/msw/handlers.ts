@@ -1,61 +1,66 @@
-import { http } from 'msw';
+import { http, HttpResponse, JsonBodyType } from 'msw';
 
-export const createWeatherHandlers = (apiUrl: string) => {
-  return [
-    http.get(`${apiUrl}/search.json`, ({ request }) => {
-      const url = new URL(request.url);
-      const city = url.searchParams.get('q');
-
-      const validCities = ['Kyiv', 'Lviv', 'Odesa', 'Kharkiv', 'Dnipro'];
-
-      if (!city || !validCities.includes(city)) {
-        return new Response(JSON.stringify([]), { status: 200 });
-      }
-
-      return Response.json([
+export const weatherApi = {
+  mock: (fn: (city: string | null) => HttpResponse<JsonBodyType>) => {
+    return http.get(
+      'http://api.weatherapi.com/v1/current.json',
+      ({ request }) => {
+        const url = new URL(request.url);
+        const city = url.searchParams.get('q');
+        return fn(city);
+      },
+    );
+  },
+  ok: () =>
+    weatherApi.mock((city) =>
+      HttpResponse.json({
+        location: { name: city },
+        current: { temp_c: 20, humidity: 50, condition: { text: 'Sunny' } },
+      }),
+    ),
+  notFound: () =>
+    weatherApi.mock(() =>
+      HttpResponse.json(
         {
-          id: 12345,
-          name: city,
-          region: 'Some Region',
-          country: 'Ukraine',
-          lat: 50.45,
-          lon: 30.52,
-        },
-      ]);
-    }),
-
-    http.get(`${apiUrl}/current.json`, ({ request }) => {
-      const url = new URL(request.url);
-      const city = url.searchParams.get('q');
-
-      const validCities = ['Kyiv', 'Lviv', 'Odesa', 'Kharkiv', 'Dnipro'];
-
-      if (!city || !validCities.includes(city)) {
-        return new Response(
-          JSON.stringify({ error: { message: 'City not found' } }),
-          { status: 404 },
-        );
-      }
-
-      return Response.json({
-        location: {
-          name: city,
-          region: 'Some Region',
-          country: 'Ukraine',
-          lat: 50.45,
-          lon: 30.52,
-          localtime: '2023-05-17 15:00',
-        },
-        current: {
-          temp_c: 22,
-          condition: {
-            text: 'Sunny',
-            icon: '//cdn.weatherapi.com/weather/64x64/day/113.png',
+          error: {
+            code: 1006,
+            message: 'No matching location found.',
           },
-          humidity: 65,
-          wind_kph: 12,
         },
-      });
-    }),
-  ];
+        { status: 400 },
+      ),
+    ),
+};
+
+export const searchApi = {
+  mock: (fn: (city: string | null) => HttpResponse<JsonBodyType>) => {
+    return http.get(
+      'https://geocoding-api.open-meteo.com/v1/search',
+      ({ request }) => {
+        const url = new URL(request.url);
+        const city = url.searchParams.get('name');
+        return fn(city);
+      },
+    );
+  },
+  ok: () =>
+    searchApi.mock((city) =>
+      HttpResponse.json({
+        results: [
+          {
+            name: city,
+            latitude: 50.45,
+            longitude: 30.52,
+          },
+        ],
+      }),
+    ),
+
+  notFound: () =>
+    searchApi.mock(() =>
+      HttpResponse.json(
+        { results: [], generationtime_ms: 0.5 },
+        { status: 200 },
+      ),
+    ),
 };
