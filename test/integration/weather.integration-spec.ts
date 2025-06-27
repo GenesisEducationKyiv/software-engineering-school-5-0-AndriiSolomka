@@ -9,13 +9,14 @@ import {
 } from 'src/cache/interfaces/cache-repository.interface';
 import { setupApp } from 'src/common/setup/setup';
 import { mockServer } from 'src/common/setup/msw/setup';
-import { searchApi, weatherApi } from 'src/common/setup/msw/handlers';
+import { GeocodingService } from 'src/geocoding/geocoding.service';
+import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
+import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
 
 async function clearCache(cacheRepository: CacheRepository, city: string) {
   await cacheRepository.set('city', city.toLowerCase(), '');
   await cacheRepository.set('weather', city.toLowerCase(), '');
 }
-import { GeocodingService } from 'src/geocoding/geocoding.service';
 
 describe('WeatherHandlersController (integration)', () => {
   let app: INestApplication<Server>;

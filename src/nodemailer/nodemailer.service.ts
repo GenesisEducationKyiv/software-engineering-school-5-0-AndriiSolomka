@@ -8,9 +8,6 @@ export class NodemailerService implements EmailTransport {
   private transporter: nodemailer.Transporter;
 
   constructor(private readonly config: EmailConfig) {
-    console.log(
-      `EmailService initialized with config: ${JSON.stringify(this.config.user)}`,
-    );
     this.transporter = nodemailer.createTransport({
       service: this.config.service,
       auth: {
