@@ -7,12 +7,9 @@ export const REDIS_CLIENT = Symbol('RedisClient');
 
 export const redisClientFactory: FactoryProvider<Redis> = {
   provide: REDIS_CLIENT,
-  useFactory: (config: RedisConfig, logger: AppLoggerService) => {
+  useFactory: ({ host, port }: RedisConfig, logger: AppLoggerService) => {
     try {
-      const redis = new Redis({
-        host: config.host,
-        port: config.port,
-      });
+      const redis = new Redis({ host, port });
 
       redis.on('error', (e) => {
         logger.error(`Redis connection failed: ${e}`);
