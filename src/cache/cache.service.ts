@@ -3,10 +3,9 @@ import {
   CacheRepository,
   CacheRepositoryToken,
 } from './interfaces/cache-repository.interface';
-import type { ICacheService } from 'src/cache/interfaces/cache-service.interface';
 
 @Injectable()
-export class CacheService<T> implements ICacheService<T> {
+export class CacheService<T> {
   constructor(
     @Inject(CacheRepositoryToken)
     private readonly cache: CacheRepository,

@@ -4,10 +4,9 @@ import { SubscriptionDomainService } from 'src/subscription-domain/subscription-
 import { WeatherService } from 'src/weather/weather.service';
 import { EmailService } from 'src/email/email.service';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
-import type { INotificationService } from 'src/notification/interfaces/notification-service.interface';
 
 @Injectable()
-export class NotificationService implements INotificationService {
+export class NotificationService {
   constructor(
     private readonly subService: SubscriptionDomainService,
     private readonly weatherService: WeatherService,

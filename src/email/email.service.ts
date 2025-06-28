@@ -5,11 +5,10 @@ import {
 } from './interfaces/email-transport.interface';
 import { EMAIL } from 'src/constants/enums/email/email.enum';
 import { IEmailPayload } from 'src/constants/types/email/email.interface';
-import type { IEmailService } from 'src/email/interfaces/email-service.interface';
 import { EmailConfig } from 'src/config/email.config';
 
 @Injectable()
-export class EmailService implements IEmailService {
+export class EmailService {
   constructor(
     @Inject(EmailTransportToken)
     private readonly transport: EmailTransport,
