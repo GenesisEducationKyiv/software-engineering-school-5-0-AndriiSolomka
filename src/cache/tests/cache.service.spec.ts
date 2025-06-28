@@ -4,10 +4,9 @@ import {
   CacheRepository,
   CacheRepositoryToken,
 } from '../interfaces/cache-repository.interface';
-import { ICacheService } from '../interfaces/cache-service.interface';
 
 describe('CacheService', () => {
-  let cacheService: ICacheService<unknown>;
+  let cacheService: CacheService<unknown>;
   let cacheRepositoryMock: jest.Mocked<
     Pick<CacheRepository, 'get' | 'set' | 'setWithExpiry'>
   >;
