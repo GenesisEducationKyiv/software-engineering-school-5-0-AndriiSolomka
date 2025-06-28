@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FetchService } from 'src/fetch/fetch.service';
+import { HttpClientService } from 'src/http-client/http-client.service';
 import {
   Coordinates,
   GeocodingInterface,
@@ -9,13 +9,13 @@ import {
 @Injectable()
 export class GeocodingService implements GeocodingInterface {
   constructor(
-    private readonly fetch: FetchService,
+    private readonly httpService: HttpClientService,
     private readonly geocodingUrl: string,
   ) {}
 
   async findCity(city: string): Promise<GeocodingResponse> {
     const url = this.buildCityUrl(city);
-    return await this.fetch.get<GeocodingResponse>(url);
+    return await this.httpService.get<GeocodingResponse>(url);
   }
 
   async getCityCoordinates(city: string): Promise<Coordinates> {

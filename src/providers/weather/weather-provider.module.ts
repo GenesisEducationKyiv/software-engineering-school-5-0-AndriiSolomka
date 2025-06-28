@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { WeatherApiProviderService } from './weather-api.provider';
-import { FetchModule } from 'src/fetch/fetch.module';
+import { HttpClientModule } from 'src/http-client/http-client.module';
 import { OpenMeteoProviderService } from './open-meteo.provider';
 import { GeocodingModule } from 'src/geocoding/geocoding.module';
 
 @Module({
-  imports: [FetchModule, GeocodingModule],
+  imports: [HttpClientModule, GeocodingModule],
   providers: [WeatherApiProviderService, OpenMeteoProviderService],
   exports: [WeatherApiProviderService, OpenMeteoProviderService],
 })

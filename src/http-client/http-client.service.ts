@@ -1,8 +1,8 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import type { IFetchService } from 'src/fetch/interfaces/fetch-service.interface';
+import type { IFetchService } from 'src/http-client/interfaces/fetch-service.interface';
 
 @Injectable()
-export class FetchService implements IFetchService {
+export class HttpClientService implements IFetchService {
   async get<T>(url: string): Promise<T> {
     const response = await fetch(url);
 

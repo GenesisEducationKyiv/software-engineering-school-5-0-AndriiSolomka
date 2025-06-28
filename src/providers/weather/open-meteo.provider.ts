@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WeatherProvider } from './weather.provider';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
-import { FetchService } from 'src/fetch/fetch.service';
+import { HttpClientService } from 'src/http-client/http-client.service';
 import {
   openMeteoWeatherCodeMap,
   OpenMeteoResponse,
@@ -31,7 +31,7 @@ function parseWeatherData(response: OpenMeteoResponse): CreateWeatherDto {
 @Injectable()
 export class OpenMeteoProviderService extends WeatherProvider {
   constructor(
-    private readonly fetch: FetchService,
+    private readonly httpService: HttpClientService,
     private readonly config: ApiConfig,
     private readonly cityService: GeocodingService,
   ) {
@@ -41,7 +41,7 @@ export class OpenMeteoProviderService extends WeatherProvider {
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const coordinates = await this.cityService.getCityCoordinates(city);
     const url = this.buildUrl(coordinates);
-    const response = await this.fetch.get<OpenMeteoResponse>(url);
+    const response = await this.httpService.get<OpenMeteoResponse>(url);
     return parseWeatherData(response);
   }
 

@@ -5,7 +5,7 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { LoggerModule } from './logger/logger.module';
-import { FetchModule } from './fetch/fetch.module';
+import { HttpClientModule } from './http-client/http-client.module';
 import { WeatherModule } from './weather/weather.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { RedisModule } from './redis/redis.module';
@@ -30,7 +30,7 @@ import { ConfigifyModule } from '@itgorillaz/configify';
   imports: [
     ConfigifyModule.forRootAsync({}),
     LoggerModule,
-    FetchModule,
+    HttpClientModule,
     WeatherModule,
     PrismaModule,
     RedisModule,

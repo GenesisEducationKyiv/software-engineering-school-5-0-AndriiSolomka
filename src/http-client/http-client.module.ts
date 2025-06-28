@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { FetchService } from './fetch.service';
+import { HttpClientService } from './http-client.service';
 import { LoggerModule } from 'src/logger/logger.module';
 import { LoggingFetchService } from 'src/common/decorators/weather-logger.decorator';
 import { LoggingConfig } from 'src/config/logging.config';
@@ -8,14 +8,14 @@ import { LoggingConfig } from 'src/config/logging.config';
   imports: [LoggerModule],
   providers: [
     {
-      provide: FetchService,
+      provide: HttpClientService,
       useFactory: (config: LoggingConfig) => {
-        const original = new FetchService();
+        const original = new HttpClientService();
         return new LoggingFetchService(original, config.enableFileLogging);
       },
       inject: [LoggingConfig],
     },
   ],
-  exports: [FetchService],
+  exports: [HttpClientService],
 })
-export class FetchModule {}
+export class HttpClientModule {}

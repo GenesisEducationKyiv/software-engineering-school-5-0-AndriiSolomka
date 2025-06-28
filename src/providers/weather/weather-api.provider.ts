@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WeatherProvider } from './weather.provider';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
-import { FetchService } from 'src/fetch/fetch.service';
+import { HttpClientService } from 'src/http-client/http-client.service';
 import { WeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
 import { ApiConfig } from 'src/config/api.config';
 
@@ -16,7 +16,7 @@ function parseWeatherData(response: WeatherApiResponse): CreateWeatherDto {
 @Injectable()
 export class WeatherApiProviderService extends WeatherProvider {
   constructor(
-    private readonly fetch: FetchService,
+    private readonly httpService: HttpClientService,
     private readonly config: ApiConfig,
   ) {
     super();
@@ -24,7 +24,7 @@ export class WeatherApiProviderService extends WeatherProvider {
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const url = this.buildUrl(city);
-    const response = await this.fetch.get<WeatherApiResponse>(url);
+    const response = await this.httpService.get<WeatherApiResponse>(url);
     return parseWeatherData(response);
   }
 
