@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-
 import { CacheWeatherService } from 'src/cache-weather/cache-weather.service';
 import { OpenMeteoProviderService } from 'src/providers/weather/open-meteo.provider';
 import { WeatherApiProviderService } from 'src/providers/weather/weather-api.provider';

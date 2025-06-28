@@ -2,10 +2,11 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   CacheRepository,
   CacheRepositoryToken,
+  CacheServiceInterface,
 } from './interfaces/cache-repository.interface';
 
 @Injectable()
-export class CacheService<T> {
+export class CacheService<T> implements CacheServiceInterface<T> {
   constructor(
     @Inject(CacheRepositoryToken)
     private readonly cache: CacheRepository,

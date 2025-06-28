@@ -5,6 +5,7 @@ import {
   GeocodingInterface,
   GeocodingResponse,
 } from 'src/geocoding/interfaces/geocoding.interface';
+import { cachedResult } from 'src/utils/cache/cache.utils';
 
 export class GeocodingProxyService implements GeocodingInterface {
   constructor(
@@ -13,12 +14,7 @@ export class GeocodingProxyService implements GeocodingInterface {
   ) {}
 
   async findCity(city: string): Promise<GeocodingResponse> {
-    const cached = await this.cache.get(city);
-    if (cached) return cached;
-
-    const data = await this.geocoding.findCity(city);
-    await this.cache.set(city, data);
-    return data;
+    return cachedResult(city, this.cache, () => this.geocoding.findCity(city));
   }
 
   async getCityCoordinates(city: string): Promise<Coordinates> {
