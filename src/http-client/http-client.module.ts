@@ -9,9 +9,13 @@ import { LoggingConfig } from 'src/config/logging.config';
   providers: [
     {
       provide: HttpClientService,
-      useFactory: (config: LoggingConfig) => {
+      useFactory: ({ enableFileLogging, logFileName }: LoggingConfig) => {
         const original = new HttpClientService();
-        return new LoggingFetchService(original, config.enableFileLogging);
+        return new LoggingFetchService(
+          original,
+          enableFileLogging,
+          logFileName,
+        );
       },
       inject: [LoggingConfig],
     },

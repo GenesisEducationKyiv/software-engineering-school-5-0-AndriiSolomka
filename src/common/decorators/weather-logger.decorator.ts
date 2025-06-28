@@ -5,6 +5,7 @@ export class LoggingFetchService extends HttpClientService {
   constructor(
     private readonly wrapped: HttpClientService,
     private readonly enableLogging: boolean,
+    private readonly fileName: string,
   ) {
     super();
   }
@@ -12,7 +13,10 @@ export class LoggingFetchService extends HttpClientService {
   async get<T>(url: string): Promise<T> {
     const result = await this.wrapped.get<T>(url);
     if (this.enableLogging) {
-      appendToLogFile(`${url} - Response: ${JSON.stringify(result)}\n`);
+      appendToLogFile(
+        `${url} - Response: ${JSON.stringify(result)}\n`,
+        this.fileName,
+      );
     }
     return result;
   }
