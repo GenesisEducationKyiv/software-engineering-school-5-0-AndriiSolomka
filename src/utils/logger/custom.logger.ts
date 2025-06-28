@@ -3,8 +3,8 @@ import * as path from 'path';
 
 const LOG_DIR = path.resolve(__dirname, '../../../logs');
 
-if (!fs.existsSync(LOG_DIR)) {
-  fs.mkdirSync(LOG_DIR, { recursive: true });
+export function ensureLogDirExists(): void {
+  if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
 }
 
 export function appendToLogFile(message: string, fileName = 'http.log') {
