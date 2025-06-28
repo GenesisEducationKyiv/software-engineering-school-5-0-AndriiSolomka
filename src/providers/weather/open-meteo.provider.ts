@@ -29,14 +29,12 @@ function parseWeatherData(response: OpenMeteoResponse): CreateWeatherDto {
 }
 
 @Injectable()
-export class OpenMeteoProviderService extends WeatherProvider {
+export class OpenMeteoProviderService implements WeatherProvider {
   constructor(
     private readonly httpService: HttpClientService,
     private readonly config: ApiConfig,
     private readonly cityService: GeocodingService,
-  ) {
-    super();
-  }
+  ) {}
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const coordinates = await this.cityService.getCityCoordinates(city);

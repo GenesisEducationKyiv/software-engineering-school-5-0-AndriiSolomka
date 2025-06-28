@@ -14,13 +14,11 @@ function parseWeatherData(response: WeatherApiResponse): CreateWeatherDto {
 }
 
 @Injectable()
-export class WeatherApiProviderService extends WeatherProvider {
+export class WeatherApiProviderService implements WeatherProvider {
   constructor(
     private readonly httpService: HttpClientService,
     private readonly config: ApiConfig,
-  ) {
-    super();
-  }
+  ) {}
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const url = this.buildUrl(city);

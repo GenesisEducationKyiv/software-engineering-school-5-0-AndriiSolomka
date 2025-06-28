@@ -1,24 +1,24 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
 
-export abstract class WeatherProvider {
-  private next: WeatherProvider;
+export interface WeatherProvider {
+  getWeather(city: string): Promise<CreateWeatherDto>;
+}
 
-  setNext(provider: WeatherProvider): WeatherProvider {
-    this.next = provider;
-    return provider;
-  }
+export class WeatherProviderChain implements WeatherProvider {
+  constructor(private readonly providers: WeatherProvider[]) {}
 
-  async handle(city: string): Promise<CreateWeatherDto> {
-    try {
-      return await this.getWeather(city);
-    } catch {
-      if (this.next) return this.next.handle(city);
-      throw new InternalServerErrorException(
-        'No weather provider could handle the request',
-      );
+  async getWeather(city: string): Promise<CreateWeatherDto> {
+    for (const provider of this.providers) {
+      try {
+        return await provider.getWeather(city);
+      } catch {
+        continue;
+      }
     }
-  }
 
-  abstract getWeather(city: string): Promise<CreateWeatherDto>;
+    throw new InternalServerErrorException(
+      'No weather provider could handle the request',
+    );
+  }
 }

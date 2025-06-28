@@ -12,7 +12,7 @@ export class WeatherCacheProxyService implements WeatherInterface {
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
     return cachedResult(city, this.cache, () =>
-      this.weatherProvider.handle(city),
+      this.weatherProvider.getWeather(city),
     );
   }
 }
