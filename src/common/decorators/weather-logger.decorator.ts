@@ -12,8 +12,7 @@ export class LoggingFetchService extends FetchService {
   async get<T>(url: string): Promise<T> {
     const result = await this.wrapped.get<T>(url);
     if (this.enableLogging) {
-      const logMessage = `${url} - Response: ${JSON.stringify(result)}\n`;
-      appendToLogFile(logMessage);
+      appendToLogFile(`${url} - Response: ${JSON.stringify(result)}\n`);
     }
     return result;
   }
