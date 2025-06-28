@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WeatherService } from '../weather.service';
-import { WeatherToken } from '../interfaces/weather.service.interface';
 
 describe('WeatherHandlersService', () => {
   let service: WeatherService;
@@ -11,9 +10,8 @@ describe('WeatherHandlersService', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
-        WeatherService,
         {
-          provide: WeatherToken,
+          provide: WeatherService,
           useValue: mockWeatherService,
         },
       ],
