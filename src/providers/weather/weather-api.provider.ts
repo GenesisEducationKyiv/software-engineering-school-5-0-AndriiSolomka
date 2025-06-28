@@ -5,6 +5,14 @@ import { FetchService } from 'src/fetch/fetch.service';
 import { WeatherApiResponse } from 'src/constants/types/weather/weather-client.interface';
 import { ApiConfig } from 'src/config/api.config';
 
+function parseWeatherData(response: WeatherApiResponse): CreateWeatherDto {
+  return {
+    temperature: response.current.temp_c,
+    humidity: response.current.humidity,
+    description: response.current.condition.text,
+  };
+}
+
 @Injectable()
 export class WeatherApiProviderService extends WeatherProvider {
   constructor(
@@ -17,15 +25,7 @@ export class WeatherApiProviderService extends WeatherProvider {
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const url = this.buildUrl(city);
     const response = await this.fetch.get<WeatherApiResponse>(url);
-    return this.parseWeatherData(response);
-  }
-
-  private parseWeatherData(response: WeatherApiResponse): CreateWeatherDto {
-    return {
-      temperature: response.current.temp_c,
-      humidity: response.current.humidity,
-      description: response.current.condition.text,
-    };
+    return parseWeatherData(response);
   }
 
   private buildUrl(city: string): string {

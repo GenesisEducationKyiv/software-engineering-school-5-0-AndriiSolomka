@@ -8,18 +8,31 @@ import {
 } from 'src/constants/types/weather/weather-client.interface';
 import { GeocodingService } from 'src/geocoding/geocoding.service';
 import { ApiConfig } from 'src/config/api.config';
+import { Coordinates } from 'src/geocoding/interfaces/geocoding.interface';
 
-const CURRENT_FIELDS = [
+const OPEN_METEO_CURRENT_WEATHER_FIELDS = [
   'temperature_2m',
   'relative_humidity_2m',
   'weather_code',
 ];
 
+function getWeatherDescription(weatherCode: number): string {
+  return openMeteoWeatherCodeMap[weatherCode] ?? 'Unknown weather condition';
+}
+
+function parseWeatherData(response: OpenMeteoResponse): CreateWeatherDto {
+  return {
+    temperature: response.current.temperature_2m,
+    humidity: response.current.relative_humidity_2m,
+    description: getWeatherDescription(response.current.weather_code),
+  };
+}
+
 @Injectable()
 export class OpenMeteoProviderService extends WeatherProvider {
   constructor(
     private readonly fetch: FetchService,
-    private readonly baseWeatherUrl: ApiConfig,
+    private readonly config: ApiConfig,
     private readonly cityService: GeocodingService,
   ) {
     super();
@@ -27,29 +40,17 @@ export class OpenMeteoProviderService extends WeatherProvider {
 
   async getWeather(city: string): Promise<CreateWeatherDto> {
     const coordinates = await this.cityService.getCityCoordinates(city);
-    const url = this.buildUrl(coordinates.latitude, coordinates.longitude);
+    const url = this.buildUrl(coordinates);
     const response = await this.fetch.get<OpenMeteoResponse>(url);
-    return this.parseWeatherData(response);
+    return parseWeatherData(response);
   }
 
-  private getWeatherDescription(weatherCode: number): string {
-    return openMeteoWeatherCodeMap[weatherCode] ?? 'Unknown weather condition';
-  }
-
-  private parseWeatherData(response: OpenMeteoResponse): CreateWeatherDto {
-    return {
-      temperature: response.current.temperature_2m,
-      humidity: response.current.relative_humidity_2m,
-      description: this.getWeatherDescription(response.current.weather_code),
-    };
-  }
-
-  private buildUrl(latitude: number, longitude: number): string {
+  private buildUrl({ latitude, longitude }: Coordinates): string {
     const params = new URLSearchParams({
       latitude: latitude.toString(),
       longitude: longitude.toString(),
-      current: CURRENT_FIELDS.join(','),
+      current: OPEN_METEO_CURRENT_WEATHER_FIELDS.join(','),
     });
-    return `${this.baseWeatherUrl.openMeteoApiUrl}/forecast?${params.toString()}`;
+    return `${this.config.openMeteoApiUrl}/forecast?${params.toString()}`;
   }
 }
