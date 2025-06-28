@@ -29,11 +29,6 @@ export class WeatherApiProviderService extends WeatherProvider {
   }
 
   private buildUrl(city: string): string {
-    const params = new URLSearchParams({
-      key: this.config.weatherApiKey,
-      q: city,
-      aqi: 'yes',
-    });
-    return `${this.config.weatherApiUrl}/current.json?${params.toString()}`;
+    return `${this.config.weatherApiUrl}/current.json?key=${this.config.weatherApiKey}&q=${city}&aqi=yes`;
   }
 }
