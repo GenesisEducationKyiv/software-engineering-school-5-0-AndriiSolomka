@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'src/http-client/http-client.module';
 import { CacheCityModule } from 'src/cache-city/cache-city.module';
 import { GeocodingService } from './geocoding.service';
-import { GeocodingProxyService } from 'src/proxy/geocoding/geocoding-proxy.service';
+import { GeocodingCacheProxyService } from 'src/proxy/geocoding/geocoding-cache-proxy.service';
 import { HttpClientService } from 'src/http-client/http-client.service';
 import { CacheCityService } from 'src/cache-city/cache-city.service';
 import { ApiConfig } from 'src/config/api.config';
@@ -21,7 +21,7 @@ import { ApiConfig } from 'src/config/api.config';
           fetchService,
           config.geocodingApiUrl,
         );
-        return new GeocodingProxyService(geocoding, cacheCityService);
+        return new GeocodingCacheProxyService(geocoding, cacheCityService);
       },
       inject: [HttpClientService, ApiConfig, CacheCityService],
     },

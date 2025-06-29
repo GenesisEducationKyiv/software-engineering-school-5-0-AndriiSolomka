@@ -7,7 +7,7 @@ import {
 } from 'src/geocoding/interfaces/geocoding.interface';
 import { cachedResult } from 'src/utils/cache/cache.utils';
 
-export class GeocodingProxyService implements GeocodingInterface {
+export class GeocodingCacheProxyService implements GeocodingInterface {
   constructor(
     private readonly geocoding: GeocodingService,
     private readonly cache: CacheCityService,
