@@ -24,7 +24,7 @@ describe('WeatherHandlersService', () => {
     jest.clearAllMocks();
   });
 
-  it('should return cached weather if present', async () => {
+  it('should return weather if present', async () => {
     const city = 'Kyiv';
     const cachedWeather = { temp: 20, description: 'sunny' };
 
@@ -34,17 +34,5 @@ describe('WeatherHandlersService', () => {
 
     expect(mockWeatherService.getWeather).toHaveBeenCalledWith(city);
     expect(result).toEqual(cachedWeather);
-  });
-
-  it('should fetch weather, cache it and return if not cached', async () => {
-    const city = 'Lviv';
-    const fetchedWeather = { temp: 15, description: 'cloudy' };
-
-    mockWeatherService.getWeather.mockResolvedValue(fetchedWeather);
-
-    const result = await service.getWeather(city);
-
-    expect(mockWeatherService.getWeather).toHaveBeenCalledWith(city);
-    expect(result).toEqual(fetchedWeather);
   });
 });
