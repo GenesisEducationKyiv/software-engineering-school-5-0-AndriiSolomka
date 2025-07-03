@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { logHttpRequest } from 'src/utils/logger/http-logger';
 import { HTTP_LOG_FILE_PATH } from 'src/utils/logger/logger.config';
 import { createPinoLogger } from 'src/utils/logger/logger.factory';

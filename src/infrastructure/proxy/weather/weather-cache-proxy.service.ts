@@ -1,10 +1,10 @@
-import { cachedResult } from 'src/utils/cache/cache.utils';
+import { WeatherProviderInterface } from 'src/core/abstracts/weather/weather-provider.interface';
 import {
   WeatherData,
   WeatherInterface,
 } from 'src/core/abstracts/weather/weather.interface';
-import { WeatherProviderInterface } from 'src/core/abstracts/weather/weather-provider.interface';
 import { CacheWeatherService } from 'src/infrastructure/cache/cache-weather.service';
+import { cachedResult } from 'src/utils/cache/cache.utils';
 
 export class WeatherCacheProxyService implements WeatherInterface {
   constructor(

@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { IsString, IsNotEmpty, IsEmail, IsEnum } from 'class-validator';
+import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { Frequency } from 'src/core/entities/subscription.entity';
 
 export class CreateSubscriptionDto {

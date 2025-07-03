@@ -1,11 +1,12 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CacheConfig } from 'src/config/cache.config';
-import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
-import { CacheService } from './cache.service';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'src/core/abstracts/cache/cache-repository.interface';
+import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+
+import { CacheService } from './cache.service';
 
 @Injectable()
 export class CacheWeatherService extends CacheService<WeatherData> {

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { WeatherProviderModule } from './weather-provider.module';
-
-import { GeocodingModule } from '../infrastructure/geocoding.module';
 import { WeatherHandlersController } from 'src/interface/controllers/weather.controller';
-import { WeatherService } from '../../weather/weather.service';
+
+import { WeatherProviderModule } from './weather-provider.module';
 import { WeatherFactory } from '../../factories/weather-factory';
-import { RedisModule } from '../cache/redis.module';
+import { WeatherService } from '../../weather/weather.service';
 import { CacheWeatherModule } from '../cache/cache-weather.module';
+import { RedisModule } from '../cache/redis.module';
+import { GeocodingModule } from '../infrastructure/geocoding.module';
 
 @Module({
   imports: [

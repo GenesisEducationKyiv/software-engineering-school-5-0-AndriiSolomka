@@ -3,6 +3,7 @@ import {
   makeGaugeProvider,
   makeHistogramProvider,
 } from '@willsoto/nestjs-prometheus';
+
 import { CACHE_METRIC_NAMES } from './constants/metrics.constants';
 
 export const cacheMetricProviders = [

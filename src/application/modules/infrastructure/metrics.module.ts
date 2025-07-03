@@ -1,4 +1,4 @@
-import { Module, Global } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { cacheMetricProviders } from 'src/infrastructure/metrics/cache-metrics';
 import { MetricsService } from 'src/infrastructure/metrics/metrics.service';

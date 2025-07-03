@@ -1,4 +1,5 @@
 import { setupServer } from 'msw/node';
+
 import type { RequestHandler } from 'msw';
 
 export type MockServer = ReturnType<typeof createMockServer>;

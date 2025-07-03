@@ -1,18 +1,17 @@
-import * as request from 'supertest';
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from 'src/app.module';
+import { Test, TestingModule } from '@nestjs/testing';
 import { Server } from 'http';
-
-import { setupApp } from 'src/common/setup/setup';
+import { AppModule } from 'src/app.module';
+import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
+import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 import { mockServer } from 'src/common/setup/msw/setup';
+import { setupApp } from 'src/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'src/core/abstracts/cache/cache-repository.interface';
 import { GeocodingService } from 'src/infrastructure/geocoding/geocoding.service';
-import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
-import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
+import * as request from 'supertest';
 
 async function clearCache(
   cacheRepository: CacheRepositoryInterface,

@@ -1,4 +1,4 @@
-import { http, HttpResponse, JsonBodyType } from 'msw';
+import { HttpResponse, JsonBodyType, http } from 'msw';
 
 export const searchApi = {
   mock: (fn: (city: string | null) => HttpResponse<JsonBodyType>) => {

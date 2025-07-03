@@ -1,34 +1,32 @@
+import { ConfigifyModule } from '@itgorillaz/configify';
 import {
   MiddlewareConsumer,
   Module,
   NestModule,
   RequestMethod,
 } from '@nestjs/common';
+import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 
-import { ConfigifyModule } from '@itgorillaz/configify';
-import { MetricsModule } from './application/modules/infrastructure/metrics.module';
+import { CacheCityModule } from './application/modules/cache/cache-city.module';
+import { CacheWeatherModule } from './application/modules/cache/cache-weather.module';
+import { CacheModule } from './application/modules/cache/cache.module';
+import { RedisModule } from './application/modules/cache/redis.module';
+import { GeocodingModule } from './application/modules/infrastructure/geocoding.module';
+import { HttpClientModule } from './application/modules/infrastructure/http-client.module';
 import { LoggerModule } from './application/modules/infrastructure/logger.module';
-import { WeatherModule } from './application/modules/weather/weather.module';
-
-import { TokenModule } from './application/modules/token/token.module';
+import { MetricsModule } from './application/modules/infrastructure/metrics.module';
+import { PrismaModule } from './application/modules/infrastructure/prisma.module';
+import { EmailModule } from './application/modules/notification/email.module';
+import { NodemailerModule } from './application/modules/notification/nodemailer.module';
+import { NotificationModule } from './application/modules/notification/notification.module';
+import { ScheduleModule } from './application/modules/notification/schedule.module';
 import { SubscriptionDomainModule } from './application/modules/subscription/subscription-domain.module';
 import { SubscriptionHandlersModule } from './application/modules/subscription/subscription-handlers.module';
-import { ScheduleModule } from './application/modules/notification/schedule.module';
-
-import { NodemailerModule } from './application/modules/notification/nodemailer.module';
+import { TokenModule } from './application/modules/token/token.module';
 import { WeatherProviderModule } from './application/modules/weather/weather-provider.module';
-import { GeocodingModule } from './application/modules/infrastructure/geocoding.module';
-import { CacheCityService } from './infrastructure/cache/cache-city.service';
+import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
-import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
-import { HttpClientModule } from './application/modules/infrastructure/http-client.module';
-import { PrismaModule } from './application/modules/infrastructure/prisma.module';
-import { RedisModule } from './application/modules/cache/redis.module';
-import { EmailModule } from './application/modules/notification/email.module';
-import { NotificationModule } from './application/modules/notification/notification.module';
-import { CacheWeatherModule } from './application/modules/cache/cache-weather.module';
-import { CacheCityModule } from './application/modules/cache/cache-city.module';
-import { CacheModule } from './application/modules/cache/cache.module';
+import { CacheCityService } from './infrastructure/cache/cache-city.service';
 
 @Module({
   imports: [

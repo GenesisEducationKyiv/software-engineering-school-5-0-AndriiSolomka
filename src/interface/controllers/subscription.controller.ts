@@ -1,7 +1,8 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
-import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
 import { SubscriptionHandlersService } from 'src/application/subscription/subscription-handler.service';
+import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+
+import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
 
 @Controller()
 export class SubscriptionHandlersController {

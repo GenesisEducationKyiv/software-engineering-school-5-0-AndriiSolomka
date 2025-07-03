@@ -1,4 +1,4 @@
-import { test, expect, Page, Route } from '@playwright/test';
+import { Page, Route, expect, test } from '@playwright/test';
 
 async function mockHttpResponse(
   page: Page,

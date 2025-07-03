@@ -1,18 +1,17 @@
-import * as request from 'supertest';
-import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { AppModule } from 'src/app.module';
-import { setupApp } from 'src/common/setup/setup';
-import { mockServer } from 'src/common/setup/msw/setup';
-import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
-import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
-
+import { Test, TestingModule } from '@nestjs/testing';
 import { Server } from 'http';
+import { AppModule } from 'src/app.module';
+import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
+import { openMeteoApi } from 'src/common/setup/msw/handlers/openmeteo';
+import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
+import { mockServer } from 'src/common/setup/msw/setup';
+import { setupApp } from 'src/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'src/core/abstracts/cache/cache-repository.interface';
-import { openMeteoApi } from 'src/common/setup/msw/handlers/openmeteo';
+import * as request from 'supertest';
 
 async function clearCityCache(
   cacheRepository: CacheRepositoryInterface,

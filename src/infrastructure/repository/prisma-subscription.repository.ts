@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Frequency, Subscription } from '@prisma/client';
 import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
-import { PrismaService } from '../database/prisma.service';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
+
+import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class PrismaSubscriptionRepository {

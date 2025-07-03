@@ -1,15 +1,15 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { EmailConfig } from 'src/config/email.config';
-
-import { EMAIL } from './constants/email.constants';
-import {
-  EmailInterface,
-  EmailPayload,
-} from 'src/core/abstracts/email/email.interface';
 import {
   EmailTransportInterface,
   EmailTransportToken,
 } from 'src/core/abstracts/email/email-transport.interface';
+import {
+  EmailInterface,
+  EmailPayload,
+} from 'src/core/abstracts/email/email.interface';
+
+import { EMAIL } from './constants/email.constants';
 
 @Injectable()
 export class EmailService implements EmailInterface {

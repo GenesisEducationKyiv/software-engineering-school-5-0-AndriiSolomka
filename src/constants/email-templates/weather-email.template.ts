@@ -1,4 +1,5 @@
 import { EMAIL } from 'src/constants/enums/email/email.enum';
+
 import { WeatherEmailPayload } from '../types/weather/weather-email.interface';
 
 export const createWeatherEmailText = ({

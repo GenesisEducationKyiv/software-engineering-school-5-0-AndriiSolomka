@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
-import { Frequency } from 'src/core/entities/subscription.entity';
-import { SubscriptionDomainService } from '../subscription/subscription-domain.service';
-import { EmailService } from 'src/infrastructure/email/email.service';
-import { NotificationInterface } from 'src/core/abstracts/notification/notification.interface';
 import { WeatherService } from 'src/application/weather/weather.service';
+import { NotificationInterface } from 'src/core/abstracts/notification/notification.interface';
+import { Frequency } from 'src/core/entities/subscription.entity';
+import { EmailService } from 'src/infrastructure/email/email.service';
+import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
+
+import { SubscriptionDomainService } from '../subscription/subscription-domain.service';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {

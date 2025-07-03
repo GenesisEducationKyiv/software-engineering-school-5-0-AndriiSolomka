@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import pino, { Logger, multistream, LoggerOptions } from 'pino';
+import pino, { Logger, LoggerOptions, multistream } from 'pino';
 
 export function createPinoLogger(
   filePath: string,

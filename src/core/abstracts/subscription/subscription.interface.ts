@@ -1,5 +1,8 @@
-import { Frequency } from 'src/core/entities/subscription.entity';
-import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
+import {
+  Frequency,
+  SubscriptionEntity,
+} from 'src/core/entities/subscription.entity';
+
 import { SubscriptionParams } from './subscription-repository.interface';
 
 export interface SubscriptionServiceInterface {

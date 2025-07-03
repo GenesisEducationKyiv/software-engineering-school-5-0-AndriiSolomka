@@ -1,6 +1,6 @@
 import {
-  createWeatherEmailText,
   EMAIL_SUBJECTS,
+  createWeatherEmailText,
 } from 'src/constants/email-templates/weather-email.template';
 import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
 import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
