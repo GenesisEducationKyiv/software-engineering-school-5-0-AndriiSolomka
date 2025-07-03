@@ -2,14 +2,14 @@ import * as request from 'supertest';
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { Server } from 'http';
 import { Frequency } from '@prisma/client';
 import { setupApp } from 'src/common/setup/setup';
-import { EmailService } from 'src/email/email.service';
 import { mockServer } from 'src/common/setup/msw/setup';
 import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
+import { PrismaService } from 'src/infrastructure/database/prisma.service';
+import { EmailService } from 'src/infrastructure/email/email.service';
 
 const makeDto = (
   overrides?: Partial<{ email: string; city: string; frequency: string }>,

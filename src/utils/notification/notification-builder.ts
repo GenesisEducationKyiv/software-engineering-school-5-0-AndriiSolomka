@@ -2,12 +2,12 @@ import {
   createWeatherEmailText,
   EMAIL_SUBJECTS,
 } from 'src/constants/email-templates/weather-email.template';
-import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
-import { CreateWeatherDto } from 'src/weather/dto/create-weather.dto';
+import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
 
 export function buildWeatherNotification(
-  sub: SubWithTokens,
-  weather: CreateWeatherDto,
+  sub: SubscriptionEntity,
+  weather: WeatherData,
 ): { subject: string; text: string } {
   const token = sub.tokens[0].token;
 

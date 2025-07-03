@@ -1,16 +1,13 @@
-import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
-import { GeocodingService } from 'src/geocoding/geocoding.service';
-import { CreateSubscriptionDto } from 'src/subscription-handlers/dto/create-subscription.dto';
+import { Injectable, PipeTransform } from '@nestjs/common';
+import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
+import { GeocodingService } from 'src/infrastructure/geocoding/geocoding.service';
 
 @Injectable()
 export class CityValidationPipe implements PipeTransform {
   constructor(private readonly geocodingService: GeocodingService) {}
 
-  async transform(value: CreateSubscriptionDto) {
-    const response = await this.geocodingService.findCity(value.city);
-    if (!response.results || response.results.length === 0) {
-      throw new NotFoundException(`City "${value.city}" not found`);
-    }
+  async transform(value: SubscriptionParams) {
+    await this.geocodingService.findCity(value.city);
     return value;
   }
 }

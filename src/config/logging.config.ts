@@ -1,5 +1,5 @@
 import { Configuration, Value } from '@itgorillaz/configify';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 @Configuration()
 export class LoggingConfig {
@@ -10,4 +10,11 @@ export class LoggingConfig {
     default: false,
   })
   enableFileLogging: boolean;
+
+  @IsString()
+  @IsOptional()
+  @Value('LOG_FILE_NAME', {
+    default: 'http.log',
+  })
+  logFileName: string;
 }

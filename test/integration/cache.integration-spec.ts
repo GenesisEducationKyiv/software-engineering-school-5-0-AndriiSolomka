@@ -3,13 +3,13 @@ import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
 import { setupApp } from 'src/common/setup/setup';
 import {
-  CacheRepository,
+  CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/cache/interfaces/cache-repository.interface';
+} from 'src/core/abstracts/cache/cache-repository.interface';
 
 describe('RedisRepository (integration)', () => {
   let app: INestApplication;
-  let cacheRepository: CacheRepository;
+  let cacheRepository: CacheRepositoryInterface;
 
   const PREFIX = 'testPrefix';
   const KEY = 'testKey';
@@ -24,7 +24,7 @@ describe('RedisRepository (integration)', () => {
     setupApp(app);
     await app.init();
 
-    cacheRepository = app.get<CacheRepository>(CacheRepositoryToken);
+    cacheRepository = app.get<CacheRepositoryInterface>(CacheRepositoryToken);
   });
 
   afterEach(async () => {

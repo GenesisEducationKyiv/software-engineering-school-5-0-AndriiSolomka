@@ -6,14 +6,18 @@ import { setupApp } from 'src/common/setup/setup';
 import { mockServer } from 'src/common/setup/msw/setup';
 import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
-import {
-  CacheRepository,
-  CacheRepositoryToken,
-} from 'src/cache/interfaces/cache-repository.interface';
-import { openMeteoApi } from 'src/common/setup/msw/handlers/openmeteo';
-import { Server } from 'http';
 
-async function clearCityCache(cacheRepository: CacheRepository, city: string) {
+import { Server } from 'http';
+import {
+  CacheRepositoryInterface,
+  CacheRepositoryToken,
+} from 'src/core/abstracts/cache/cache-repository.interface';
+import { openMeteoApi } from 'src/common/setup/msw/handlers/openmeteo';
+
+async function clearCityCache(
+  cacheRepository: CacheRepositoryInterface,
+  city: string,
+) {
   const key = city.toLowerCase();
   await cacheRepository.set('city', key, '');
   await cacheRepository.set('weather', key, '');
@@ -21,7 +25,7 @@ async function clearCityCache(cacheRepository: CacheRepository, city: string) {
 
 describe('Weather Providers (integration)', () => {
   let app: INestApplication<Server>;
-  let cacheRepository: CacheRepository;
+  let cacheRepository: CacheRepositoryInterface;
 
   const validCity = 'Kyiv';
   const invalidCity = 'NonExistentCity';

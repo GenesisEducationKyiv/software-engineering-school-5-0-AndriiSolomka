@@ -3,24 +3,28 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { AppModule } from 'src/app.module';
 import { Server } from 'http';
-import {
-  CacheRepository,
-  CacheRepositoryToken,
-} from 'src/cache/interfaces/cache-repository.interface';
+
 import { setupApp } from 'src/common/setup/setup';
 import { mockServer } from 'src/common/setup/msw/setup';
-import { GeocodingService } from 'src/geocoding/geocoding.service';
-import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
+import {
+  CacheRepositoryInterface,
+  CacheRepositoryToken,
+} from 'src/core/abstracts/cache/cache-repository.interface';
+import { GeocodingService } from 'src/infrastructure/geocoding/geocoding.service';
 import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
+import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 
-async function clearCache(cacheRepository: CacheRepository, city: string) {
+async function clearCache(
+  cacheRepository: CacheRepositoryInterface,
+  city: string,
+) {
   await cacheRepository.set('city', city.toLowerCase(), '');
   await cacheRepository.set('weather', city.toLowerCase(), '');
 }
 
 describe('WeatherHandlersController (integration)', () => {
   let app: INestApplication<Server>;
-  let cacheRepository: CacheRepository;
+  let cacheRepository: CacheRepositoryInterface;
   let cityService: GeocodingService;
 
   const WEATHER_CACHE_PREFIX = 'weather';
