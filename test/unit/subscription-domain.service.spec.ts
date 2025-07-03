@@ -2,10 +2,13 @@ import { ConflictException } from '@nestjs/common';
 
 import { Test } from '@nestjs/testing';
 import {
+  SubscriptionRepositoryInterface,
+  SubscriptionRepositoryToken,
+} from 'src/core/abstracts/subscription/subscription-repository.interface';
+import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
-import { SubscriptionRepository } from 'src/subscription-domain/interfaces/subscription-repository.interface';
 import { SubscriptionDomainService } from 'src/use-cases/subscription/subscription-domain.service';
 
 function makeSubscription(): SubscriptionEntity {
@@ -26,7 +29,7 @@ describe('SubscriptionDomainService', () => {
   let service: SubscriptionDomainService;
   let repoMock: jest.Mocked<
     Pick<
-      SubscriptionRepository,
+      SubscriptionRepositoryInterface,
       | 'create'
       | 'findOne'
       | 'delete'

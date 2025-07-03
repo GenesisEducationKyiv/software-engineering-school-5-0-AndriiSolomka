@@ -1,5 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { CacheRepositoryInterface, CacheRepositoryToken } from 'src/core/abstracts/cache/cache-repository.interface';
+import {
+  CacheRepositoryInterface,
+  CacheRepositoryToken,
+} from 'src/core/abstracts/cache/cache-repository.interface';
 import { CacheInterface } from 'src/core/abstracts/cache/cache.interface';
 import { CacheService } from 'src/infrastructure/cache/cache.service';
 
