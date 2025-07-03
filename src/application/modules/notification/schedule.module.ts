@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { SubscriptionDomainModule } from './subscription-domain.module';
+import { SubscriptionDomainModule } from '../subscription/subscription-domain.module';
 import { NotificationModule } from './notification.module';
 import { ScheduleService } from 'src/use-cases/schedule/schedule.service';
 

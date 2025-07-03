@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { PrismaModule } from './prisma.module';
-import { TokenModule } from './token.module';
-import { EmailModule } from './email.module';
+import { TokenModule } from '../token/token.module';
 import { SubscriptionDomainModule } from './subscription-domain.module';
-import { GeocodingModule } from './geocoding.module';
-import { SubscriptionHandlersService } from '../subscription/subscription-handler.service';
+import { GeocodingModule } from '../infrastructure/geocoding.module';
+import { SubscriptionHandlersService } from '../../subscription/subscription-handler.service';
 import { SubscriptionHandlersController } from 'src/interface/controllers/subscription.controller';
+import { PrismaModule } from '../infrastructure/prisma.module';
+import { EmailModule } from '../notification/email.module';
 
 @Module({
   imports: [
