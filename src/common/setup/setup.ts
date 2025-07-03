@@ -1,6 +1,4 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { SWAGGER } from 'src/constants/enums/swagger/swagger';
 
 export function setupApp(app: INestApplication): void {
   app.useGlobalPipes(
@@ -24,14 +22,4 @@ export function setupApp(app: INestApplication): void {
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     allowedHeaders: '*',
   });
-
-  const config = new DocumentBuilder()
-    .setTitle(SWAGGER.TITLE)
-    .setDescription(SWAGGER.DESCRIPTION)
-    .setVersion(SWAGGER.VERSION)
-    .addTag(SWAGGER.TAG)
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document);
 }

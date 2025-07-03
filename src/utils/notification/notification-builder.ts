@@ -1,9 +1,9 @@
+import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
 import {
   EMAIL_SUBJECTS,
   createWeatherEmailText,
-} from 'src/constants/email-templates/weather-email.template';
-import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
-import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
+} from 'src/infrastructure/email/constants/email.constants';
 
 export function buildWeatherNotification(
   sub: SubscriptionEntity,

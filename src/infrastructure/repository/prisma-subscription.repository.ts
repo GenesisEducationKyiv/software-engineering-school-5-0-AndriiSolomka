@@ -1,9 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Frequency, Subscription } from '@prisma/client';
-import { SubWithTokens } from 'src/constants/types/prisma/subscription.type';
+import { Prisma } from '@prisma/client';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
 
 import { PrismaService } from '../database/prisma.service';
+
+export type SubWithTokens = Prisma.SubscriptionGetPayload<{
+  include: { tokens: true };
+}>;
 
 @Injectable()
 export class PrismaSubscriptionRepository {
