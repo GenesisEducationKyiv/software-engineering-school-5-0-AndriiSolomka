@@ -1,13 +1,14 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { TokenInterface } from 'src/core/abstracts/token/token-interface';
 import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
-} from 'src/core/abstracts/token/token.interface';
+} from 'src/core/abstracts/token/token-repository.interface';
 import { TokenEntity } from 'src/core/entities/subscription.entity';
 import { randomByteGenerator } from 'src/utils/generator/random-generator';
 
 @Injectable()
-export class TokenService implements TokenService {
+export class TokenUseCase implements TokenInterface {
   constructor(
     @Inject(TokenRepositoryToken)
     private readonly tokenRepo: TokenRepositoryInterface,

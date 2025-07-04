@@ -5,7 +5,9 @@ import {
 
 import { SubscriptionParams } from './subscription-repository.interface';
 
-export interface SubscriptionServiceInterface {
+export const SubscriptionToken = Symbol('SubscriptionToken');
+
+export interface SubscriptionInterface {
   create(data: SubscriptionParams): Promise<SubscriptionEntity>;
   confirm(subscription_id: number): Promise<SubscriptionEntity>;
   delete(subscription_id: number): Promise<SubscriptionEntity>;

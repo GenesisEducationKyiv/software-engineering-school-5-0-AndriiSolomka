@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { WeatherHandlersController } from 'src/interface/controllers/weather.controller';
+import { WeatherUseCase } from 'src/use-cases/weather-updates/get-weather.use-case';
 
 import { WeatherProviderModule } from './weather-provider.module';
 import { WeatherFactory } from '../../factories/weather-factory';
-import { WeatherService } from '../../weather/weather.service';
 import { CacheWeatherModule } from '../cache/cache-weather.module';
 import { RedisModule } from '../cache/redis.module';
 import { GeocodingModule } from '../infrastructure/geocoding.module';
@@ -15,16 +14,15 @@ import { GeocodingModule } from '../infrastructure/geocoding.module';
     CacheWeatherModule,
     GeocodingModule,
   ],
-  controllers: [WeatherHandlersController],
   providers: [
-    WeatherService,
+    WeatherUseCase,
     WeatherFactory,
     {
-      provide: WeatherService,
+      provide: WeatherUseCase,
       useFactory: (factory: WeatherFactory) => factory.create(),
       inject: [WeatherFactory],
     },
   ],
-  exports: [WeatherService],
+  exports: [WeatherUseCase],
 })
 export class WeatherModule {}

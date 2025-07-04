@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ScheduleService } from 'src/use-cases/schedule/schedule.service';
+import { ScheduleUseCase } from 'src/use-cases/schedule/schedule.us-case';
 
-import { NotificationModule } from './notification.module';
+import { WeatherUpdatesModule } from './weather-updates.module';
 import { SubscriptionDomainModule } from '../subscription/subscription-domain.module';
 
 @Module({
-  imports: [SubscriptionDomainModule, NotificationModule],
-  providers: [ScheduleService],
+  imports: [SubscriptionDomainModule, WeatherUpdatesModule],
+  providers: [ScheduleUseCase],
 })
 export class ScheduleModule {}

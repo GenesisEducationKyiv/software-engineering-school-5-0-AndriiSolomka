@@ -8,7 +8,7 @@ import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
-import { SubscriptionDomainService } from 'src/use-cases/subscription/subscription-domain.service';
+import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
@@ -25,7 +25,7 @@ function makeSubscription(): SubscriptionEntity {
 }
 
 describe('SubscriptionDomainService', () => {
-  let service: SubscriptionDomainService;
+  let service: SubscriptionDomainUseCase;
   let repoMock: jest.Mocked<
     Pick<
       SubscriptionRepositoryInterface,
@@ -50,7 +50,7 @@ describe('SubscriptionDomainService', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        SubscriptionDomainService,
+        SubscriptionDomainUseCase,
         {
           provide: SubscriptionRepositoryToken,
           useValue: repoMock,
@@ -58,7 +58,7 @@ describe('SubscriptionDomainService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionDomainService>(SubscriptionDomainService);
+    service = module.get<SubscriptionDomainUseCase>(SubscriptionDomainUseCase);
   });
 
   describe('create', () => {

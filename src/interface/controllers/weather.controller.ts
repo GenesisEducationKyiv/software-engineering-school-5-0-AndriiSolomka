@@ -1,12 +1,12 @@
 import { Controller, Get, Query, UsePipes } from '@nestjs/common';
-import { WeatherService } from 'src/application/weather/weather.service';
 import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+import { WeatherUseCase } from 'src/use-cases/weather-updates/get-weather.use-case';
 
 import { WeatherQueryDto } from '../dto/weather/weather-query.dto';
 
 @Controller('weather')
 export class WeatherHandlersController {
-  constructor(private readonly weatherService: WeatherService) {}
+  constructor(private readonly weatherService: WeatherUseCase) {}
 
   @UsePipes(CityValidationPipe)
   @Get()

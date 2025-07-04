@@ -4,6 +4,8 @@ export interface WeatherData {
   description: string;
 }
 
+export const WeatherToken = Symbol('WeatherToken');
+
 export interface WeatherInterface {
   getWeather(city: string): Promise<WeatherData>;
 }

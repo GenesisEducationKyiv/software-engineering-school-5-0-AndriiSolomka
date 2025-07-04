@@ -1,15 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  EmailInterface,
+  EmailToken,
+} from 'src/core/abstracts/email/email.interface';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
-import { EmailService } from 'src/infrastructure/email/email.service';
-import { SubscriptionDomainService } from 'src/use-cases/subscription/subscription-domain.service';
-import { TokenService } from 'src/use-cases/token/token.service';
+import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
+import { TokenUseCase } from 'src/use-cases/token/token.use-case';
 
 @Injectable()
-export class SubscriptionHandlersService {
+export class SubscriptionHandlersUseCase {
   constructor(
-    private readonly subService: SubscriptionDomainService,
-    private readonly tokenService: TokenService,
-    private readonly mailService: EmailService,
+    private readonly subService: SubscriptionDomainUseCase,
+    private readonly tokenService: TokenUseCase,
+    @Inject(EmailToken)
+    private readonly mailService: EmailInterface,
   ) {}
 
   async subscribe(params: SubscriptionParams): Promise<{ message: string }> {

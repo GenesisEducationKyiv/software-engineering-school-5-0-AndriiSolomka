@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { SubscriptionHandlersController } from 'src/interface/controllers/subscription.controller';
+import { EmailToken } from 'src/core/abstracts/email/email.interface';
+import { EmailService } from 'src/infrastructure/email/email.service';
 
 import { SubscriptionDomainModule } from './subscription-domain.module';
-import { SubscriptionHandlersService } from '../../subscription/subscription-handler.service';
+import { SubscriptionHandlersUseCase } from '../../../use-cases/subscription/subscription-handler.use-case';
 import { GeocodingModule } from '../infrastructure/geocoding.module';
 import { PrismaModule } from '../infrastructure/prisma.module';
 import { EmailModule } from '../notification/email.module';
@@ -16,7 +17,13 @@ import { TokenModule } from '../token/token.module';
     SubscriptionDomainModule,
     GeocodingModule,
   ],
-  providers: [SubscriptionHandlersService],
-  controllers: [SubscriptionHandlersController],
+  providers: [
+    SubscriptionHandlersUseCase,
+    {
+      provide: EmailToken,
+      useExisting: EmailService,
+    },
+  ],
+  exports: [SubscriptionHandlersUseCase],
 })
 export class SubscriptionHandlersModule {}

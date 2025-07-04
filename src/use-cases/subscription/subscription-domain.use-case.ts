@@ -5,14 +5,14 @@ import {
   SubscriptionRepositoryInterface,
   SubscriptionRepositoryToken,
 } from 'src/core/abstracts/subscription/subscription-repository.interface';
-import { SubscriptionServiceInterface } from 'src/core/abstracts/subscription/subscription.interface';
+import { SubscriptionInterface } from 'src/core/abstracts/subscription/subscription.interface';
 import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
 
 @Injectable()
-export class SubscriptionDomainService implements SubscriptionServiceInterface {
+export class SubscriptionDomainUseCase implements SubscriptionInterface {
   constructor(
     @Inject(SubscriptionRepositoryToken)
     private readonly subscriptionRepo: SubscriptionRepositoryInterface,

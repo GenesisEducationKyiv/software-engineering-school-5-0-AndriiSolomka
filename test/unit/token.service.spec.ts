@@ -3,9 +3,9 @@ import { Test } from '@nestjs/testing';
 import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
-} from 'src/core/abstracts/token/token.interface';
+} from 'src/core/abstracts/token/token-repository.interface';
 import { TokenEntity } from 'src/core/entities/subscription.entity';
-import { TokenService } from 'src/use-cases/token/token.service';
+import { TokenUseCase } from 'src/use-cases/token/token.use-case';
 
 jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
@@ -23,7 +23,7 @@ function makeToken(): TokenEntity {
 }
 
 describe('TokenService', () => {
-  let service: TokenService;
+  let service: TokenUseCase;
   let repoMock: jest.Mocked<
     Pick<TokenRepositoryInterface, 'create' | 'findOne'>
   >;
@@ -36,7 +36,7 @@ describe('TokenService', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        TokenService,
+        TokenUseCase,
         {
           provide: TokenRepositoryToken,
           useValue: repoMock,
@@ -44,7 +44,7 @@ describe('TokenService', () => {
       ],
     }).compile();
 
-    service = module.get<TokenService>(TokenService);
+    service = module.get<TokenUseCase>(TokenUseCase);
   });
 
   describe('create', () => {

@@ -18,15 +18,16 @@ import { MetricsModule } from './application/modules/infrastructure/metrics.modu
 import { PrismaModule } from './application/modules/infrastructure/prisma.module';
 import { EmailModule } from './application/modules/notification/email.module';
 import { NodemailerModule } from './application/modules/notification/nodemailer.module';
-import { NotificationModule } from './application/modules/notification/notification.module';
 import { ScheduleModule } from './application/modules/notification/schedule.module';
+import { WeatherUpdatesModule } from './application/modules/notification/weather-updates.module';
 import { SubscriptionDomainModule } from './application/modules/subscription/subscription-domain.module';
-import { SubscriptionHandlersModule } from './application/modules/subscription/subscription-handlers.module';
 import { TokenModule } from './application/modules/token/token.module';
 import { WeatherProviderModule } from './application/modules/weather/weather-provider.module';
 import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
+import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
+import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 
 @Module({
   imports: [
@@ -41,9 +42,8 @@ import { CacheCityService } from './infrastructure/cache/cache-city.service';
     LoggerModule,
     TokenModule,
     SubscriptionDomainModule,
-    SubscriptionHandlersModule,
     ScheduleModule,
-    NotificationModule,
+    WeatherUpdatesModule,
     ScheduleNestModule.forRoot(),
     CacheWeatherModule,
     CacheCityModule,
@@ -51,6 +51,8 @@ import { CacheCityService } from './infrastructure/cache/cache-city.service';
     NodemailerModule,
     WeatherProviderModule,
     GeocodingModule,
+    SubscriptionControllersModule,
+    WeatherControllersModule,
   ],
   controllers: [],
   providers: [CacheCityService],

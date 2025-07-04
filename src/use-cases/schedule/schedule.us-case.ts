@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { Frequency } from 'src/core/entities/subscription.entity';
-import { NotificationService } from 'src/use-cases/notification/notification.service';
-import { SubscriptionDomainService } from 'src/use-cases/subscription/subscription-domain.service';
+import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';
+import { SendWeatherUpdatesUseCase } from '../weather-updates/weather-updates.use-case';
 
 @Injectable()
-export class ScheduleService {
+export class ScheduleUseCase {
   constructor(
-    private readonly subService: SubscriptionDomainService,
-    private readonly notificationService: NotificationService,
+    private readonly subService: SubscriptionDomainUseCase,
+    private readonly notificationService: SendWeatherUpdatesUseCase,
   ) {}
 
   @Cron(SCHEDULE.DELETE_UNCONFIRMED_SUBSCRIPTIONS)
