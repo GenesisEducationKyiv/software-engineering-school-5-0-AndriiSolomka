@@ -1,215 +1,90 @@
-import * as fs from 'fs';
-import * as path from 'path';
-import * as ts from 'typescript';
+import { filesOfProject } from 'tsarch';
+import 'tsarch/dist/jest';
 
 describe('Clean Architecture Compliance', () => {
-  const srcPath = path.resolve(__dirname, '../../src');
+  it('core does not depend on outer layers', () => {
+    const rule = filesOfProject()
+      .inFolder('src/core')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('src/infrastructure')
+      .inFolder('src/interface')
+      .inFolder('src/application')
+      .inFolder('src/use-cases');
 
-  const layerMapping = {
-    core: ['src/core'],
-    useCases: ['src/core/use-cases', 'src/use-cases'],
-    infrastructure: ['src/infrastructure'],
-    interface: ['src/interface'],
-    application: ['src/application'],
-  };
-
-  const allowedDependencies = {
-    core: [],
-    useCases: ['core'],
-    infrastructure: ['core', 'useCases'],
-    interface: ['core', 'useCases', 'application'],
-    application: ['core', 'useCases', 'infrastructure'],
-  };
-
-  function getImports(filePath: string): string[] {
-    const content = fs.readFileSync(filePath, 'utf8');
-    const sourceFile = ts.createSourceFile(
-      filePath,
-      content,
-      ts.ScriptTarget.ES2020,
-      true,
-    );
-
-    const imports: string[] = [];
-
-    function visit(node: ts.Node) {
-      if (ts.isImportDeclaration(node)) {
-        const moduleSpecifier = node.moduleSpecifier
-          .getText()
-          .replace(/['"`]/g, '');
-        if (moduleSpecifier.startsWith('src/')) {
-          imports.push(moduleSpecifier);
-        }
-      }
-      ts.forEachChild(node, visit);
-    }
-
-    visit(sourceFile);
-    return imports;
-  }
-
-  function getLayerForPath(filePath: string): string | null {
-    for (const [layer, paths] of Object.entries(layerMapping)) {
-      for (const layerPath of paths) {
-        if (filePath.includes(layerPath)) {
-          return layer;
-        }
-      }
-    }
-    return null;
-  }
-
-  function getAllFiles(dir: string, fileList: string[] = []): string[] {
-    const files = fs.readdirSync(dir);
-
-    files.forEach((file) => {
-      const filePath = path.join(dir, file);
-      if (fs.statSync(filePath).isDirectory()) {
-        getAllFiles(filePath, fileList);
-      } else if (filePath.endsWith('.ts') && !filePath.endsWith('.d.ts')) {
-        fileList.push(filePath);
-      }
-    });
-
-    return fileList;
-  }
-
-  test('Core layer should not depend on outer layers', () => {
-    const coreFiles = getAllFiles(path.join(srcPath, 'core'));
-
-    coreFiles.forEach((file) => {
-      const imports = getImports(file);
-      const forbiddenImports = imports.filter(
-        (imp) =>
-          imp.includes('src/infrastructure') ||
-          imp.includes('src/interface') ||
-          imp.includes('src/application'),
-      );
-
-      expect(forbiddenImports).toEqual([]);
-    });
+    return expect(rule).toPassAsync();
   });
 
-  test('Use cases should only depend on core', () => {
-    const useCaseFiles: string[] = [];
+  it('use cases depend only on core', () => {
+    const rule = filesOfProject()
+      .inFolder('src/use-cases')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('src/infrastructure')
+      .inFolder('src/interface')
+      .inFolder('src/application');
 
-    layerMapping.useCases.forEach((useCasePath) => {
-      const fullPath = path.join(srcPath, useCasePath.replace('src/', ''));
-      if (fs.existsSync(fullPath)) {
-        useCaseFiles.push(...getAllFiles(fullPath));
-      }
-    });
-
-    useCaseFiles.forEach((file) => {
-      const imports = getImports(file);
-      const forbiddenImports = imports.filter(
-        (imp) =>
-          imp.includes('src/infrastructure') || imp.includes('src/interface'),
-      );
-
-      if (forbiddenImports.length > 0) {
-        console.warn(
-          `File ${file} has forbidden dependencies: ${forbiddenImports.join(', ')}`,
-        );
-      }
-
-      expect(forbiddenImports).toEqual([]);
-    });
+    return expect(rule).toPassAsync();
   });
 
-  test('All layers should respect dependency rules', () => {
-    const allFiles = getAllFiles(srcPath);
-    const violations: { file: string; import: string }[] = [];
+  it('infrastructure depends only on core and use-cases', () => {
+    const rule = filesOfProject()
+      .inFolder('src/infrastructure')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('src/interface')
+      .inFolder('src/application');
 
-    allFiles.forEach((file) => {
-      const sourceLayer = getLayerForPath(file);
-      if (!sourceLayer) return;
-      const imports = getImports(file);
-
-      imports.forEach((importPath) => {
-        const importLayer = getLayerForPath(importPath);
-        if (!importLayer) return;
-
-        const allowed: string[] =
-          (allowedDependencies as Record<string, string[]>)[sourceLayer] || [];
-        if (!allowed.includes(importLayer) && sourceLayer !== importLayer) {
-          violations.push({
-            file: file.replace(srcPath, 'src'),
-            import: importPath,
-          });
-        }
-      });
-    });
-
-    if (violations.length > 0) {
-      console.error('Clean Architecture Violations:');
-      violations.forEach((v) => {
-        console.error(
-          `${v.file} imports ${v.import} which violates dependency rules`,
-        );
-      });
-    }
-
-    expect(violations).toEqual([]);
+    expect(rule).toPassAsync();
   });
 
-  test('Infrastructure should implement interfaces from core', () => {
-    const implFiles = getAllFiles(path.join(srcPath, 'infrastructure')).filter(
-      (file) => !file.includes('.interface.ts') && !file.includes('/types/'),
-    );
+  it('interface depends only on core and use-cases', () => {
+    const rule = filesOfProject()
+      .inFolder('src/interface')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('src/infrastructure')
+      .inFolder('src/application');
 
-    const implementsInterface = implFiles.filter((file) => {
-      const content = fs.readFileSync(file, 'utf8');
-      return (
-        content.includes('implements') &&
-        getImports(file).some((imp) => imp.includes('src/core/abstracts'))
-      );
-    });
-
-    expect(implementsInterface.length).toBeGreaterThan(0);
+    expect(rule).toPassAsync();
   });
 
-  test('Core entities should not have framework dependencies', () => {
-    const entityFiles = getAllFiles(path.join(srcPath, 'core/entities'));
+  it('application does not depend on interface layer', () => {
+    const rule = filesOfProject()
+      .inFolder('src/application')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('src/interface');
 
-    entityFiles.forEach((file) => {
-      const content = fs.readFileSync(file, 'utf8');
-
-      const hasFrameworkImports =
-        content.includes("from '@nestjs") || content.includes("from '@prisma");
-
-      expect(hasFrameworkImports).toBe(false);
-    });
+    expect(rule).toPassAsync();
   });
 
-  test('Interfaces in core should be implemented in infrastructure', () => {
-    const interfaceFiles = getAllFiles(
-      path.join(srcPath, 'core/abstracts'),
-    ).filter((file) => file.includes('.interface.ts'));
+  it('all layers are free of cycles', () => {
+    const coreCycleFree = filesOfProject()
+      .inFolder('src/core')
+      .should()
+      .beFreeOfCycles();
+    const useCasesCycleFree = filesOfProject()
+      .inFolder('src/use-cases')
+      .should()
+      .beFreeOfCycles();
+    const infrastructureCycleFree = filesOfProject()
+      .inFolder('src/infrastructure')
+      .should()
+      .beFreeOfCycles();
+    const interfaceCycleFree = filesOfProject()
+      .inFolder('src/interface')
+      .should()
+      .beFreeOfCycles();
+    const applicationCycleFree = filesOfProject()
+      .inFolder('src/application')
+      .should()
+      .beFreeOfCycles();
 
-    const interfaces = interfaceFiles
-      .map((file) => {
-        const content = fs.readFileSync(file, 'utf8');
-        const matches = content.match(/export\s+interface\s+(\w+)/g) || [];
-        return matches.map((m: string): string =>
-          m.replace(/export\s+interface\s+/, ''),
-        );
-      })
-      .flat();
-
-    const infrastructureFiles = getAllFiles(
-      path.join(srcPath, 'infrastructure'),
-    );
-    const implementedInterfaces = interfaces.filter((interfaceName) => {
-      return infrastructureFiles.some((file) => {
-        const content = fs.readFileSync(file, 'utf8');
-        return content.includes(`implements ${interfaceName}`);
-      });
-    });
-
-    expect(implementedInterfaces.length).toBeGreaterThan(0);
-    expect(
-      implementedInterfaces.length / interfaces.length,
-    ).toBeGreaterThanOrEqual(0.5);
+    expect(coreCycleFree).toPassAsync();
+    expect(useCasesCycleFree).toPassAsync();
+    expect(infrastructureCycleFree).toPassAsync();
+    expect(interfaceCycleFree).toPassAsync();
+    expect(applicationCycleFree).toPassAsync();
   });
 });
