@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WeatherService } from 'src/application/weather/weather.service';
+import { WeatherUseCase } from 'src/use-cases/weather-updates/get-weather.use-case';
 
 describe('WeatherHandlersService', () => {
-  let service: WeatherService;
+  let service: WeatherUseCase;
   const mockWeatherService = {
     getWeather: jest.fn(),
   };
@@ -10,15 +10,15 @@ describe('WeatherHandlersService', () => {
   beforeEach(async () => {
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
-        WeatherService,
+        WeatherUseCase,
         {
-          provide: WeatherService,
+          provide: WeatherUseCase,
           useValue: mockWeatherService,
         },
       ],
     }).compile();
 
-    service = moduleRef.get<WeatherService>(WeatherService);
+    service = moduleRef.get<WeatherUseCase>(WeatherUseCase);
   });
 
   afterEach(() => {

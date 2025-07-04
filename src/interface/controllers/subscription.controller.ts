@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { SubscriptionHandlersUseCase } from 'src/use-cases/subscription/subscription-handler.use-case';
 import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+import { SubscriptionHandlersUseCase } from 'src/use-cases/subscription/subscription-handler.use-case';
 
 import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
 
