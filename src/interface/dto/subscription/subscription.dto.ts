@@ -1,4 +1,3 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { Frequency } from 'src/core/entities/subscription.entity';
 
@@ -13,8 +12,4 @@ export class CreateSubscriptionDto {
 
   @IsEnum(Frequency)
   frequency: Frequency;
-}
-
-export class UpdateSubscriptionDto extends PartialType(CreateSubscriptionDto) {
-  confirmed?: boolean;
 }
