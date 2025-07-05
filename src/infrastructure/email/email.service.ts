@@ -9,8 +9,6 @@ import {
   EmailPayload,
 } from 'src/core/abstracts/email/email.interface';
 
-import { EMAIL } from './constants/email.constants';
-
 @Injectable()
 export class EmailService implements EmailInterface {
   constructor(
@@ -20,9 +18,7 @@ export class EmailService implements EmailInterface {
   ) {}
 
   async sendConfirmationEmail(email: string, token: string): Promise<void> {
-    const confirmationUrl = `${this.config.confirmLink}${token}`;
-    const subject = EMAIL.SUBJECT;
-    const text = `${EMAIL.TEXT} ${confirmationUrl}`;
+    const { subject, text } = this.buildConfirmationEmail(token);
     await this.transport.send({ to: email, subject, text });
   }
 
@@ -32,5 +28,12 @@ export class EmailService implements EmailInterface {
       subject: emailPayload.subject,
       text: emailPayload.text,
     });
+  }
+
+  private buildConfirmationEmail(token: string) {
+    const confirmationUrl = `${this.config.confirmLink}${token}`;
+    const subject = this.config.subject;
+    const text = `${this.config.text} ${confirmationUrl}`;
+    return { subject, text };
   }
 }

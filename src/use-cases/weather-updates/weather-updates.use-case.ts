@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { EmailConfig } from 'src/config/email.config';
 import {
   EmailInterface,
   EmailToken,
@@ -24,6 +25,7 @@ export class SendWeatherUpdatesUseCase implements EmailSenderInterface {
     private readonly weatherService: WeatherInterface,
     @Inject(EmailToken)
     private readonly emailService: EmailInterface,
+    private readonly emailConfig: EmailConfig,
   ) {}
 
   async sendWeatherUpdates(frequency: Frequency): Promise<void> {
@@ -31,7 +33,11 @@ export class SendWeatherUpdatesUseCase implements EmailSenderInterface {
 
     for (const sub of subscriptions) {
       const weather = await this.weatherService.getWeather(sub.city);
-      const { subject, text } = buildWeatherNotification(sub, weather);
+      const { subject, text } = buildWeatherNotification(
+        sub,
+        weather,
+        this.emailConfig.unsubscribeLink,
+      );
 
       await this.emailService.sendWeatherEmail({
         email: sub.email,
