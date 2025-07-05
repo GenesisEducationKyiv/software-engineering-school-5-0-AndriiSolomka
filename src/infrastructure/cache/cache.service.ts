@@ -31,4 +31,13 @@ export class CacheService<T> implements CacheInterface<T> {
       this.ttl,
     );
   }
+
+  async getOrSet(key: string, fetchFn: () => Promise<T>): Promise<T> {
+    const cached = await this.get(key);
+    if (cached) return cached;
+
+    const data = await fetchFn();
+    await this.set(key, data);
+    return data;
+  }
 }

@@ -4,7 +4,6 @@ import {
   WeatherInterface,
 } from 'src/core/abstracts/weather/weather.interface';
 import { CacheWeatherService } from 'src/infrastructure/cache/cache-weather.service';
-import { cachedResult } from 'src/utils/cache/cache.utils';
 
 export class WeatherCacheProxyService implements WeatherInterface {
   constructor(
@@ -13,7 +12,7 @@ export class WeatherCacheProxyService implements WeatherInterface {
   ) {}
 
   async getWeather(city: string): Promise<WeatherData> {
-    return cachedResult(city, this.cache, () =>
+    return this.cache.getOrSet(city, () =>
       this.weatherProvider.getWeather(city),
     );
   }
