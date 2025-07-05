@@ -25,10 +25,12 @@ import { NodemailerModule } from './nodemailer/nodemailer.module';
 import { WeatherProviderModule } from './providers/weather/weather-provider.module';
 import { GeocodingModule } from './geocoding/geocoding.module';
 import { ConfigifyModule } from '@itgorillaz/configify';
+import { MetricsModule } from './metrics/metrics.module';
 
 @Module({
   imports: [
     ConfigifyModule.forRootAsync({}),
+    MetricsModule,
     LoggerModule,
     HttpClientModule,
     WeatherModule,
