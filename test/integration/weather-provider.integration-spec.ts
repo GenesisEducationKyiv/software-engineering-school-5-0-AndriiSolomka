@@ -13,6 +13,11 @@ import {
 import { openMeteoApi } from 'src/common/setup/msw/handlers/openmeteo';
 import { Server } from 'http';
 
+function resetMockServerWeatherApi() {
+  mockServer.clearHandlers();
+  mockServer.addHandlers([searchApi.ok()]);
+}
+
 async function clearCityCache(cacheRepository: CacheRepository, city: string) {
   const key = city.toLowerCase();
   await cacheRepository.set('city', key, '');
@@ -109,6 +114,8 @@ describe('Weather Providers (integration)', () => {
         .query({ city: validCity })
         .expect(200);
 
+      resetMockServerWeatherApi();
+
       const res2 = await request(app.getHttpServer())
         .get('/api/weather')
         .query({ city: validCity })
@@ -134,6 +141,8 @@ describe('Weather Providers (integration)', () => {
         .get('/api/weather')
         .query({ city: validCity })
         .expect(200);
+
+      resetMockServerWeatherApi();
 
       const res2 = await request(app.getHttpServer())
         .get('/api/weather')
