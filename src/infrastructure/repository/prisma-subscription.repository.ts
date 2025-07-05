@@ -1,47 +1,65 @@
 import { Injectable } from '@nestjs/common';
-import { Frequency, Subscription } from '@prisma/client';
-import { Prisma } from '@prisma/client';
-import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
+import {
+  SubscriptionParams,
+  SubscriptionRepositoryInterface,
+} from 'src/core/abstracts/subscription/subscription-repository.interface';
+import {
+  Frequency,
+  SubscriptionEntity,
+} from 'src/core/entities/subscription.entity';
 
 import { PrismaService } from '../database/prisma.service';
-
-export type SubWithTokens = Prisma.SubscriptionGetPayload<{
-  include: { tokens: true };
-}>;
+import { SubscriptionMapper } from './mappers/subscription.mapper';
 
 @Injectable()
-export class PrismaSubscriptionRepository {
+export class PrismaSubscriptionRepository
+  implements SubscriptionRepositoryInterface
+{
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(params: SubscriptionParams): Promise<Subscription> {
+  async create(params: SubscriptionParams): Promise<SubscriptionEntity> {
     const { email, city, frequency } = params;
-    return await this.prisma.subscription.create({
+    const subscription = await this.prisma.subscription.create({
       data: { email, city, frequency },
     });
+
+    return SubscriptionMapper.toDomain(subscription);
   }
 
-  async findOne(email: string, city: string): Promise<Subscription | null> {
-    return await this.prisma.subscription.findFirst({ where: { email, city } });
+  async findOne(
+    email: string,
+    city: string,
+  ): Promise<SubscriptionEntity | null> {
+    const subscription = await this.prisma.subscription.findFirst({
+      where: { email, city },
+    });
+    return subscription ? SubscriptionMapper.toDomain(subscription) : null;
   }
 
-  async delete(subscription_id: number): Promise<Subscription> {
-    return await this.prisma.subscription.delete({
+  async delete(subscription_id: number): Promise<SubscriptionEntity> {
+    const subscription = await this.prisma.subscription.delete({
       where: { subscription_id },
     });
+
+    return SubscriptionMapper.toDomain(subscription);
   }
 
-  async confirm(subscription_id: number): Promise<Subscription> {
-    return await this.prisma.subscription.update({
+  async confirm(subscription_id: number): Promise<SubscriptionEntity> {
+    const subscription = await this.prisma.subscription.update({
       where: { subscription_id },
       data: { confirmed: true },
     });
+
+    return SubscriptionMapper.toDomain(subscription);
   }
 
-  async findByFrequency(frequency: Frequency): Promise<SubWithTokens[]> {
-    return await this.prisma.subscription.findMany({
+  async findByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]> {
+    const subscriptions = await this.prisma.subscription.findMany({
       where: { confirmed: true, frequency },
       include: { tokens: true },
     });
+
+    return SubscriptionMapper.toList(subscriptions);
   }
 
   async deleteUnconfirmed(): Promise<{ count: number }> {
