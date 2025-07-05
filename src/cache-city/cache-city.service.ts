@@ -1,23 +1,19 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { CacheService } from 'src/cache/cache.service';
 import {
   CacheRepository,
   CacheRepositoryToken,
 } from 'src/cache/interfaces/cache-repository.interface';
-import { Location } from 'src/constants/types/weather/weather-client.interface';
+import { CacheConfig } from 'src/config/cache.config';
+import { GeocodingResponse } from 'src/geocoding/interfaces/geocoding.interface';
 
 @Injectable()
-export class CacheCityService extends CacheService<Location[]> {
+export class CacheCityService extends CacheService<GeocodingResponse> {
   constructor(
     @Inject(CacheRepositoryToken)
     cache: CacheRepository,
-    private readonly config: ConfigService,
+    private readonly config: CacheConfig,
   ) {
-    super(
-      cache,
-      config.getOrThrow<string>('CITY_CACHE.PREFIX'),
-      config.getOrThrow<number>('CITY_CACHE.TTL'),
-    );
+    super(cache, config.cityCachePrefix, config.cityCacheTTL);
   }
 }

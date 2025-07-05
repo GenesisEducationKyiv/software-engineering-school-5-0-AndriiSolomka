@@ -5,7 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { TokenModule } from 'src/token/token.module';
 import { EmailModule } from 'src/email/email.module';
 import { SubscriptionDomainModule } from 'src/subscription-domain/subscription-domain.module';
-import { CityModule } from 'src/city/city.module';
+import { GeocodingModule } from 'src/geocoding/geocoding.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { CityModule } from 'src/city/city.module';
     TokenModule,
     EmailModule,
     SubscriptionDomainModule,
-    CityModule,
+    GeocodingModule,
   ],
   providers: [SubscriptionHandlersService],
   controllers: [SubscriptionHandlersController],

@@ -8,7 +8,8 @@ import { Frequency } from '@prisma/client';
 import { setupApp } from 'src/common/setup/setup';
 import { EmailService } from 'src/email/email.service';
 import { mockServer } from 'src/common/setup/msw/setup';
-import { searchApi, weatherApi } from 'src/common/setup/msw/handlers';
+import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
+import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
 
 const makeDto = (
   overrides?: Partial<{ email: string; city: string; frequency: string }>,

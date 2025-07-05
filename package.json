@@ -21,6 +21,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
+    "@itgorillaz/configify": "^4.0.1",
     "@keyv/redis": "^4.4.0",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/cache-manager": "^3.0.1",
@@ -37,6 +38,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "ioredis": "^5.6.1",
+    "joi": "^17.13.3",
     "nestjs-pino": "^4.4.0",
     "nodemailer": "^7.0.3",
     "pino-http": "^10.4.0",
