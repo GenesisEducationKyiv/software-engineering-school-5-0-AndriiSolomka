@@ -35,10 +35,10 @@ export class MetricsService {
     this.cacheSize.set({ cache_type: cacheType }, size);
   }
 
-  startCacheOperationTimer(cacheType: string, operation: string) {
-    const timer = this.cacheOperationDuration.startTimer();
+  createCacheOperationStopper(cacheType: string, operation: string) {
+    const stopTimer = this.cacheOperationDuration.startTimer();
     return (status: CACHE_OPERATION_STATUS) => {
-      timer({ cache_type: cacheType, operation, status });
+      stopTimer({ cache_type: cacheType, operation, status });
     };
   }
 }

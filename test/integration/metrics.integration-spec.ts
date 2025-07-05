@@ -77,7 +77,10 @@ describe('MetricsService (integration)', () => {
   });
 
   it('should record cache operation durations', async () => {
-    const endTimer = metricsService.startCacheOperationTimer('weather', 'set');
+    const endTimer = metricsService.createCacheOperationStopper(
+      'weather',
+      'set',
+    );
 
     await new Promise((resolve) => setTimeout(resolve, 10));
 
@@ -99,11 +102,17 @@ describe('MetricsService (integration)', () => {
   });
 
   it('should record different operation statuses', async () => {
-    const successTimer = metricsService.startCacheOperationTimer('city', 'get');
+    const successTimer = metricsService.createCacheOperationStopper(
+      'city',
+      'get',
+    );
     await new Promise((resolve) => setTimeout(resolve, 5));
     successTimer(CACHE_OPERATION_STATUS.SUCCESS);
 
-    const errorTimer = metricsService.startCacheOperationTimer('city', 'get');
+    const errorTimer = metricsService.createCacheOperationStopper(
+      'city',
+      'get',
+    );
     await new Promise((resolve) => setTimeout(resolve, 5));
     errorTimer(CACHE_OPERATION_STATUS.ERROR);
 

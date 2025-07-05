@@ -13,7 +13,7 @@ export class MetricsCacheDecorator<T> {
   ) {}
 
   async get(key: string): Promise<T | null> {
-    const end = this.metrics.startCacheOperationTimer(this.cacheType, 'get');
+    const end = this.metrics.createCacheOperationStopper(this.cacheType, 'get');
     try {
       const result = await this.decorated.get(key);
       if (result !== null && result !== undefined) {
@@ -31,7 +31,7 @@ export class MetricsCacheDecorator<T> {
   }
 
   async set(key: string, value: T): Promise<void> {
-    const end = this.metrics.startCacheOperationTimer(this.cacheType, 'set');
+    const end = this.metrics.createCacheOperationStopper(this.cacheType, 'set');
     try {
       await this.decorated.set(key, value);
       end(CACHE_OPERATION_STATUS.SUCCESS);
@@ -42,7 +42,7 @@ export class MetricsCacheDecorator<T> {
   }
 
   async getOrSet(key: string, fetchFn: () => Promise<T>): Promise<T> {
-    const end = this.metrics.startCacheOperationTimer(
+    const end = this.metrics.createCacheOperationStopper(
       this.cacheType,
       'getOrSet',
     );
