@@ -11,7 +11,7 @@ export class SubscriptionMapper {
     subscription: Subscription & { tokens?: Token[] },
   ): SubscriptionEntity {
     return {
-      subscription_id: subscription.subscription_id,
+      subscriptionId: subscription.subscriptionId,
       email: subscription.email,
       city: subscription.city,
       frequency: subscription.frequency as Frequency,

@@ -14,8 +14,8 @@ jest.mock('src/utils/generator/random-generator', () => ({
 function makeToken(): TokenEntity {
   const now = new Date();
   return {
-    token_id: 1,
-    subscription_id: 123,
+    tokenId: 1,
+    subscriptionId: 123,
     token: 'mocked-token',
     createdAt: now,
     expiresAt: now,

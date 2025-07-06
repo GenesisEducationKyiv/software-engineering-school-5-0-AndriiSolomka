@@ -18,20 +18,20 @@ export class SubscriptionHandlersUseCase {
 
   async subscribe(params: SubscriptionParams): Promise<{ message: string }> {
     const subscription = await this.subService.create(params);
-    const token = await this.tokenService.create(subscription.subscription_id);
+    const token = await this.tokenService.create(subscription.subscriptionId);
     await this.mailService.sendConfirmationEmail(params.email, token);
     return { message: 'Confirmation email sent' };
   }
 
   async confirm(token: string): Promise<{ message: string }> {
     const tokenEntity = await this.tokenService.getEntity(token);
-    await this.subService.confirm(tokenEntity.subscription_id);
+    await this.subService.confirm(tokenEntity.subscriptionId);
     return { message: 'Subscription confirmed successfully' };
   }
 
   async unsubscribe(token: string): Promise<{ message: string }> {
     const tokenEntity = await this.tokenService.getEntity(token);
-    await this.subService.delete(tokenEntity.subscription_id);
+    await this.subService.delete(tokenEntity.subscriptionId);
     return { message: 'Subscription deleted successfully' };
   }
 }

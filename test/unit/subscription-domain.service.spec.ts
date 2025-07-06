@@ -13,7 +13,7 @@ import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscripti
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
   return {
-    subscription_id: 1,
+    subscriptionId: 1,
     email: 'test@mail.com',
     city: 'Kyiv',
     frequency: Frequency.Daily,
@@ -80,7 +80,7 @@ describe('SubscriptionDomainService', () => {
     it('should create subscription if not exists', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
       const created = makeSubscription();
-      created.subscription_id = 2;
+      created.subscriptionId = 2;
 
       repoMock.create.mockResolvedValueOnce(created);
       const result = await service.create({
@@ -102,7 +102,7 @@ describe('SubscriptionDomainService', () => {
   describe('confirm', () => {
     it('should confirm subscription', async () => {
       const confirmed = makeSubscription();
-      confirmed.subscription_id = 4;
+      confirmed.subscriptionId = 4;
 
       repoMock.confirm.mockResolvedValueOnce(confirmed);
       repoMock.confirm.mockResolvedValueOnce(confirmed);
@@ -117,7 +117,7 @@ describe('SubscriptionDomainService', () => {
   describe('delete', () => {
     it('should delete subscription', async () => {
       const deleted = makeSubscription();
-      deleted.subscription_id = 5;
+      deleted.subscriptionId = 5;
 
       repoMock.delete.mockResolvedValueOnce(deleted);
       const result = await service.delete(5);

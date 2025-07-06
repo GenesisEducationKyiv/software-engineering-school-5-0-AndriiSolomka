@@ -4,15 +4,15 @@ export enum Frequency {
 }
 
 export interface TokenEntity {
-  token_id: number;
-  subscription_id: number;
+  tokenId: number;
+  subscriptionId: number;
   token: string;
   createdAt: Date;
   expiresAt: Date;
 }
 
 export interface SubscriptionEntity {
-  subscription_id: number;
+  subscriptionId: number;
   email: string;
   city: string;
   frequency: Frequency;

@@ -8,26 +8,26 @@ datasource db {
 }
 
 model Subscription {
-  subscription_id Int       @id @default(autoincrement())
-  email           String
-  city            String
-  frequency       Frequency
-  confirmed       Boolean   @default(false)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  tokens          Token[]
+  subscriptionId Int       @id @default(autoincrement()) @map("id")
+  email          String
+  city           String
+  frequency      Frequency
+  confirmed      Boolean   @default(false)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  tokens         Token[]
 
   @@unique([email, city])
   @@map("subscription")
 }
 
 model Token {
-  token_id        Int          @id @default(autoincrement())
-  token           String       @unique
-  subscription_id Int
-  subscription    Subscription @relation(fields: [subscription_id], references: [subscription_id], onDelete: Cascade)
-  createdAt       DateTime     @default(now())
-  expiresAt       DateTime?
+  tokenId        Int          @id @default(autoincrement()) @map("id")
+  token          String       @unique
+  subscriptionId Int
+  subscription   Subscription @relation(fields: [subscriptionId], references: [subscriptionId], onDelete: Cascade)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  expiresAt      DateTime?    @map("expires_at")
 
   @@map("token")
 }
