@@ -24,8 +24,8 @@ function makeSubscription(): SubscriptionEntity {
   };
 }
 
-describe('SubscriptionDomainService', () => {
-  let service: SubscriptionDomainUseCase;
+describe('SubscriptionDomainUseCase', () => {
+  let useCase: SubscriptionDomainUseCase;
   let repoMock: jest.Mocked<
     Pick<
       SubscriptionRepositoryInterface,
@@ -58,7 +58,7 @@ describe('SubscriptionDomainService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionDomainUseCase>(SubscriptionDomainUseCase);
+    useCase = module.get<SubscriptionDomainUseCase>(SubscriptionDomainUseCase);
   });
 
   describe('create', () => {
@@ -66,7 +66,7 @@ describe('SubscriptionDomainService', () => {
       repoMock.findOne.mockResolvedValueOnce(makeSubscription());
 
       await expect(
-        service.create({
+        useCase.create({
           email: 'test@mail.com',
           city: 'Kyiv',
           frequency: Frequency.Daily,
@@ -83,7 +83,7 @@ describe('SubscriptionDomainService', () => {
       created.subscriptionId = 2;
 
       repoMock.create.mockResolvedValueOnce(created);
-      const result = await service.create({
+      const result = await useCase.create({
         email: 'test@mail.com',
         city: 'Kyiv',
         frequency: Frequency.Daily,
@@ -107,7 +107,7 @@ describe('SubscriptionDomainService', () => {
       repoMock.confirm.mockResolvedValueOnce(confirmed);
       repoMock.confirm.mockResolvedValueOnce(confirmed);
 
-      const result = await service.confirm(4);
+      const result = await useCase.confirm(4);
 
       expect(repoMock.confirm).toHaveBeenCalledWith(4);
       expect(result).toBe(confirmed);
@@ -120,7 +120,7 @@ describe('SubscriptionDomainService', () => {
       deleted.subscriptionId = 5;
 
       repoMock.delete.mockResolvedValueOnce(deleted);
-      const result = await service.delete(5);
+      const result = await useCase.delete(5);
 
       expect(repoMock.delete).toHaveBeenCalledWith(5);
       expect(result).toBe(deleted);
@@ -131,7 +131,7 @@ describe('SubscriptionDomainService', () => {
     it('should delete unconfirmed subscriptions', async () => {
       repoMock.deleteUnconfirmed.mockResolvedValueOnce({ count: 2 });
 
-      const result = await service.deleteUnconfirmed();
+      const result = await useCase.deleteUnconfirmed();
 
       expect(repoMock.deleteUnconfirmed).toHaveBeenCalled();
       expect(result).toEqual({ count: 2 });

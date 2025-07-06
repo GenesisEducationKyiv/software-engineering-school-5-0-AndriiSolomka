@@ -22,8 +22,8 @@ function makeToken(): TokenEntity {
   };
 }
 
-describe('TokenService', () => {
-  let service: TokenUseCase;
+describe('TokenUseCase', () => {
+  let useCase: TokenUseCase;
   let repoMock: jest.Mocked<
     Pick<TokenRepositoryInterface, 'create' | 'findOne'>
   >;
@@ -44,14 +44,14 @@ describe('TokenService', () => {
       ],
     }).compile();
 
-    service = module.get<TokenUseCase>(TokenUseCase);
+    useCase = module.get<TokenUseCase>(TokenUseCase);
   });
 
   describe('create', () => {
     it('should generate token and save it', async () => {
       repoMock.create.mockResolvedValueOnce(makeToken());
 
-      const result = await service.create(123);
+      const result = await useCase.create(123);
 
       expect(result).toBe('mocked-token');
       expect(repoMock.create).toHaveBeenCalledWith('mocked-token', 123);
@@ -65,7 +65,7 @@ describe('TokenService', () => {
 
       repoMock.findOne.mockResolvedValueOnce(tokenEntity);
 
-      const result = await service.getEntity('mocked-token');
+      const result = await useCase.getEntity('mocked-token');
 
       expect(repoMock.findOne).toHaveBeenCalledWith('mocked-token');
       expect(result).toBe(tokenEntity);
@@ -74,7 +74,7 @@ describe('TokenService', () => {
     it('should throw NotFoundException if token not found', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
 
-      await expect(service.getEntity('not-exist')).rejects.toBeInstanceOf(
+      await expect(useCase.getEntity('not-exist')).rejects.toBeInstanceOf(
         NotFoundException,
       );
     });

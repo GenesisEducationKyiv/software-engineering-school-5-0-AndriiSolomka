@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { WeatherUseCase } from 'src/use-cases/weather-updates/get-weather.use-case';
 
-describe('WeatherHandlersService', () => {
-  let service: WeatherUseCase;
+describe('WeatherUseCase', () => {
+  let useCase: WeatherUseCase;
   const mockWeatherService = {
     getWeather: jest.fn(),
   };
@@ -18,7 +18,7 @@ describe('WeatherHandlersService', () => {
       ],
     }).compile();
 
-    service = moduleRef.get<WeatherUseCase>(WeatherUseCase);
+    useCase = moduleRef.get<WeatherUseCase>(WeatherUseCase);
   });
 
   afterEach(() => {
@@ -31,7 +31,7 @@ describe('WeatherHandlersService', () => {
 
     mockWeatherService.getWeather.mockResolvedValue(cachedWeather);
 
-    const result = await service.getWeather(city);
+    const result = await useCase.getWeather(city);
 
     expect(mockWeatherService.getWeather).toHaveBeenCalledWith(city);
     expect(result).toEqual(cachedWeather);
