@@ -23,6 +23,10 @@ describe('MetricsService (integration)', () => {
     metricsService = app.get<MetricsService>(MetricsService);
   });
 
+  beforeEach(() => {
+    metricsService.clearAllMetrics();
+  });
+
   afterAll(async () => {
     await app.close();
   });

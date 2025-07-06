@@ -41,4 +41,11 @@ export class MetricsService {
       stopTimer({ cache_type: cacheType, operation, status });
     };
   }
+
+  clearAllMetrics(): void {
+    this.cacheHitCounter.reset();
+    this.cacheMissCounter.reset();
+    this.cacheSize.reset();
+    this.cacheOperationDuration.reset();
+  }
 }
