@@ -23,10 +23,4 @@ export class EmailConfig {
 
   @Value('EMAIL_UNSUBSCRIBE_LINK')
   unsubscribeLink: string;
-
-  @Value('EMAIL_SUBJECT')
-  subject: string;
-
-  @Value('EMAIL_TEXT')
-  text: string;
 }

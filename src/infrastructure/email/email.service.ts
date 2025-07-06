@@ -9,6 +9,11 @@ import {
   EmailPayload,
 } from 'src/core/abstracts/email/email.interface';
 
+enum EMAIL {
+  SUBJECT = 'Subscription Confirmation',
+  TEXT = 'Please confirm your Subscription by clicking the link:',
+}
+
 @Injectable()
 export class EmailService implements EmailInterface {
   constructor(
@@ -32,8 +37,8 @@ export class EmailService implements EmailInterface {
 
   private buildConfirmationEmail(token: string) {
     const confirmationUrl = `${this.config.confirmLink}${token}`;
-    const subject = this.config.subject;
-    const text = `${this.config.text} ${confirmationUrl}`;
+    const subject = EMAIL.SUBJECT;
+    const text = `${EMAIL.TEXT} ${confirmationUrl}`;
     return { subject, text };
   }
 }
