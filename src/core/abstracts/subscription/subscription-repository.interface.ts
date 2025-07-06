@@ -3,11 +3,11 @@ import {
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
 
-export interface SubscriptionParams {
+export type SubscriptionParams = {
   email: string;
   city: string;
   frequency: Frequency;
-}
+};
 export const SubscriptionRepositoryToken = Symbol('SubscriptionRepository');
 
 export interface SubscriptionRepositoryInterface {
