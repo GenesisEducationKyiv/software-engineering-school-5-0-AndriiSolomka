@@ -9,7 +9,7 @@ import { RedisModule } from './redis.module';
   providers: [
     {
       provide: CacheRepositoryToken,
-      useClass: RedisRepository,
+      useExisting: RedisRepository,
     },
   ],
   exports: [CacheRepositoryToken],
