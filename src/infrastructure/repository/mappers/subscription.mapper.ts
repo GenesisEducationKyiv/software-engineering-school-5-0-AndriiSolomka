@@ -1,4 +1,4 @@
-import { Prisma, Subscription, Token } from '@prisma/client';
+import { Subscription, Token } from '@prisma/client';
 import {
   Frequency,
   SubscriptionEntity,
@@ -28,15 +28,5 @@ export class SubscriptionMapper {
     subscriptions: (Subscription & { tokens?: Token[] })[],
   ): SubscriptionEntity[] {
     return subscriptions.map((subscription) => this.toDomain(subscription));
-  }
-
-  static toCreateDto(
-    entity: Partial<SubscriptionEntity>,
-  ): Prisma.SubscriptionCreateInput {
-    return {
-      email: entity.email!,
-      city: entity.city!,
-      frequency: entity.frequency as Frequency,
-    };
   }
 }
