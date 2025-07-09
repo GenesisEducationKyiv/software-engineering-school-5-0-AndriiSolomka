@@ -26,6 +26,7 @@ import { WeatherProviderModule } from './application/modules/weather/weather-pro
 import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { InternalEmailModule } from './infrastructure/api/modules/email/email.module';
+import { InternalSubscriptionModule } from './infrastructure/api/modules/subscription/subscription.module';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
@@ -55,6 +56,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     SubscriptionControllersModule,
     WeatherControllersModule,
     InternalEmailModule,
+    InternalSubscriptionModule,
   ],
   controllers: [],
   providers: [CacheCityService],

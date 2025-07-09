@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { InternalEmailModule } from 'src/infrastructure/api/modules/email/email.module';
+import { InternalSubscriptionModule } from 'src/infrastructure/api/modules/subscription/subscription.module';
 
 import { SubscriptionDomainModule } from './subscription-domain.module';
 import { SubscriptionHandlersUseCase } from '../../../use-cases/subscription/subscription-handler.use-case';
@@ -16,6 +17,7 @@ import { TokenModule } from '../token/token.module';
     SubscriptionDomainModule,
     GeocodingModule,
     InternalEmailModule,
+    InternalSubscriptionModule,
   ],
   providers: [SubscriptionHandlersUseCase],
   exports: [SubscriptionHandlersUseCase],
