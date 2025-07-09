@@ -7,9 +7,12 @@ import { TokenRepositoryToken } from 'src/core/abstracts/token/token-repository.
 import { PrismaTokenRepository } from './repositories/prisma-token.repository';
 import { TokenService } from './services/token.service';
 import { TokenApiClient } from '../clients/token-api.client';
+import { TokenInternalController } from './controllers/token.controller';
 
 @Module({
   imports: [PrismaModule, HttpClientModule],
+  controllers: [TokenInternalController],
+
   providers: [
     PrismaTokenRepository,
     TokenService,

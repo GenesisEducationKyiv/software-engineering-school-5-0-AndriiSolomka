@@ -12,10 +12,11 @@ export class TokenApiClient implements TokenInterface {
   ) {}
 
   async create(subscriptionId: number): Promise<string> {
-    return await this.httpClient.post<string>(
+    const { token } = await this.httpClient.post<{ token: string }>(
       `${this.config.internalApiBaseUrl}/token/create`,
       { subscriptionId },
     );
+    return token;
   }
 
   async getEntity(token: string): Promise<TokenEntity> {

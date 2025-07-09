@@ -12,8 +12,11 @@ export class TokenInternalController {
   ) {}
 
   @Post('create')
-  async create(@Body() body: { subscriptionId: number }): Promise<string> {
-    return await this.tokenService.create(body.subscriptionId);
+  async create(
+    @Body() body: { subscriptionId: number },
+  ): Promise<{ token: string }> {
+    const token = await this.tokenService.create(body.subscriptionId);
+    return { token };
   }
 
   @Get(':token')
