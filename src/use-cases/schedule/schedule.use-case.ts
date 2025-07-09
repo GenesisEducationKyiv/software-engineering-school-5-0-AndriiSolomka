@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { Frequency } from 'src/core/entities/subscription.entity';
-import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/clients/subscription-api.client';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';
@@ -10,7 +10,7 @@ import { SendWeatherUpdatesUseCase } from '../weather-updates/weather-updates.us
 @Injectable()
 export class ScheduleUseCase {
   constructor(
-    private readonly subService: SubscriptionDomainUseCase,
+    private readonly subService: SubscriptionApiClient,
     private readonly notificationService: SendWeatherUpdatesUseCase,
   ) {}
 

@@ -8,7 +8,7 @@ import { TokenEntity } from 'src/core/entities/subscription.entity';
 import { randomByteGenerator } from 'src/utils/generator/random-generator';
 
 @Injectable()
-export class TokenUseCase implements TokenInterface {
+export class TokenService implements TokenInterface {
   constructor(
     @Inject(TokenRepositoryToken)
     private readonly tokenRepo: TokenRepositoryInterface,

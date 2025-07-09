@@ -1,19 +1,18 @@
 import { Module } from '@nestjs/common';
-import { InternalSubscriptionModule } from 'src/infrastructure/api/modules/subscription/subscription.module';
 import { InternalEmailModule } from 'src/infrastructure/email/email.module';
+import { InternalSubscriptionModule } from 'src/infrastructure/subscription-management/subscription/subscription.module';
+import { InternalTokenModule } from 'src/infrastructure/subscription-management/token/token.module';
 
-import { SubscriptionDomainModule } from './subscription-domain.module';
 import { SubscriptionHandlersUseCase } from '../../../use-cases/subscription/subscription-handler.use-case';
 import { GeocodingModule } from '../infrastructure/geocoding.module';
 import { PrismaModule } from '../infrastructure/prisma.module';
-import { TokenModule } from '../token/token.module';
 
 @Module({
   imports: [
     PrismaModule,
-    TokenModule,
+    InternalTokenModule,
     InternalEmailModule,
-    SubscriptionDomainModule,
+    InternalSubscriptionModule,
     GeocodingModule,
     InternalEmailModule,
     InternalSubscriptionModule,

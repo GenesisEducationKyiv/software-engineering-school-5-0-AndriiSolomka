@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
-import { SubscriptionApiClient } from 'src/infrastructure/api/services/subscription/subscription.service';
 import { EmailApiClient } from 'src/infrastructure/email/clients/email-api.client';
-import { TokenUseCase } from 'src/use-cases/token/token.use-case';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/clients/subscription-api.client';
+import { TokenApiClient } from 'src/infrastructure/subscription-management/clients/token-api.client';
 
 @Injectable()
 export class SubscriptionHandlersUseCase {
   constructor(
-    private readonly tokenService: TokenUseCase,
+    private readonly tokenService: TokenApiClient,
     private readonly subClient: SubscriptionApiClient,
     private readonly emailClient: EmailApiClient,
   ) {}

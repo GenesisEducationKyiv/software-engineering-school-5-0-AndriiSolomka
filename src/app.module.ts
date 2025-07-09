@@ -18,14 +18,13 @@ import { MetricsModule } from './application/modules/infrastructure/metrics.modu
 import { PrismaModule } from './application/modules/infrastructure/prisma.module';
 import { ScheduleModule } from './application/modules/notification/schedule.module';
 import { WeatherUpdatesModule } from './application/modules/notification/weather-updates.module';
-import { SubscriptionDomainModule } from './application/modules/subscription/subscription-domain.module';
-import { TokenModule } from './application/modules/token/token.module';
 import { WeatherProviderModule } from './application/modules/weather/weather-provider.module';
 import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
-import { InternalSubscriptionModule } from './infrastructure/api/modules/subscription/subscription.module';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { InternalEmailModule } from './infrastructure/email/email.module';
+import { InternalSubscriptionModule } from './infrastructure/subscription-management/subscription/subscription.module';
+import { InternalTokenModule } from './infrastructure/subscription-management/token/token.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 
@@ -39,8 +38,6 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     PrismaModule,
     RedisModule,
     LoggerModule,
-    TokenModule,
-    SubscriptionDomainModule,
     ScheduleModule,
     WeatherUpdatesModule,
     ScheduleNestModule.forRoot(),
@@ -53,6 +50,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     WeatherControllersModule,
     InternalEmailModule,
     InternalSubscriptionModule,
+    InternalTokenModule,
   ],
   controllers: [],
   providers: [CacheCityService],

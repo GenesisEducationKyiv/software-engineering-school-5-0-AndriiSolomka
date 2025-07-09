@@ -2,18 +2,25 @@ import {
   Body,
   Controller,
   Get,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
+import {
+  SubscriptionInterface,
+  SubscriptionToken,
+} from 'src/core/abstracts/subscription/subscription.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
-import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
 
-import { CreateSubscriptionDto } from '../../dto/subscription/subscription.dto';
+import { CreateSubscriptionDto } from './dto/subscription.dto';
 
 @Controller('/internal/subscription')
 export class SubscriptionInternalController {
-  constructor(private readonly subService: SubscriptionDomainUseCase) {}
+  constructor(
+    @Inject(SubscriptionToken)
+    private readonly subService: SubscriptionInterface,
+  ) {}
 
   @Post()
   async create(@Body() dto: CreateSubscriptionDto) {

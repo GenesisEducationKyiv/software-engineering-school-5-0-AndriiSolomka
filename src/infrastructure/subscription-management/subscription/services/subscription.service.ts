@@ -12,7 +12,7 @@ import {
 } from 'src/core/entities/subscription.entity';
 
 @Injectable()
-export class SubscriptionDomainUseCase implements SubscriptionInterface {
+export class SubscriptionService implements SubscriptionInterface {
   constructor(
     @Inject(SubscriptionRepositoryToken)
     private readonly subscriptionRepo: SubscriptionRepositoryInterface,

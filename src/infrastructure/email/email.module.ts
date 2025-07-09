@@ -4,8 +4,8 @@ import { EmailTransportToken } from 'src/core/abstracts/email/email-transport.in
 import { EmailToken } from 'src/core/abstracts/email/email.interface';
 import { EmailService } from 'src/infrastructure/email/services/email.service';
 
-import { EmailInternalController } from './controllers/email.controller';
 import { EmailApiClient } from './clients/email-api.client';
+import { EmailInternalController } from './controllers/email.controller';
 import { NodemailerService } from './providers/nodemailer.provider';
 
 @Module({
