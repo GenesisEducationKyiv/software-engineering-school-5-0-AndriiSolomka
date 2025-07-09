@@ -10,7 +10,7 @@ import {
   WeatherToken,
 } from 'src/core/abstracts/weather/weather.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
-import { EmailApiClient } from 'src/infrastructure/api/services/email/email.service';
+import { EmailApiClient } from 'src/infrastructure/email/clients/email-api.client';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
-import { EmailApiClient } from 'src/infrastructure/api/services/email/email.service';
 import { SubscriptionApiClient } from 'src/infrastructure/api/services/subscription/subscription.service';
+import { EmailApiClient } from 'src/infrastructure/email/clients/email-api.client';
 import { TokenUseCase } from 'src/use-cases/token/token.use-case';
 
 @Injectable()

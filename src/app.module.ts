@@ -16,8 +16,6 @@ import { HttpClientModule } from './application/modules/infrastructure/http-clie
 import { LoggerModule } from './application/modules/infrastructure/logger.module';
 import { MetricsModule } from './application/modules/infrastructure/metrics.module';
 import { PrismaModule } from './application/modules/infrastructure/prisma.module';
-import { EmailModule } from './application/modules/notification/email.module';
-import { NodemailerModule } from './application/modules/notification/nodemailer.module';
 import { ScheduleModule } from './application/modules/notification/schedule.module';
 import { WeatherUpdatesModule } from './application/modules/notification/weather-updates.module';
 import { SubscriptionDomainModule } from './application/modules/subscription/subscription-domain.module';
@@ -25,9 +23,9 @@ import { TokenModule } from './application/modules/token/token.module';
 import { WeatherProviderModule } from './application/modules/weather/weather-provider.module';
 import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
-import { InternalEmailModule } from './infrastructure/api/modules/email/email.module';
 import { InternalSubscriptionModule } from './infrastructure/api/modules/subscription/subscription.module';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
+import { InternalEmailModule } from './infrastructure/email/email.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 
@@ -40,7 +38,6 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     WeatherModule,
     PrismaModule,
     RedisModule,
-    EmailModule,
     LoggerModule,
     TokenModule,
     SubscriptionDomainModule,
@@ -50,7 +47,6 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     CacheWeatherModule,
     CacheCityModule,
     CacheModule,
-    NodemailerModule,
     WeatherProviderModule,
     GeocodingModule,
     SubscriptionControllersModule,

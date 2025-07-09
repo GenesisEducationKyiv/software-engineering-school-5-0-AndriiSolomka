@@ -4,10 +4,7 @@ import {
   EmailToken,
 } from 'src/core/abstracts/email/email.interface';
 
-import {
-  SendConfirmationEmailDto,
-  SendWeatherEmailDto,
-} from '../../dto/email/email.dto';
+import { SendConfirmationEmailDto, SendWeatherEmailDto } from './dto/email.dto';
 
 @Controller('/internal/email')
 export class EmailInternalController {

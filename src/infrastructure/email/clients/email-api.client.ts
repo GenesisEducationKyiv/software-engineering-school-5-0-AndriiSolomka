@@ -3,7 +3,7 @@ import { AppConfig } from 'src/config/app.config';
 import { EmailInterface } from 'src/core/abstracts/email/email.interface';
 import { HttpClientService } from 'src/infrastructure/http/http-client.service';
 
-import { SendWeatherEmailDto } from '../../dto/email/email.dto';
+import { SendWeatherEmailDto } from '../controllers/dto/email.dto';
 
 @Injectable()
 export class EmailApiClient implements EmailInterface {

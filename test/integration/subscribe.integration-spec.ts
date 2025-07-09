@@ -8,7 +8,7 @@ import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 import { mockServer } from 'src/common/setup/msw/setup';
 import { setupApp } from 'src/common/setup/setup';
 import { PrismaService } from 'src/infrastructure/database/prisma.service';
-import { EmailService } from 'src/infrastructure/email/email.service';
+import { EmailService } from 'src/infrastructure/email/services/email.service';
 import * as request from 'supertest';
 
 const makeDto = (
