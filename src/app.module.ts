@@ -25,6 +25,7 @@ import { TokenModule } from './application/modules/token/token.module';
 import { WeatherProviderModule } from './application/modules/weather/weather-provider.module';
 import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
+import { InternalEmailModule } from './infrastructure/api/modules/email/email.module';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
@@ -53,6 +54,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     GeocodingModule,
     SubscriptionControllersModule,
     WeatherControllersModule,
+    InternalEmailModule,
   ],
   controllers: [],
   providers: [CacheCityService],

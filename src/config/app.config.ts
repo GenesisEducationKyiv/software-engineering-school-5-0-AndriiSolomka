@@ -7,4 +7,9 @@ export class AppConfig {
     default: 3000,
   })
   port: number;
+
+  @Value('INTERNAL_API_BASE_URL', {
+    default: 'http://localhost:3000/api/internal',
+  })
+  internalApiBaseUrl: string;
 }
