@@ -8,8 +8,8 @@ import {
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
 
-import { PrismaService } from '../../../infrastructure/database/prisma.service';
-import { SubscriptionMapper } from '../../../infrastructure/mappers/subscription.mapper';
+import { PrismaService } from '../../infrastructure/database/prisma.service';
+import { SubscriptionMapper } from '../../infrastructure/mappers/subscription.mapper';
 
 @Injectable()
 export class PrismaSubscriptionRepository

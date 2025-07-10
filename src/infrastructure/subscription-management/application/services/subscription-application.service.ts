@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
 
-import { SubscriptionService } from '../../subscription/domain/services/subscription.service';
-import { TokenService } from '../../token/domain/services/token.service';
+import { SubscriptionService } from '../../subscription/services/subscription.service';
+import { TokenService } from '../../token/services/token.service';
 
 @Injectable()
 export class SubscriptionHandlersService {

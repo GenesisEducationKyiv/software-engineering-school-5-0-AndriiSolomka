@@ -4,8 +4,8 @@ import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription
 import { Frequency, TokenEntity } from 'src/core/entities/subscription.entity';
 import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
 import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/application/services/subscription-application.service';
-import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/domain/services/subscription.service';
-import { TokenService } from 'src/infrastructure/subscription-management/token/domain/services/token.service';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/services/subscription.service';
+import { TokenService } from 'src/infrastructure/subscription-management/token/services/token.service';
 
 function makeToken(id = 1, subscriptionId = 123): TokenEntity {
   const now = new Date();

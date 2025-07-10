@@ -3,7 +3,7 @@ import { EmailConfig } from 'src/config/email.config';
 import { NotificationInterface } from 'src/core/abstracts/notification/notification.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
 import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
-import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/subscription/api/clients/subscription.client';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application/api/clients/application.client';
 import { WeatherApiClient } from 'src/infrastructure/weather/api/client/weather.client';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
 

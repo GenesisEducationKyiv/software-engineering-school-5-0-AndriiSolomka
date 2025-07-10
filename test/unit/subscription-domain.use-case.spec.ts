@@ -8,7 +8,7 @@ import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
-import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/domain/services/subscription.service';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/services/subscription.service';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();

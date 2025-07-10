@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { NotificationToken } from 'src/core/abstracts/notification/notification.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
-import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/subscription/api/clients/subscription.client';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application/api/clients/application.client';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';

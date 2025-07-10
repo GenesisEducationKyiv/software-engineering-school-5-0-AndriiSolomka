@@ -10,10 +10,8 @@ import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { InternalEmailModule } from './infrastructure/email/email.module';
 import { InternalNotificationModule } from './infrastructure/notification/notification.module';
-import { InternalHandlerModule } from './infrastructure/subscription-management/application/handlers.module';
 import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
-import { InternalSubscriptionModule } from './infrastructure/subscription-management/subscription/subscription.module';
-import { InternalTokenModule } from './infrastructure/subscription-management/token/token.module';
+import { SubscriptionManagementModule } from './infrastructure/subscription-management/subscription-management.module';
 import { CacheWeatherModule } from './infrastructure/weather/cache/cache-weather.module';
 import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
@@ -45,12 +43,9 @@ import { RedisModule } from './libs/redis/redis.module';
     SubscriptionControllersModule,
     WeatherControllersModule,
     InternalEmailModule,
-    InternalSubscriptionModule,
-    InternalTokenModule,
     InternalWeatherModule,
     InternalNotificationModule,
-
-    InternalHandlerModule,
+    SubscriptionManagementModule,
   ],
   controllers: [],
   providers: [CacheCityService],

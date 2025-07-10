@@ -3,15 +3,12 @@ import { TokenInterfaceToken } from 'src/core/abstracts/token/token-interface';
 import { TokenRepositoryToken } from 'src/core/abstracts/token/token-repository.interface';
 import { HttpClientModule } from 'src/libs/http/http-client.module';
 
-import { TokenInternalController } from './controllers/token.controller';
-import { PrismaTokenRepository } from './domain/repositories/prisma-token.repository';
-import { TokenService } from './domain/services/token.service';
+import { PrismaTokenRepository } from './repositories/prisma-token.repository';
+import { TokenService } from './services/token.service';
 import { PrismaModule } from '../infrastructure/database/prisma.module';
 
 @Module({
   imports: [PrismaModule, HttpClientModule],
-  controllers: [TokenInternalController],
-
   providers: [
     PrismaTokenRepository,
     TokenService,

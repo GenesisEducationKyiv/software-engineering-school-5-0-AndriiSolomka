@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { AppConfig } from 'src/config/app.config';
-import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
-import { SubscriptionInterface } from 'src/core/abstracts/subscription/subscription.interface';
 import {
   Frequency,
   SubscriptionEntity,
@@ -9,29 +7,28 @@ import {
 import { HttpClientService } from 'src/libs/http/http-client.service';
 
 @Injectable()
-export class SubscriptionApiClient implements SubscriptionInterface {
+export class SubscriptionApiClient {
   constructor(
     private readonly httpClient: HttpClientService,
     private readonly config: AppConfig,
   ) {}
 
-  async create(params: SubscriptionParams): Promise<SubscriptionEntity> {
-    return await this.httpClient.post<SubscriptionEntity>(
+  async subscribe(params: { email: string; city: string; frequency: string }) {
+    return await this.httpClient.post(
       `${this.config.internalApiBaseUrl}/subscription`,
       params,
     );
   }
 
-  async confirm(subscriptionId: number): Promise<SubscriptionEntity> {
-    return await this.httpClient.post<SubscriptionEntity>(
-      `${this.config.internalApiBaseUrl}/subscription/confirm/${subscriptionId}`,
-      {},
+  async confirm(token: string) {
+    return await this.httpClient.get(
+      `${this.config.internalApiBaseUrl}/subscription/confirm/${token}`,
     );
   }
 
-  async delete(subscriptionId: number): Promise<SubscriptionEntity> {
-    return await this.httpClient.post<SubscriptionEntity>(
-      `${this.config.internalApiBaseUrl}/subscription/delete/${subscriptionId}`,
+  async unsubscribe(token: string) {
+    return await this.httpClient.post(
+      `${this.config.internalApiBaseUrl}/subscription/unsubscribe/${token}`,
       {},
     );
   }

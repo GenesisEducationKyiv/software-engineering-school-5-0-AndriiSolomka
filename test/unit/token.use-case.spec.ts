@@ -5,7 +5,7 @@ import {
   TokenRepositoryToken,
 } from 'src/core/abstracts/token/token-repository.interface';
 import { TokenEntity } from 'src/core/entities/subscription.entity';
-import { TokenService } from 'src/infrastructure/subscription-management/token/domain/services/token.service';
+import { TokenService } from 'src/infrastructure/subscription-management/token/services/token.service';
 
 jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
