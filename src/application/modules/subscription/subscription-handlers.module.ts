@@ -5,7 +5,7 @@ import { InternalTokenModule } from 'src/infrastructure/subscription-management/
 
 import { SubscriptionHandlersUseCase } from '../../../use-cases/subscription/subscription-handler.use-case';
 import { GeocodingModule } from '../infrastructure/geocoding.module';
-import { PrismaModule } from '../infrastructure/prisma.module';
+import { PrismaModule } from '../../../infrastructure/subscription-management/database/prisma.module';
 
 @Module({
   imports: [

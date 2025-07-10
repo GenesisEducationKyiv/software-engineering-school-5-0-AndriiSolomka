@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { TokenRepositoryInterface } from 'src/core/abstracts/token/token-repository.interface';
 import { TokenEntity } from 'src/core/entities/subscription.entity';
-import { PrismaService } from 'src/infrastructure/database/prisma.service';
 
 import { TokenMapper } from '../../mappers/token.mapper';
+import { PrismaService } from '../../database/prisma.service';
 
 @Injectable()
 export class PrismaTokenRepository implements TokenRepositoryInterface {

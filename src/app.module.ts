@@ -15,7 +15,7 @@ import { GeocodingModule } from './application/modules/infrastructure/geocoding.
 import { HttpClientModule } from './application/modules/infrastructure/http-client.module';
 import { LoggerModule } from './application/modules/infrastructure/logger.module';
 import { MetricsModule } from './application/modules/infrastructure/metrics.module';
-import { PrismaModule } from './application/modules/infrastructure/prisma.module';
+import { PrismaModule } from './infrastructure/subscription-management/database/prisma.module';
 import { ScheduleModule } from './application/modules/notification/schedule.module';
 import { WeatherUpdatesModule } from './application/modules/notification/weather-updates.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';

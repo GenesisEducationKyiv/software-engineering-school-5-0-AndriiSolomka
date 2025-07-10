@@ -3,7 +3,7 @@ import { CacheWeatherService } from 'src/infrastructure/cache/cache-weather.serv
 import { OpenMeteoProviderService } from 'src/infrastructure/weather/providers/open-meteo.provider';
 import { WeatherApiProviderService } from 'src/infrastructure/weather/providers/weather-api.provider';
 import { WeatherProviderChain } from 'src/infrastructure/weather/providers/weather.provider';
-import { WeatherCacheProxyService } from 'src/infrastructure/weather/proxy/weather/weather-cache-proxy.service';
+import { WeatherCacheProxyService } from 'src/infrastructure/weather/proxy/weather-cache-proxy.service';
 
 @Injectable()
 export class WeatherFactory {
