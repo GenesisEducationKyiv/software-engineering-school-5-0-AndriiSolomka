@@ -5,7 +5,7 @@ import {
   SuccessResponseDto,
   TokenParamDto,
 } from './dto/handlers.dto';
-import { SubscriptionHandlersService } from '../../domain/services/subscription-application.service';
+import { SubscriptionHandlersService } from '../../services/subscription-application.service';
 
 @Controller('internal/subscription')
 export class SubscriptionController {

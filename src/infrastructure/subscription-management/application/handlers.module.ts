@@ -6,7 +6,7 @@ import { InternalSubscriptionModule } from '../subscription/subscription.module'
 import { SubscriptionController } from './api/controllers/subscription.controller';
 import { InternalTokenModule } from '../token/token.module';
 import { HandlersApiClient } from './api/clients/aplication.client';
-import { SubscriptionHandlersService } from './domain/services/subscription-application.service';
+import { SubscriptionHandlersService } from './services/subscription-application.service';
 
 @Module({
   imports: [

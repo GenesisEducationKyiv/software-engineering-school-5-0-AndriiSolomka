@@ -5,8 +5,8 @@ import { GeocodingModule } from 'src/application/modules/infrastructure/geocodin
 import { HttpClientModule } from 'src/application/modules/infrastructure/http-client.module';
 import { WeatherToken } from 'src/core/abstracts/weather/weather.interface';
 
-import { WeatherApiClient } from './client/weather-api.client';
-import { WeatherInternalController } from './controllers/weather.controller';
+import { WeatherApiClient } from './api/client/weather.client';
+import { WeatherInternalController } from './api/controllers/weather.controller';
 import { WeatherProviderModule } from './providers/weather-provider.module';
 import { WeatherFactory } from './weather.factory';
 
