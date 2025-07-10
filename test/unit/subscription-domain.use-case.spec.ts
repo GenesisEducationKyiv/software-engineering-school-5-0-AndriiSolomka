@@ -8,7 +8,7 @@ import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
-import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/domain/services/subscription.service';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
@@ -24,8 +24,8 @@ function makeSubscription(): SubscriptionEntity {
   };
 }
 
-describe('SubscriptionDomainUseCase', () => {
-  let useCase: SubscriptionDomainUseCase;
+describe('SubscriptionService', () => {
+  let service: SubscriptionService;
   let repoMock: jest.Mocked<
     Pick<
       SubscriptionRepositoryInterface,
@@ -50,7 +50,7 @@ describe('SubscriptionDomainUseCase', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        SubscriptionDomainUseCase,
+        SubscriptionService,
         {
           provide: SubscriptionRepositoryToken,
           useValue: repoMock,
@@ -58,7 +58,7 @@ describe('SubscriptionDomainUseCase', () => {
       ],
     }).compile();
 
-    useCase = module.get<SubscriptionDomainUseCase>(SubscriptionDomainUseCase);
+    service = module.get<SubscriptionService>(SubscriptionService);
   });
 
   describe('create', () => {
@@ -66,7 +66,7 @@ describe('SubscriptionDomainUseCase', () => {
       repoMock.findOne.mockResolvedValueOnce(makeSubscription());
 
       await expect(
-        useCase.create({
+        service.create({
           email: 'test@mail.com',
           city: 'Kyiv',
           frequency: Frequency.Daily,
@@ -83,7 +83,7 @@ describe('SubscriptionDomainUseCase', () => {
       created.subscriptionId = 2;
 
       repoMock.create.mockResolvedValueOnce(created);
-      const result = await useCase.create({
+      const result = await service.create({
         email: 'test@mail.com',
         city: 'Kyiv',
         frequency: Frequency.Daily,
@@ -107,7 +107,7 @@ describe('SubscriptionDomainUseCase', () => {
       repoMock.confirm.mockResolvedValueOnce(confirmed);
       repoMock.confirm.mockResolvedValueOnce(confirmed);
 
-      const result = await useCase.confirm(4);
+      const result = await service.confirm(4);
 
       expect(repoMock.confirm).toHaveBeenCalledWith(4);
       expect(result).toBe(confirmed);
@@ -120,7 +120,7 @@ describe('SubscriptionDomainUseCase', () => {
       deleted.subscriptionId = 5;
 
       repoMock.delete.mockResolvedValueOnce(deleted);
-      const result = await useCase.delete(5);
+      const result = await service.delete(5);
 
       expect(repoMock.delete).toHaveBeenCalledWith(5);
       expect(result).toBe(deleted);
@@ -131,7 +131,7 @@ describe('SubscriptionDomainUseCase', () => {
     it('should delete unconfirmed subscriptions', async () => {
       repoMock.deleteUnconfirmed.mockResolvedValueOnce({ count: 2 });
 
-      const result = await useCase.deleteUnconfirmed();
+      const result = await service.deleteUnconfirmed();
 
       expect(repoMock.deleteUnconfirmed).toHaveBeenCalled();
       expect(result).toEqual({ count: 2 });

@@ -1,13 +1,11 @@
 import { Test } from '@nestjs/testing';
-import {
-  EmailInterface,
-  EmailToken,
-} from 'src/core/abstracts/email/email.interface';
+import { EmailInterface } from 'src/core/abstracts/email/email.interface';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { Frequency, TokenEntity } from 'src/core/entities/subscription.entity';
-import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscription-domain.use-case';
-import { SubscriptionHandlersUseCase } from 'src/use-cases/subscription/subscription-handler.use-case';
-import { TokenUseCase } from 'src/use-cases/token/token.use-case';
+import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
+import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/application/services/subscription-application.service';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/domain/services/subscription.service';
+import { TokenService } from 'src/infrastructure/subscription-management/token/domain/services/token.service';
 
 function makeToken(id = 1, subscriptionId = 123): TokenEntity {
   const now = new Date();
@@ -20,12 +18,12 @@ function makeToken(id = 1, subscriptionId = 123): TokenEntity {
   };
 }
 
-describe('SubscriptionHandlersUseCase', () => {
-  let useCase: SubscriptionHandlersUseCase;
+describe('SubscriptionHandlersService', () => {
+  let service: SubscriptionHandlersService;
   let subServiceMock: jest.Mocked<
-    Pick<SubscriptionDomainUseCase, 'create' | 'confirm' | 'delete'>
+    Pick<SubscriptionService, 'create' | 'confirm' | 'delete'>
   >;
-  let tokenServiceMock: jest.Mocked<Pick<TokenUseCase, 'create' | 'getEntity'>>;
+  let tokenServiceMock: jest.Mocked<Pick<TokenService, 'create' | 'getEntity'>>;
   let mailServiceMock: jest.Mocked<
     Pick<EmailInterface, 'sendConfirmationEmail'>
   >;
@@ -48,24 +46,24 @@ describe('SubscriptionHandlersUseCase', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        SubscriptionHandlersUseCase,
+        SubscriptionHandlersService,
         {
-          provide: SubscriptionDomainUseCase,
+          provide: SubscriptionService,
           useValue: subServiceMock,
         },
         {
-          provide: TokenUseCase,
+          provide: TokenService,
           useValue: tokenServiceMock,
         },
         {
-          provide: EmailToken,
+          provide: EmailApiClient,
           useValue: mailServiceMock,
         },
       ],
     }).compile();
 
-    useCase = module.get<SubscriptionHandlersUseCase>(
-      SubscriptionHandlersUseCase,
+    service = module.get<SubscriptionHandlersService>(
+      SubscriptionHandlersService,
     );
   });
 
@@ -98,7 +96,7 @@ describe('SubscriptionHandlersUseCase', () => {
       tokenServiceMock.create.mockResolvedValueOnce(mockToken);
       mailServiceMock.sendConfirmationEmail.mockResolvedValueOnce(undefined);
 
-      const result = await useCase.subscribe(params);
+      const result = await service.subscribe(params);
 
       expect(subServiceMock.create).toHaveBeenCalledWith(params);
       expect(tokenServiceMock.create).toHaveBeenCalledWith(
@@ -121,7 +119,7 @@ describe('SubscriptionHandlersUseCase', () => {
       const error = new Error('Failed to create subscription');
       subServiceMock.create.mockRejectedValueOnce(error);
 
-      await expect(useCase.subscribe(params)).rejects.toThrow(error);
+      await expect(service.subscribe(params)).rejects.toThrow(error);
       expect(tokenServiceMock.create).not.toHaveBeenCalled();
       expect(mailServiceMock.sendConfirmationEmail).not.toHaveBeenCalled();
     });
@@ -145,7 +143,7 @@ describe('SubscriptionHandlersUseCase', () => {
         tokens: [],
       });
 
-      const result = await useCase.confirm(token);
+      const result = await service.confirm(token);
 
       expect(tokenServiceMock.getEntity).toHaveBeenCalledWith(token);
       expect(subServiceMock.confirm).toHaveBeenCalledWith(
@@ -162,7 +160,7 @@ describe('SubscriptionHandlersUseCase', () => {
 
       tokenServiceMock.getEntity.mockRejectedValueOnce(error);
 
-      await expect(useCase.confirm(token)).rejects.toThrow(error);
+      await expect(service.confirm(token)).rejects.toThrow(error);
       expect(subServiceMock.confirm).not.toHaveBeenCalled();
     });
   });
@@ -184,7 +182,7 @@ describe('SubscriptionHandlersUseCase', () => {
         tokens: [],
       });
 
-      const result = await useCase.unsubscribe(token);
+      const result = await service.unsubscribe(token);
 
       expect(tokenServiceMock.getEntity).toHaveBeenCalledWith(token);
       expect(subServiceMock.delete).toHaveBeenCalledWith(
@@ -199,7 +197,7 @@ describe('SubscriptionHandlersUseCase', () => {
 
       tokenServiceMock.getEntity.mockRejectedValueOnce(error);
 
-      await expect(useCase.unsubscribe(token)).rejects.toThrow(error);
+      await expect(service.unsubscribe(token)).rejects.toThrow(error);
       expect(subServiceMock.delete).not.toHaveBeenCalled();
     });
   });

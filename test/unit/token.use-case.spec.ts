@@ -5,7 +5,7 @@ import {
   TokenRepositoryToken,
 } from 'src/core/abstracts/token/token-repository.interface';
 import { TokenEntity } from 'src/core/entities/subscription.entity';
-import { TokenUseCase } from 'src/use-cases/token/token.use-case';
+import { TokenService } from 'src/infrastructure/subscription-management/token/domain/services/token.service';
 
 jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
@@ -22,8 +22,8 @@ function makeToken(): TokenEntity {
   };
 }
 
-describe('TokenUseCase', () => {
-  let useCase: TokenUseCase;
+describe('TokenService', () => {
+  let service: TokenService;
   let repoMock: jest.Mocked<
     Pick<TokenRepositoryInterface, 'create' | 'findOne'>
   >;
@@ -36,7 +36,7 @@ describe('TokenUseCase', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        TokenUseCase,
+        TokenService,
         {
           provide: TokenRepositoryToken,
           useValue: repoMock,
@@ -44,14 +44,14 @@ describe('TokenUseCase', () => {
       ],
     }).compile();
 
-    useCase = module.get<TokenUseCase>(TokenUseCase);
+    service = module.get<TokenService>(TokenService);
   });
 
   describe('create', () => {
     it('should generate token and save it', async () => {
       repoMock.create.mockResolvedValueOnce(makeToken());
 
-      const result = await useCase.create(123);
+      const result = await service.create(123);
 
       expect(result).toBe('mocked-token');
       expect(repoMock.create).toHaveBeenCalledWith('mocked-token', 123);
@@ -65,7 +65,7 @@ describe('TokenUseCase', () => {
 
       repoMock.findOne.mockResolvedValueOnce(tokenEntity);
 
-      const result = await useCase.getEntity('mocked-token');
+      const result = await service.getEntity('mocked-token');
 
       expect(repoMock.findOne).toHaveBeenCalledWith('mocked-token');
       expect(result).toBe(tokenEntity);
@@ -74,7 +74,7 @@ describe('TokenUseCase', () => {
     it('should throw NotFoundException if token not found', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
 
-      await expect(useCase.getEntity('not-exist')).rejects.toBeInstanceOf(
+      await expect(service.getEntity('not-exist')).rejects.toBeInstanceOf(
         NotFoundException,
       );
     });
