@@ -1,6 +1,6 @@
 import { Inject, Injectable, OnModuleDestroy } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import { CacheRepositoryInterface } from 'src/core/abstracts/cache/cache-repository.interface';
+import { CacheRepositoryInterface } from 'src/libs/cache/core/cache-repository.interface';
 
 import { REDIS_CLIENT } from './redis-client.factory';
 

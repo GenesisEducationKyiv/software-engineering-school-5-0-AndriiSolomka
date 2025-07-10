@@ -10,8 +10,13 @@ import { setupApp } from 'src/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/core/abstracts/cache/cache-repository.interface';
+} from 'src/libs/cache/core/cache-repository.interface';
 import * as request from 'supertest';
+
+function resetMockServerWeatherApi() {
+  mockServer.clearHandlers();
+  mockServer.addHandlers([searchApi.ok()]);
+}
 
 async function clearCityCache(
   cacheRepository: CacheRepositoryInterface,
@@ -49,7 +54,7 @@ describe('Weather Providers (integration)', () => {
     await app.close();
   });
 
-  describe('GET /api/weather', () => {
+  describe('GET /api/internal/weather/:city', () => {
     beforeEach(async () => {
       await clearCityCache(cacheRepository, validCity);
       await clearCityCache(cacheRepository, invalidCity);
@@ -59,8 +64,7 @@ describe('Weather Providers (integration)', () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const res = await request(app.getHttpServer())
-        .get('/internal/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
       expect(res.body).toEqual({
@@ -78,8 +82,7 @@ describe('Weather Providers (integration)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
       expect(res.body).toEqual({
@@ -97,8 +100,7 @@ describe('Weather Providers (integration)', () => {
       ]);
 
       await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: invalidCity })
+        .get(`/api/internal/weather/${invalidCity}`)
         .expect(500);
     });
 
@@ -108,13 +110,13 @@ describe('Weather Providers (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
+      resetMockServerWeatherApi();
+
       const res2 = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
       expect(res2.body).toEqual(res1.body);
@@ -134,13 +136,13 @@ describe('Weather Providers (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
+      resetMockServerWeatherApi();
+
       const res2 = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
       expect(res2.body).toEqual(res1.body);

@@ -1,5 +1,5 @@
-import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
+import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 
 const createWeatherEmailText = (
   city: string,

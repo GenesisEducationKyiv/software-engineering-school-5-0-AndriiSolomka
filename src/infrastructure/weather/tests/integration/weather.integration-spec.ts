@@ -9,9 +9,14 @@ import { setupApp } from 'src/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/core/abstracts/cache/cache-repository.interface';
+} from 'src/libs/cache/core/cache-repository.interface';
 import { GeocodingService } from 'src/libs/geocoding/geocoding.service';
 import * as request from 'supertest';
+
+function resetMockServerWeatherApi() {
+  mockServer.clearHandlers();
+  mockServer.addHandlers([searchApi.ok()]);
+}
 
 async function clearCache(
   cacheRepository: CacheRepositoryInterface,
@@ -21,7 +26,7 @@ async function clearCache(
   await cacheRepository.set('weather', city.toLowerCase(), '');
 }
 
-describe('WeatherHandlersController (integration)', () => {
+describe('WeatherInternalController (integration)', () => {
   let app: INestApplication<Server>;
   let cacheRepository: CacheRepositoryInterface;
   let cityService: GeocodingService;
@@ -50,8 +55,8 @@ describe('WeatherHandlersController (integration)', () => {
     await app.close();
   });
 
-  describe('GET /weather', () => {
-    const validCity = 'Kyiv';
+  describe('GET /internal/weather/:city', () => {
+    const validCity = 'London';
     const invalidCity = 'NonExistentCityForTest';
 
     beforeEach(async () => {
@@ -63,8 +68,7 @@ describe('WeatherHandlersController (integration)', () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const res = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('temperature');
@@ -76,13 +80,8 @@ describe('WeatherHandlersController (integration)', () => {
       mockServer.addHandlers([searchApi.notFound()]);
 
       await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: invalidCity })
+        .get(`/api/internal/weather/${invalidCity}`)
         .expect(404);
-    });
-
-    it('should return 400 for missing city param', async () => {
-      await request(app.getHttpServer()).get('/api/weather').expect(400);
     });
 
     it('should cache weather data and return cached value on second request', async () => {
@@ -91,13 +90,13 @@ describe('WeatherHandlersController (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
+      resetMockServerWeatherApi();
+
       const res2 = await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: validCity })
+        .get(`/api/internal/weather/${validCity}`)
         .expect(200);
 
       expect(res2.body).toEqual(res1.body);
@@ -113,8 +112,7 @@ describe('WeatherHandlersController (integration)', () => {
       const key = invalidCity.toLowerCase();
 
       await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: invalidCity })
+        .get(`/api/internal/weather/${invalidCity}`)
         .expect(404);
 
       const cachedCityData = await cacheRepository.get(CITY_CACHE_PREFIX, key);
@@ -123,8 +121,7 @@ describe('WeatherHandlersController (integration)', () => {
       const checkCitySpy = jest.spyOn(cityService, 'findCity');
 
       await request(app.getHttpServer())
-        .get('/api/weather')
-        .query({ city: invalidCity })
+        .get(`/api/internal/weather/${invalidCity}`)
         .expect(404);
 
       expect(checkCitySpy).toHaveBeenCalledWith(invalidCity);

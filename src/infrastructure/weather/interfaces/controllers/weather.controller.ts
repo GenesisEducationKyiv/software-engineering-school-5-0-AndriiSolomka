@@ -1,4 +1,5 @@
-import { Controller, Get, Inject, Param } from '@nestjs/common';
+import { Controller, Get, Inject, Param, UsePipes } from '@nestjs/common';
+import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
 import {
   WeatherInterface,
   WeatherToken,
@@ -11,6 +12,7 @@ export class WeatherInternalController {
     private readonly weatherService: WeatherInterface,
   ) {}
 
+  @UsePipes(CityValidationPipe)
   @Get(':city')
   async getWeather(@Param('city') city: string) {
     return await this.weatherService.getWeather(city);

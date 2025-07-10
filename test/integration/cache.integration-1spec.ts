@@ -5,7 +5,7 @@ import { setupApp } from 'src/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/core/abstracts/cache/cache-repository.interface';
+} from 'src/libs/cache/core/cache-repository.interface';
 
 describe('RedisRepository (integration)', () => {
   let app: INestApplication;

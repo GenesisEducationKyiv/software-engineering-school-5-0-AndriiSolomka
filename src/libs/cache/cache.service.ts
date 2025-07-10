@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/core/abstracts/cache/cache-repository.interface';
-import { CacheInterface } from 'src/core/abstracts/cache/cache.interface';
+} from 'src/libs/cache/core/cache-repository.interface';
+import { CacheInterface } from 'src/libs/cache/core/cache.interface';
 
 @Injectable()
 export class CacheService<T> implements CacheInterface<T> {
