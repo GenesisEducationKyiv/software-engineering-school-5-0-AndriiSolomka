@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { GeocodingModule } from 'src/application/modules/infrastructure/geocoding.module';
-import { SubscriptionHandlersModule } from 'src/application/modules/subscription/subscription-handlers.module';
+import { InternalHandlerModule } from 'src/infrastructure/subscription-management/application/handlers.module';
 import { SubscriptionHandlersController } from 'src/interface/controllers/subscription.controller';
 
 @Module({
-  imports: [SubscriptionHandlersModule, GeocodingModule],
+  imports: [InternalHandlerModule, GeocodingModule],
   controllers: [SubscriptionHandlersController],
 })
 export class SubscriptionControllersModule {}

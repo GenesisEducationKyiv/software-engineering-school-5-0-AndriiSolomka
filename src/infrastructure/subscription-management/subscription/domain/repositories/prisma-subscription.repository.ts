@@ -7,8 +7,9 @@ import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
-import { SubscriptionMapper } from 'src/infrastructure/subscription-management/mappers/subscription.mapper';
-import { PrismaService } from '../../database/prisma.service';
+
+import { PrismaService } from '../../../infrastructure/database/prisma.service';
+import { SubscriptionMapper } from '../../../infrastructure/mappers/subscription.mapper';
 
 @Injectable()
 export class PrismaSubscriptionRepository

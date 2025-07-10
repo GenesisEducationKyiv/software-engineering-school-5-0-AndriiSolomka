@@ -8,7 +8,6 @@ import { WeatherToken } from 'src/core/abstracts/weather/weather.interface';
 import { WeatherApiClient } from './client/weather-api.client';
 import { WeatherInternalController } from './controllers/weather.controller';
 import { WeatherProviderModule } from './providers/weather-provider.module';
-import { WeatherService } from './services/weather.service';
 import { WeatherFactory } from './weather.factory';
 
 @Module({
@@ -23,10 +22,6 @@ import { WeatherFactory } from './weather.factory';
   providers: [
     WeatherApiClient,
     WeatherFactory,
-    {
-      provide: WeatherToken,
-      useClass: WeatherService,
-    },
     {
       provide: WeatherToken,
       useFactory: (factory: WeatherFactory) => factory.create(),

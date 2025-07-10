@@ -1,12 +1,12 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
-import { SubscriptionHandlersUseCase } from 'src/use-cases/subscription/subscription-handler.use-case';
+import { HandlersApiClient } from 'src/infrastructure/subscription-management/application/api/clients/aplication.client';
 
 import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
 
 @Controller()
 export class SubscriptionHandlersController {
-  constructor(private readonly subscribeService: SubscriptionHandlersUseCase) {}
+  constructor(private readonly subscribeService: HandlersApiClient) {}
 
   @UsePipes(CityValidationPipe)
   @Post('subscribe')

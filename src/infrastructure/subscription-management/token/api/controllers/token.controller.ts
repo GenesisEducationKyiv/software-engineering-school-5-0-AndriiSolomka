@@ -2,7 +2,7 @@ import { Body, Controller, Get, Inject, Param, Post } from '@nestjs/common';
 import { TokenInterfaceToken } from 'src/core/abstracts/token/token-interface';
 import { TokenEntity } from 'src/core/entities/subscription.entity';
 
-import { TokenService } from '../services/token.service';
+import { TokenService } from '../../domain/services/token.service';
 
 @Controller('internal/token')
 export class TokenInternalController {

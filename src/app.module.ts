@@ -15,7 +15,6 @@ import { GeocodingModule } from './application/modules/infrastructure/geocoding.
 import { HttpClientModule } from './application/modules/infrastructure/http-client.module';
 import { LoggerModule } from './application/modules/infrastructure/logger.module';
 import { MetricsModule } from './application/modules/infrastructure/metrics.module';
-import { PrismaModule } from './infrastructure/subscription-management/database/prisma.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { InternalEmailModule } from './infrastructure/email/email.module';
@@ -25,6 +24,8 @@ import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 import { InternalNotificationModule } from './infrastructure/notification/notification.module';
+import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
+import { InternalHandlerModule } from './infrastructure/subscription-management/application/handlers.module';
 
 @Module({
   imports: [
@@ -48,6 +49,8 @@ import { InternalNotificationModule } from './infrastructure/notification/notifi
     InternalTokenModule,
     InternalWeatherModule,
     InternalNotificationModule,
+
+    InternalHandlerModule,
   ],
   controllers: [],
   providers: [CacheCityService],

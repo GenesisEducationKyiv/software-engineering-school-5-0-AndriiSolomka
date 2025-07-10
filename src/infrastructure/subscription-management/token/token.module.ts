@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'src/application/modules/infrastructure/http-client.module';
-import { PrismaModule } from 'src/infrastructure/subscription-management/database/prisma.module';
 import { TokenInterfaceToken } from 'src/core/abstracts/token/token-interface';
 import { TokenRepositoryToken } from 'src/core/abstracts/token/token-repository.interface';
 
-import { PrismaTokenRepository } from './repositories/prisma-token.repository';
-import { TokenService } from './services/token.service';
-import { TokenApiClient } from '../clients/token-api.client';
-import { TokenInternalController } from './controllers/token.controller';
+import { PrismaTokenRepository } from './domain/repositories/prisma-token.repository';
+import { TokenService } from './domain/services/token.service';
+import { TokenApiClient } from './api/clients/token.client';
+import { TokenInternalController } from './api/controllers/token.controller';
+import { PrismaModule } from '../infrastructure/database/prisma.module';
 
 @Module({
   imports: [PrismaModule, HttpClientModule],

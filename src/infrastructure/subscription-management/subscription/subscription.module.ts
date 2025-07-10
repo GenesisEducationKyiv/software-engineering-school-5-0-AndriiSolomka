@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'src/application/modules/infrastructure/http-client.module';
-import { PrismaModule } from 'src/infrastructure/subscription-management/database/prisma.module';
 import { SubscriptionRepositoryToken } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { SubscriptionToken } from 'src/core/abstracts/subscription/subscription.interface';
 
-import { SubscriptionApiClient } from '../clients/subscription-api.client';
-import { SubscriptionInternalController } from '../subscription/controllers/subscription.controller';
-import { PrismaSubscriptionRepository } from '../subscription/repositories/prisma-subscription.repository';
-import { SubscriptionService } from '../subscription/services/subscription.service';
+import { SubscriptionApiClient } from './api/clients/subscription.client';
+import { PrismaModule } from '../infrastructure/database/prisma.module';
+import { SubscriptionInternalController } from './api/controllers/subscription.controller';
+import { SubscriptionService } from './domain/services/subscription.service';
+import { PrismaSubscriptionRepository } from './domain/repositories/prisma-subscription.repository';
 
 @Module({
   imports: [PrismaModule, HttpClientModule],
