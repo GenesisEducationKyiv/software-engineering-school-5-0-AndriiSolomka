@@ -2,7 +2,7 @@ import { Body, Controller, Inject, Post } from '@nestjs/common';
 import {
   EmailInterface,
   EmailToken,
-} from 'src/core/abstracts/email/email.interface';
+} from 'src/infrastructure/email/core/email.interface';
 
 import { SendConfirmationEmailDto, SendWeatherEmailDto } from './dto/email.dto';
 

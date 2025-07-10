@@ -1,8 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { EmailInterface } from 'src/core/abstracts/email/email.interface';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { Frequency, TokenEntity } from 'src/core/entities/subscription.entity';
-import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
+import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
+import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
 import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/application/services/subscription-application.service';
 import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/services/subscription.service';
 import { TokenService } from 'src/infrastructure/subscription-management/token/services/token.service';

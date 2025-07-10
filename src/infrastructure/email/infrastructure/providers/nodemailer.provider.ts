@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { EmailConfig } from 'src/config/email.config';
-import { EmailTransportInterface } from 'src/core/abstracts/email/email-transport.interface';
+import { EmailConfig } from 'src/infrastructure/email/config/email.config';
+import { EmailTransportInterface } from 'src/infrastructure/email/core/email-transport.interface';
 
 @Injectable()
 export class NodemailerService implements EmailTransportInterface {

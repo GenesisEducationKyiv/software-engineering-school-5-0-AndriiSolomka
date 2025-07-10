@@ -1,13 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { EmailConfig } from 'src/config/email.config';
+import { EmailConfig } from 'src/infrastructure/email/config/email.config';
 import {
   EmailTransportInterface,
   EmailTransportToken,
-} from 'src/core/abstracts/email/email-transport.interface';
+} from 'src/infrastructure/email/core/email-transport.interface';
 import {
   EmailInterface,
   EmailPayload,
-} from 'src/core/abstracts/email/email.interface';
+} from 'src/infrastructure/email/core/email.interface';
 
 enum EMAIL {
   SUBJECT = 'Subscription Confirmation',

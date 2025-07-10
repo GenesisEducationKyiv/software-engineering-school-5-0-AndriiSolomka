@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { EmailConfig } from 'src/config/email.config';
+import { EmailConfig } from 'src/infrastructure/email/config/email.config';
 import { NotificationInterface } from 'src/core/abstracts/notification/notification.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
-import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
+import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
 import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application/api/clients/application.client';
 import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
