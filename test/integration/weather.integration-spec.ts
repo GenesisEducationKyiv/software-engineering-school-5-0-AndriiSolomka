@@ -10,7 +10,7 @@ import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'src/core/abstracts/cache/cache-repository.interface';
-import { GeocodingService } from 'src/infrastructure/geocoding/geocoding.service';
+import { GeocodingService } from 'src/libs/geocoding/geocoding.service';
 import * as request from 'supertest';
 
 async function clearCache(

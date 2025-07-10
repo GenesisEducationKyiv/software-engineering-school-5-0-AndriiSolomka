@@ -3,8 +3,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Server } from 'http';
 import { AppModule } from 'src/app.module';
 import { setupApp } from 'src/common/setup/setup';
-import { CACHE_OPERATION_STATUS } from 'src/infrastructure/libs/metrics/constants/metrics.constants';
-import { MetricsService } from 'src/infrastructure/libs/metrics/metrics.service';
+import { CACHE_OPERATION_STATUS } from 'src/libs/metrics/constants/metrics.constants';
+import { MetricsService } from 'src/libs/metrics/metrics.service';
 import * as request from 'supertest';
 
 describe('MetricsService (integration)', () => {

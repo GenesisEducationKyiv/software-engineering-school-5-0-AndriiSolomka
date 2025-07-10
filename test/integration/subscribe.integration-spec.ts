@@ -7,8 +7,9 @@ import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
 import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 import { mockServer } from 'src/common/setup/msw/setup';
 import { setupApp } from 'src/common/setup/setup';
-import { PrismaService } from 'src/infrastructure/database/prisma.service';
-import { EmailService } from 'src/infrastructure/email/services/email.service';
+import { EmailInterface } from 'src/core/abstracts/email/email.interface';
+import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
+import { PrismaService } from 'src/infrastructure/subscription-management/infrastructure/database/prisma.service';
 import * as request from 'supertest';
 
 const makeDto = (
@@ -23,7 +24,7 @@ const makeDto = (
 describe('SubscriptionHandlersController (integration)', () => {
   let app: INestApplication<Server>;
   let prisma: PrismaService;
-  let emailService: EmailService;
+  let emailService: EmailInterface;
   let sendConfirmationEmailSpy: jest.SpyInstance;
   let sendWeatherEmailSpy: jest.SpyInstance;
 
@@ -37,7 +38,7 @@ describe('SubscriptionHandlersController (integration)', () => {
     await app.init();
 
     prisma = app.get(PrismaService);
-    emailService = app.get(EmailService);
+    emailService = app.get(EmailApiClient);
 
     sendConfirmationEmailSpy = jest
       .spyOn(emailService, 'sendConfirmationEmail')
