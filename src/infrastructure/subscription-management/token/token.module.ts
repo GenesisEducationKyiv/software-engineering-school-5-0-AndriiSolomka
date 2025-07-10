@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { HttpClientModule } from 'src/infrastructure/libs/http/http-client.module';
 import { TokenInterfaceToken } from 'src/core/abstracts/token/token-interface';
 import { TokenRepositoryToken } from 'src/core/abstracts/token/token-repository.interface';
+import { HttpClientModule } from 'src/libs/http/http-client.module';
 
 import { TokenInternalController } from './controllers/token.controller';
 import { PrismaTokenRepository } from './domain/repositories/prisma-token.repository';

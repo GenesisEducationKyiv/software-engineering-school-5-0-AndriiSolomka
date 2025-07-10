@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CacheCityService } from 'src/infrastructure/cache/cache-city.service';
-import { MetricsCacheDecorator } from 'src/infrastructure/decorators/metrics-cache.decorator';
-import { CacheModule } from 'src/infrastructure/libs/cache/cache.module';
-import { MetricsService } from 'src/infrastructure/libs/metrics/metrics.service';
+
+import { CacheCityService } from './cache-city.service';
+import { CacheModule } from '../../cache/cache.module';
+import { MetricsCacheDecorator } from '../../decorators/metrics-cache.decorator';
+import { MetricsService } from '../../metrics/metrics.service';
 
 const RawCacheCityService = Symbol('RawCacheCityService');
 

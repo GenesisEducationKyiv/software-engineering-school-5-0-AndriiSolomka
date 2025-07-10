@@ -4,17 +4,17 @@ import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'src/core/abstracts/cache/cache-repository.interface';
-import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+import { City } from 'src/core/abstracts/geocoding/geocoding.interface';
 
-import { CacheService } from '../libs/cache/cache.service';
+import { CacheService } from '../../cache/cache.service';
 
 @Injectable()
-export class CacheWeatherService extends CacheService<WeatherData> {
+export class CacheCityService extends CacheService<City> {
   constructor(
     @Inject(CacheRepositoryToken)
     cache: CacheRepositoryInterface,
     private readonly config: CacheConfig,
   ) {
-    super(cache, config.weatherCachePrefix, config.weatherCacheTTL);
+    super(cache, config.cityCachePrefix, config.cityCacheTTL);
   }
 }

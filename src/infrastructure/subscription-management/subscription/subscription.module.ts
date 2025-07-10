@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { HttpClientModule } from 'src/infrastructure/libs/http/http-client.module';
 import { SubscriptionRepositoryToken } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { SubscriptionToken } from 'src/core/abstracts/subscription/subscription.interface';
+import { HttpClientModule } from 'src/libs/http/http-client.module';
 
 import { SubscriptionApiClient } from './api/clients/subscription.client';
 import { PrismaModule } from '../infrastructure/database/prisma.module';

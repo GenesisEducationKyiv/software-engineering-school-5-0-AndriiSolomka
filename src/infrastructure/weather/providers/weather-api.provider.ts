@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { ApiConfig } from 'src/config/api.config';
 import { WeatherProviderInterface } from 'src/core/abstracts/weather/weather-provider.interface';
 import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+
 import { WeatherApiResponse } from '../types/weather.interface';
-import { HttpClientService } from 'src/infrastructure/libs/http/http-client.service';
+import { HttpClientService } from 'src/libs/http/http-client.service';
 
 function parseWeatherData(response: WeatherApiResponse): WeatherData {
   return {

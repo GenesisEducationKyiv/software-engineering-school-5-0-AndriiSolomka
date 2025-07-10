@@ -6,7 +6,7 @@ import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
-import { HttpClientService } from 'src/infrastructure/libs/http/http-client.service';
+import { HttpClientService } from 'src/libs/http/http-client.service';
 
 @Injectable()
 export class SubscriptionApiClient implements SubscriptionInterface {

@@ -3,7 +3,8 @@ import {
   WeatherData,
   WeatherInterface,
 } from 'src/core/abstracts/weather/weather.interface';
-import { CacheWeatherService } from 'src/infrastructure/cache/cache-weather.service';
+
+import { CacheWeatherService } from '../cache/cache-weather.service';
 
 export class WeatherCacheProxyService implements WeatherInterface {
   constructor(

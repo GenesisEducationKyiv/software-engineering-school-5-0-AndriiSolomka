@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { GeocodingModule } from 'src/infrastructure/libs/geocoding/geocoding.module';
-import { HttpClientModule } from 'src/infrastructure/libs/http/http-client.module';
+import { GeocodingModule } from 'src/libs/geocoding/geocoding.module';
+import { HttpClientModule } from 'src/libs/http/http-client.module';
 
 import { OpenMeteoProviderService } from './open-meteo.provider';
 import { WeatherApiProviderService } from './weather-api.provider';

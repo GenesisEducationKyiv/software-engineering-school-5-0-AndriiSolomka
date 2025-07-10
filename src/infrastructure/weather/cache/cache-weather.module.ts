@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CacheWeatherService } from 'src/infrastructure/cache/cache-weather.service';
-import { MetricsCacheDecorator } from 'src/infrastructure/decorators/metrics-cache.decorator';
-import { CacheModule } from 'src/infrastructure/libs/cache/cache.module';
-import { MetricsService } from 'src/infrastructure/libs/metrics/metrics.service';
+import { CacheModule } from 'src/libs/cache/cache.module';
+import { MetricsCacheDecorator } from 'src/libs/decorators/metrics-cache.decorator';
+import { MetricsService } from 'src/libs/metrics/metrics.service';
+
+import { CacheWeatherService } from './cache-weather.service';
 
 export const RawCacheWeatherService = Symbol('RawCacheWeatherService');
 

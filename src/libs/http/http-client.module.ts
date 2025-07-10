@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { LoggingConfig } from 'src/config/logging.config';
-import { LoggingFetchService } from 'src/infrastructure/decorators/weather-logger.decorator';
-import { HttpClientService } from 'src/infrastructure/libs/http/http-client.service';
 
+import { HttpClientService } from './http-client.service';
+import { LoggingFetchService } from '../decorators/weather-logger.decorator';
 import { LoggerModule } from '../logger/logger.module';
 
 @Module({

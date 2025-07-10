@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
-import { cacheMetricProviders } from 'src/infrastructure/libs/metrics/cache-metrics';
-import { MetricsService } from 'src/infrastructure/libs/metrics/metrics.service';
+
+import { cacheMetricProviders } from './cache-metrics';
+import { MetricsService } from './metrics.service';
 
 @Global()
 @Module({
