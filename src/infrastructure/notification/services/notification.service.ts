@@ -1,20 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { EmailConfig } from 'src/config/email.config';
-import { EmailSenderInterface } from 'src/core/abstracts/notification/notification.interface';
-import {
-  SubscriptionInterface,
-  SubscriptionToken,
-} from 'src/core/abstracts/subscription/subscription.interface';
+import { NotificationInterface } from 'src/core/abstracts/notification/notification.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
 import { EmailApiClient } from 'src/infrastructure/email/clients/email-api.client';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/clients/subscription-api.client';
 import { WeatherApiClient } from 'src/infrastructure/weather/client/weather-api.client';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
 
 @Injectable()
-export class SendWeatherUpdatesUseCase implements EmailSenderInterface {
+export class NotificationService implements NotificationInterface {
   constructor(
-    @Inject(SubscriptionToken)
-    private readonly subService: SubscriptionInterface,
+    private readonly subService: SubscriptionApiClient,
     private readonly weatherService: WeatherApiClient,
     private readonly emailService: EmailApiClient,
     private readonly emailConfig: EmailConfig,

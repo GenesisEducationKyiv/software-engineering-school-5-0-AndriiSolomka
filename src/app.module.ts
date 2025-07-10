@@ -16,8 +16,6 @@ import { HttpClientModule } from './application/modules/infrastructure/http-clie
 import { LoggerModule } from './application/modules/infrastructure/logger.module';
 import { MetricsModule } from './application/modules/infrastructure/metrics.module';
 import { PrismaModule } from './infrastructure/subscription-management/database/prisma.module';
-import { ScheduleModule } from './application/modules/notification/schedule.module';
-import { WeatherUpdatesModule } from './application/modules/notification/weather-updates.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { InternalEmailModule } from './infrastructure/email/email.module';
@@ -26,6 +24,7 @@ import { InternalTokenModule } from './infrastructure/subscription-management/to
 import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
+import { InternalNotificationModule } from './infrastructure/notification/notification.module';
 
 @Module({
   imports: [
@@ -37,8 +36,6 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     PrismaModule,
     RedisModule,
     LoggerModule,
-    ScheduleModule,
-    WeatherUpdatesModule,
     ScheduleNestModule.forRoot(),
     CacheWeatherModule,
     CacheCityModule,
@@ -50,6 +47,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     InternalSubscriptionModule,
     InternalTokenModule,
     InternalWeatherModule,
+    InternalNotificationModule,
   ],
   controllers: [],
   providers: [CacheCityService],
