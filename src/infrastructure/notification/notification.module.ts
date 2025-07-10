@@ -8,14 +8,14 @@ import { InternalEmailModule } from '../email/email.module';
 import { InternalWeatherModule } from '../weather/weather.module';
 import { NotificationInternalController } from './api/controllers/notification.controller';
 import { ScheduleService } from './services/schedule.service';
-import { InternalHandlerModule } from '../subscription-management/application/handlers.module';
+import { SubscriptionManagementModule } from '../subscription-management/subscription-management.module';
 
 @Module({
   imports: [
     HttpClientModule,
     InternalEmailModule,
     InternalWeatherModule,
-    InternalHandlerModule,
+    SubscriptionManagementModule,
   ],
   controllers: [NotificationInternalController],
   providers: [
