@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
-import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/subscription/api/clients/subscription.client';
-import { TokenApiClient } from 'src/infrastructure/subscription-management/token/api/clients/token.client';
+
+import { SubscriptionService } from '../../subscription/domain/services/subscription.service';
+import { TokenService } from '../../token/domain/services/token.service';
 
 @Injectable()
 export class SubscriptionHandlersService {
   constructor(
-    private readonly tokenService: TokenApiClient,
-    private readonly subClient: SubscriptionApiClient,
+    private readonly tokenService: TokenService,
+    private readonly subClient: SubscriptionService,
     private readonly emailClient: EmailApiClient,
   ) {}
 

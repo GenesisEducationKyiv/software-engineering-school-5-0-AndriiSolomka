@@ -3,10 +3,9 @@ import { HttpClientModule } from 'src/application/modules/infrastructure/http-cl
 import { TokenInterfaceToken } from 'src/core/abstracts/token/token-interface';
 import { TokenRepositoryToken } from 'src/core/abstracts/token/token-repository.interface';
 
+import { TokenInternalController } from './controllers/token.controller';
 import { PrismaTokenRepository } from './domain/repositories/prisma-token.repository';
 import { TokenService } from './domain/services/token.service';
-import { TokenApiClient } from './api/clients/token.client';
-import { TokenInternalController } from './api/controllers/token.controller';
 import { PrismaModule } from '../infrastructure/database/prisma.module';
 
 @Module({
@@ -24,8 +23,7 @@ import { PrismaModule } from '../infrastructure/database/prisma.module';
       provide: TokenInterfaceToken,
       useClass: TokenService,
     },
-    TokenApiClient,
   ],
-  exports: [TokenApiClient],
+  exports: [TokenService],
 })
 export class InternalTokenModule {}

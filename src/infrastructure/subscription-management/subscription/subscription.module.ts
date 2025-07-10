@@ -6,13 +6,14 @@ import { SubscriptionToken } from 'src/core/abstracts/subscription/subscription.
 import { SubscriptionApiClient } from './api/clients/subscription.client';
 import { PrismaModule } from '../infrastructure/database/prisma.module';
 import { SubscriptionInternalController } from './api/controllers/subscription.controller';
-import { SubscriptionService } from './domain/services/subscription.service';
 import { PrismaSubscriptionRepository } from './domain/repositories/prisma-subscription.repository';
+import { SubscriptionService } from './domain/services/subscription.service';
 
 @Module({
   imports: [PrismaModule, HttpClientModule],
   controllers: [SubscriptionInternalController],
   providers: [
+    SubscriptionService,
     {
       provide: SubscriptionRepositoryToken,
       useClass: PrismaSubscriptionRepository,
@@ -23,6 +24,6 @@ import { PrismaSubscriptionRepository } from './domain/repositories/prisma-subsc
     },
     SubscriptionApiClient,
   ],
-  exports: [SubscriptionApiClient],
+  exports: [SubscriptionApiClient, SubscriptionService],
 })
 export class InternalSubscriptionModule {}
