@@ -17,13 +17,13 @@ import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 import { CacheModule } from './libs/cache/cache.module';
+import { RedisModule } from './libs/cache/providers/redis.module';
 import { CacheCityModule } from './libs/geocoding/cache/cache-city.module';
 import { CacheCityService } from './libs/geocoding/cache/cache-city.service';
 import { GeocodingModule } from './libs/geocoding/geocoding.module';
 import { HttpClientModule } from './libs/http/http-client.module';
 import { LoggerModule } from './libs/logger/logger.module';
 import { MetricsModule } from './libs/metrics/metrics.module';
-import { RedisModule } from './libs/redis/redis.module';
 
 @Module({
   imports: [

@@ -12,7 +12,7 @@ import {
 } from 'src/core/entities/subscription.entity';
 import { EmailApiClient } from 'src/infrastructure/email/api/clients/email.client';
 import { NotificationService } from 'src/infrastructure/notification/services/notification.service';
-import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/subscription/api/clients/subscription.client';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application/api/clients/application.client';
 import { WeatherApiClient } from 'src/infrastructure/weather/api/client/weather.client';
 import * as notificationBuilder from 'src/utils/notification/notification-builder';
 

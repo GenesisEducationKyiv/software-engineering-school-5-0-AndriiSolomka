@@ -3,13 +3,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Server } from 'http';
 import { AppModule } from 'src/app.module';
 import { setupApp } from 'src/common/setup/setup';
-import { CACHE_OPERATION_STATUS } from 'src/libs/metrics/constants/metrics.constants';
-import { MetricsService } from 'src/libs/metrics/metrics.service';
+import { CacheMetricsService } from 'src/libs/cache/metrics/cache-metrics.service';
+import { CACHE_OPERATION_STATUS } from 'src/libs/cache/metrics/constants/metrics.constants';
 import * as request from 'supertest';
 
 describe('MetricsService (integration)', () => {
   let app: INestApplication<Server>;
-  let metricsService: MetricsService;
+  let metricsService: CacheMetricsService;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -20,7 +20,7 @@ describe('MetricsService (integration)', () => {
     setupApp(app);
     await app.init();
 
-    metricsService = app.get<MetricsService>(MetricsService);
+    metricsService = app.get<CacheMetricsService>(CacheMetricsService);
   });
 
   beforeEach(() => {
