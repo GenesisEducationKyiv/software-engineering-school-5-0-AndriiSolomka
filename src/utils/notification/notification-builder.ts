@@ -1,4 +1,4 @@
-import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 import { SubscriptionEntity } from 'src/core/entities/subscription.entity';
 
 const createWeatherEmailText = (

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { OpenMeteoProviderService } from 'src/infrastructure/weather/providers/open-meteo.provider';
-import { WeatherApiProviderService } from 'src/infrastructure/weather/providers/weather-api.provider';
-import { WeatherProviderChain } from 'src/infrastructure/weather/providers/weather.provider';
-import { WeatherCacheProxyService } from 'src/infrastructure/weather/proxy/weather-cache-proxy.service';
 
-import { CacheWeatherService } from './cache/cache-weather.service';
+import { CacheWeatherService } from './infrastructure/cache/cache-weather.service';
+import { OpenMeteoProviderService } from './infrastructure/providers/open-meteo.provider';
+import { WeatherApiProviderService } from './infrastructure/providers/weather-api.provider';
+import { WeatherProviderChain } from './infrastructure/providers/weather.provider';
+import { WeatherCacheProxyService } from './infrastructure/proxy/weather-cache-proxy.service';
 
 @Injectable()
 export class WeatherFactory {

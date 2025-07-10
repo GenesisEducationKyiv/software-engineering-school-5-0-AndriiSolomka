@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Param } from '@nestjs/common';
 import {
   WeatherInterface,
   WeatherToken,
-} from 'src/core/abstracts/weather/weather.interface';
+} from 'src/infrastructure/weather/core/weather.interface';
 
 @Controller('internal/weather')
 export class WeatherInternalController {

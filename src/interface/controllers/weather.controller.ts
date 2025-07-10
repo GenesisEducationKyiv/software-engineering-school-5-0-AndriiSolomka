@@ -1,6 +1,6 @@
 import { Controller, Get, Query, UsePipes } from '@nestjs/common';
 import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
-import { WeatherApiClient } from 'src/infrastructure/weather/api/client/weather.client';
+import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
 
 import { WeatherQueryDto } from '../dto/weather/weather-query.dto';
 

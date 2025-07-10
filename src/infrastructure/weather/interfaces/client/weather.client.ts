@@ -3,7 +3,7 @@ import { AppConfig } from 'src/config/app.config';
 import {
   WeatherData,
   WeatherInterface,
-} from 'src/core/abstracts/weather/weather.interface';
+} from 'src/infrastructure/weather/core/weather.interface';
 import { HttpClientService } from 'src/libs/http/http-client.service';
 
 @Injectable()

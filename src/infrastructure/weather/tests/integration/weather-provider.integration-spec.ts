@@ -59,7 +59,7 @@ describe('Weather Providers (integration)', () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const res = await request(app.getHttpServer())
-        .get('/api/weather')
+        .get('/internal/weather')
         .query({ city: validCity })
         .expect(200);
 

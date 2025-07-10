@@ -4,7 +4,7 @@ import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'src/core/abstracts/cache/cache-repository.interface';
-import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 import { CacheService } from 'src/libs/cache/cache.service';
 
 @Injectable()

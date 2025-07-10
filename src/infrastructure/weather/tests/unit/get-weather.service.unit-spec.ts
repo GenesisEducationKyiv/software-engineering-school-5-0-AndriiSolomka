@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WeatherInterface } from 'src/core/abstracts/weather/weather.interface';
+import { WeatherInterface } from 'src/infrastructure/weather/core/weather.interface';
 import { WeatherFactory } from 'src/infrastructure/weather/weather.factory';
 
 describe('WeatherUseCase', () => {
@@ -26,7 +26,7 @@ describe('WeatherUseCase', () => {
     jest.clearAllMocks();
   });
 
-  it('should return  weather if present', async () => {
+  it('should return weather if present', async () => {
     const city = 'Kyiv';
     const cachedWeather = { temp: 20, description: 'sunny' };
 
