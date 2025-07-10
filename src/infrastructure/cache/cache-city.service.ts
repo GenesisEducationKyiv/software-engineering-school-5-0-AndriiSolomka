@@ -6,7 +6,7 @@ import {
 } from 'src/core/abstracts/cache/cache-repository.interface';
 import { City } from 'src/core/abstracts/geocoding/geocoding.interface';
 
-import { CacheService } from './cache.service';
+import { CacheService } from '../libs/cache/cache.service';
 
 @Injectable()
 export class CacheCityService extends CacheService<City> {

@@ -1,6 +1,6 @@
 import { appendToLogFile } from 'src/utils/logger/custom.logger';
 
-import { HttpClientService } from '../http/http-client.service';
+import { HttpClientService } from '../libs/http/http-client.service';
 
 export class LoggingFetchService extends HttpClientService {
   constructor(

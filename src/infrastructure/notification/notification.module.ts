@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { HttpClientModule } from 'src/application/modules/infrastructure/http-client.module';
+import { HttpClientModule } from 'src/infrastructure/libs/http/http-client.module';
 import { NotificationToken } from 'src/core/abstracts/notification/notification.interface';
 
 import { NotificationApiClient } from './api/client/notification.client';

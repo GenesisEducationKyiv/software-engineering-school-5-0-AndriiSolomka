@@ -4,7 +4,6 @@ import {
   Coordinates,
   GeocodingInterface,
 } from 'src/core/abstracts/geocoding/geocoding.interface';
-
 import { HttpClientService } from '../http/http-client.service';
 
 type GeocodingResponse = {

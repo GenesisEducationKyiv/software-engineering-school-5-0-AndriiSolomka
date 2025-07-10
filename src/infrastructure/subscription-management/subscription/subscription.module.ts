@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { HttpClientModule } from 'src/application/modules/infrastructure/http-client.module';
+import { HttpClientModule } from 'src/infrastructure/libs/http/http-client.module';
 import { SubscriptionRepositoryToken } from 'src/core/abstracts/subscription/subscription-repository.interface';
 import { SubscriptionToken } from 'src/core/abstracts/subscription/subscription.interface';
 

@@ -9,12 +9,10 @@ import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 
 import { CacheCityModule } from './application/modules/cache/cache-city.module';
 import { CacheWeatherModule } from './application/modules/cache/cache-weather.module';
-import { CacheModule } from './application/modules/cache/cache.module';
-import { RedisModule } from './application/modules/cache/redis.module';
-import { GeocodingModule } from './application/modules/infrastructure/geocoding.module';
-import { HttpClientModule } from './application/modules/infrastructure/http-client.module';
-import { LoggerModule } from './application/modules/infrastructure/logger.module';
-import { MetricsModule } from './application/modules/infrastructure/metrics.module';
+import { GeocodingModule } from './infrastructure/libs/geocoding/geocoding.module';
+import { HttpClientModule } from './infrastructure/libs/http/http-client.module';
+import { LoggerModule } from './infrastructure/libs/logger/logger.module';
+import { MetricsModule } from './infrastructure/libs/metrics/metrics.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { InternalEmailModule } from './infrastructure/email/email.module';
@@ -26,6 +24,8 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
 import { InternalNotificationModule } from './infrastructure/notification/notification.module';
 import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
 import { InternalHandlerModule } from './infrastructure/subscription-management/application/handlers.module';
+import { RedisModule } from './infrastructure/libs/redis/redis.module';
+import { CacheModule } from './infrastructure/libs/cache/cache.module';
 
 @Module({
   imports: [

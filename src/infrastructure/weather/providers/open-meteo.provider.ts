@@ -3,12 +3,13 @@ import { ApiConfig } from 'src/config/api.config';
 import { Coordinates } from 'src/core/abstracts/geocoding/geocoding.interface';
 import { WeatherProviderInterface } from 'src/core/abstracts/weather/weather-provider.interface';
 import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
+import { HttpClientService } from 'src/infrastructure/libs/http/http-client.service';
+
 import {
   OpenMeteoResponse,
   openMeteoWeatherCodeMap,
 } from '../types/weather.interface';
-import { HttpClientService } from 'src/infrastructure/http/http-client.service';
-import { GeocodingService } from 'src/infrastructure/geocoding/geocoding.service';
+import { GeocodingService } from 'src/infrastructure/libs/geocoding/geocoding.service';
 
 const OPEN_METEO_CURRENT_WEATHER_FIELDS = [
   'temperature_2m',

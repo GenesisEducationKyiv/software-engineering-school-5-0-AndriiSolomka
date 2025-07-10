@@ -4,7 +4,7 @@ import {
   WeatherData,
   WeatherInterface,
 } from 'src/core/abstracts/weather/weather.interface';
-import { HttpClientService } from 'src/infrastructure/http/http-client.service';
+import { HttpClientService } from 'src/infrastructure/libs/http/http-client.service';
 
 @Injectable()
 export class WeatherApiClient implements WeatherInterface {

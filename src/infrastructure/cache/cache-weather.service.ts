@@ -6,7 +6,7 @@ import {
 } from 'src/core/abstracts/cache/cache-repository.interface';
 import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
 
-import { CacheService } from './cache.service';
+import { CacheService } from '../libs/cache/cache.service';
 
 @Injectable()
 export class CacheWeatherService extends CacheService<WeatherData> {

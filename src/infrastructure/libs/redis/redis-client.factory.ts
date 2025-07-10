@@ -1,8 +1,7 @@
 import { FactoryProvider } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { RedisConfig } from 'src/config/redis.config';
-
-import { LoggerService } from '../logger/logger.service';
+import { LoggerService } from 'src/infrastructure/libs/logger/logger.service';
 
 export const REDIS_CLIENT = Symbol('RedisClient');
 

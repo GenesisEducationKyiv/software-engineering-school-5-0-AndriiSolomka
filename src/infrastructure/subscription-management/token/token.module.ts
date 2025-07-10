@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { HttpClientModule } from 'src/application/modules/infrastructure/http-client.module';
+import { HttpClientModule } from 'src/infrastructure/libs/http/http-client.module';
 import { TokenInterfaceToken } from 'src/core/abstracts/token/token-interface';
 import { TokenRepositoryToken } from 'src/core/abstracts/token/token-repository.interface';
 

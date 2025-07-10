@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GeocodingModule } from 'src/application/modules/infrastructure/geocoding.module';
+import { GeocodingModule } from 'src/infrastructure/libs/geocoding/geocoding.module';
 import { InternalWeatherModule } from 'src/infrastructure/weather/weather.module';
 import { WeatherHandlersController } from 'src/interface/controllers/weather.controller';
 
