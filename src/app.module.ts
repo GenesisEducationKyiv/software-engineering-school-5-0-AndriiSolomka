@@ -18,13 +18,12 @@ import { MetricsModule } from './application/modules/infrastructure/metrics.modu
 import { PrismaModule } from './application/modules/infrastructure/prisma.module';
 import { ScheduleModule } from './application/modules/notification/schedule.module';
 import { WeatherUpdatesModule } from './application/modules/notification/weather-updates.module';
-import { WeatherProviderModule } from './application/modules/weather/weather-provider.module';
-import { WeatherModule } from './application/modules/weather/weather.module';
 import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
 import { CacheCityService } from './infrastructure/cache/cache-city.service';
 import { InternalEmailModule } from './infrastructure/email/email.module';
 import { InternalSubscriptionModule } from './infrastructure/subscription-management/subscription/subscription.module';
 import { InternalTokenModule } from './infrastructure/subscription-management/token/token.module';
+import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 
@@ -34,7 +33,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     MetricsModule,
     LoggerModule,
     HttpClientModule,
-    WeatherModule,
+    InternalWeatherModule,
     PrismaModule,
     RedisModule,
     LoggerModule,
@@ -44,13 +43,13 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     CacheWeatherModule,
     CacheCityModule,
     CacheModule,
-    WeatherProviderModule,
     GeocodingModule,
     SubscriptionControllersModule,
     WeatherControllersModule,
     InternalEmailModule,
     InternalSubscriptionModule,
     InternalTokenModule,
+    InternalWeatherModule,
   ],
   controllers: [],
   providers: [CacheCityService],

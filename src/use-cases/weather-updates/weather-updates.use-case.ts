@@ -5,12 +5,9 @@ import {
   SubscriptionInterface,
   SubscriptionToken,
 } from 'src/core/abstracts/subscription/subscription.interface';
-import {
-  WeatherInterface,
-  WeatherToken,
-} from 'src/core/abstracts/weather/weather.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
 import { EmailApiClient } from 'src/infrastructure/email/clients/email-api.client';
+import { WeatherApiClient } from 'src/infrastructure/weather/client/weather-api.client';
 import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
 
 @Injectable()
@@ -18,8 +15,7 @@ export class SendWeatherUpdatesUseCase implements EmailSenderInterface {
   constructor(
     @Inject(SubscriptionToken)
     private readonly subService: SubscriptionInterface,
-    @Inject(WeatherToken)
-    private readonly weatherService: WeatherInterface,
+    private readonly weatherService: WeatherApiClient,
     private readonly emailService: EmailApiClient,
     private readonly emailConfig: EmailConfig,
   ) {}
