@@ -7,7 +7,8 @@ import {
 @Controller('internal/weather')
 export class WeatherInternalController {
   constructor(
-    @Inject(WeatherToken) private readonly weatherService: WeatherInterface,
+    @Inject(WeatherToken)
+    private readonly weatherService: WeatherInterface,
   ) {}
 
   @Get(':city')

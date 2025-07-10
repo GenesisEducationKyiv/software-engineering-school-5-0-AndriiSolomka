@@ -1,4 +1,9 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Frequency,
+  SubscriptionEntity,
+} from 'src/core/entities/subscription.entity';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/services/subscription.service';
 
 import {
   SubscriptionCreateDto,
@@ -11,6 +16,7 @@ import { SubscriptionHandlersService } from '../../services/subscription-applica
 export class SubscriptionController {
   constructor(
     private readonly subscriptionHandlers: SubscriptionHandlersService,
+    private readonly subscriptionService: SubscriptionService,
   ) {}
 
   @Post()
@@ -32,5 +38,17 @@ export class SubscriptionController {
     @Param() { token }: TokenParamDto,
   ): Promise<SuccessResponseDto> {
     return await this.subscriptionHandlers.unsubscribe(token);
+  }
+
+  @Post('delete-unconfirmed')
+  async deleteUnconfirmed(): Promise<{ count: number }> {
+    return await this.subscriptionService.deleteUnconfirmed();
+  }
+
+  @Get('by-frequency/:frequency')
+  async getByFrequency(
+    @Param('frequency') frequency: Frequency,
+  ): Promise<SubscriptionEntity[]> {
+    return await this.subscriptionService.getByFrequency(frequency);
   }
 }
