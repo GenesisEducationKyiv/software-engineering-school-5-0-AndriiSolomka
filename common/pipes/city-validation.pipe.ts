@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { SubscriptionParams } from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { SubscriptionParams } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
 import { GeocodingService } from 'libs/infrastructure/geocoding/geocoding.service';
 
 @Injectable()

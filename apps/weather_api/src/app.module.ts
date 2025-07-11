@@ -6,6 +6,9 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
+import { InternalEmailModule } from 'apps/email/email.module';
+import { InternalNotificationModule } from 'apps/notification/src/notification.module';
+import { CacheWeatherModule } from 'apps/weather/src/infrastructure/cache/cache-weather.module';
 import { HttpLoggerMiddleware } from 'common/middlewares/http-logger.middleware';
 import { CacheModule } from 'libs/infrastructure/cache/cache.module';
 import { RedisModule } from 'libs/infrastructure/cache/providers/redis.module';
@@ -16,14 +19,11 @@ import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 import { MetricsModule } from 'libs/infrastructure/metrics/metrics.module';
 
-import { InternalEmailModule } from './infrastructure/email/email.module';
-import { InternalNotificationModule } from './infrastructure/notification/notification.module';
-import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
-import { SubscriptionManagementModule } from './infrastructure/subscription-management/subscription-management.module';
-import { AppModule } from '../../weather/src/app.module';
-import { CacheWeatherModule } from './infrastructure/weather/infrastructure/cache/cache-weather.module';
-import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
-import { WeatherControllersModule } from './interface/modules/weather-controller.module';
+import { SubscriptionControllersModule } from '../../gateway/src/modules/subscription-controllers.module';
+import { WeatherControllersModule } from '../../gateway/src/modules/weather-controller.module';
+import { PrismaModule } from '../../subscription/src/infrastructure/database/prisma.module';
+import { SubscriptionManagementModule } from '../../subscription/src/subscription.module';
+import { WeatherAppModule } from '../../weather/src/weather.module';
 
 @Module({
   imports: [
@@ -43,9 +43,9 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     SubscriptionControllersModule,
     WeatherControllersModule,
     InternalEmailModule,
-    AppModule,
     InternalNotificationModule,
     SubscriptionManagementModule,
+    WeatherAppModule,
   ],
   controllers: [],
   providers: [CacheCityService],

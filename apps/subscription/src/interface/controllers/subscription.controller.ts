@@ -1,0 +1,56 @@
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
+import { SubscriptionCityValidationPipe } from 'common/pipes/city-validation.pipe';
+
+import {
+  SubscriptionCreateDto,
+  SuccessResponseDto,
+  TokenParamDto,
+} from './dto/handlers.dto';
+import {
+  Frequency,
+  SubscriptionEntity,
+} from '../../core/entities/subscription.entity';
+import { SubscriptionHandlersService } from '../../infrastructure/services/subscription-application.service';
+import { SubscriptionService } from '../../infrastructure/services/subscription.service';
+
+@Controller('internal/subscription')
+export class SubscriptionController {
+  constructor(
+    private readonly subscriptionHandlers: SubscriptionHandlersService,
+    private readonly subscriptionService: SubscriptionService,
+  ) {}
+
+  @Post()
+  @UsePipes(SubscriptionCityValidationPipe)
+  async subscribe(
+    @Body() params: SubscriptionCreateDto,
+  ): Promise<SuccessResponseDto> {
+    return await this.subscriptionHandlers.subscribe(params);
+  }
+
+  @Get('confirm/:token')
+  async confirm(
+    @Param() { token }: TokenParamDto,
+  ): Promise<SuccessResponseDto> {
+    return await this.subscriptionHandlers.confirm(token);
+  }
+
+  @Post('unsubscribe/:token')
+  async unsubscribe(
+    @Param() { token }: TokenParamDto,
+  ): Promise<SuccessResponseDto> {
+    return await this.subscriptionHandlers.unsubscribe(token);
+  }
+
+  @Post('delete-unconfirmed')
+  async deleteUnconfirmed(): Promise<{ count: number }> {
+    return await this.subscriptionService.deleteUnconfirmed();
+  }
+
+  @Get('by-frequency/:frequency')
+  async getByFrequency(
+    @Param('frequency') frequency: Frequency,
+  ): Promise<SubscriptionEntity[]> {
+    return await this.subscriptionService.getByFrequency(frequency);
+  }
+}
