@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CacheConfig } from 'libs/config/cache.config';
+import { CacheCityConfig } from 'libs/config/cache.config';
 import { City } from 'libs/core/geocoding/geocoding.interface';
 
 import {
@@ -13,7 +13,7 @@ export class CacheCityService extends CacheService<City> {
   constructor(
     @Inject(CacheRepositoryToken)
     cache: CacheRepositoryInterface,
-    private readonly config: CacheConfig,
+    private readonly config: CacheCityConfig,
   ) {
     super(cache, config.cityCachePrefix, config.cityCacheTTL);
   }

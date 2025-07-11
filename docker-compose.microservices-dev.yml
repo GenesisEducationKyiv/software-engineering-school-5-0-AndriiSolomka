@@ -1,0 +1,70 @@
+volumes:
+  postgres-db:
+  redis-data:
+
+networks:
+  dev-network:
+    driver: bridge
+
+services:
+  db:
+    container_name: db
+    image: postgres:17-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    volumes:
+      - postgres-db:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+    user: postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -d postgres']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - dev-network
+
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    volumes:
+      - redis-data:/data
+    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
+    networks:
+      - dev-network
+
+  adminer:
+    container_name: adminer
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - dev-network
+
+  weather:
+    container_name: weather
+    build:
+      context: .
+      dockerfile: apps/weather/Dockerfile.dev
+    env_file:
+      - apps/weather/.env
+    ports:
+      - '5051:5051'
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - dev-network

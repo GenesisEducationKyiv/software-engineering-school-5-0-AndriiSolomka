@@ -1,3 +1,4 @@
+import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { WeatherToken } from 'apps/weather/src/core/weather.interface';
 import { RedisModule } from 'libs/infrastructure/cache/providers/redis.module';
@@ -12,6 +13,7 @@ import { WeatherFactory } from './weather.factory';
 
 @Module({
   imports: [
+    ConfigifyModule.forRootAsync({}),
     WeatherProviderModule,
     RedisModule,
     CacheWeatherModule,

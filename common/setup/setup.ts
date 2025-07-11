@@ -17,6 +17,7 @@ export function setupApp(app: INestApplication): void {
       'http://localhost:3000',
       'https://weather-api-application-tau.vercel.app',
       'http://35.207.129.35:3000',
+      'http://localhost:5051',
     ],
     credentials: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',

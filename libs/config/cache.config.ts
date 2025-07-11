@@ -2,7 +2,7 @@ import { Configuration, Value } from '@itgorillaz/configify';
 import { IsInt, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 
 @Configuration()
-export class CacheConfig {
+export class CacheCityConfig {
   @IsString()
   @IsNotEmpty()
   @Value('CITY_CACHE_PREFIX', { default: 'city' })
