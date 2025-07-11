@@ -1,6 +1,6 @@
 import { FactoryProvider } from '@nestjs/common';
 import { Redis } from 'ioredis';
-import { RedisConfig } from 'src/config/redis.config';
+import { RedisConfig } from 'src/libs/config/redis.config';
 
 import { LoggerService } from '../../logger/logger.service';
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AppConfig } from 'src/config/app.config';
+import { AppConfig } from 'src/libs/config/app.config';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
 import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 

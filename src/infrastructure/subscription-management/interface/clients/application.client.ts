@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { AppConfig } from 'src/config/app.config';
+import { AppConfig } from 'src/libs/config/app.config';
 import {
   Frequency,
   SubscriptionEntity,
