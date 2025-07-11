@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AppConfig } from 'src/config/app.config';
-import { NotificationInterface } from 'src/core/abstracts/notification/notification.interface';
 import { Frequency } from 'src/core/entities/subscription.entity';
+import { NotificationInterface } from 'src/infrastructure/notification/core/notification.interface';
 import { HttpClientService } from 'src/libs/http/http-client.service';
 
 @Injectable()

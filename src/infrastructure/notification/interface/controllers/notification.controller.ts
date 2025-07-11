@@ -1,8 +1,8 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { NotificationToken } from 'src/core/abstracts/notification/notification.interface';
+import { NotificationToken } from 'src/infrastructure/notification/core/notification.interface';
 
 import { SendUpdatesDto } from './dto/notification.dto';
-import { NotificationService } from '../../services/notification.service';
+import { NotificationService } from '../../infrastructure/services/notification.service';
 
 @Controller('internal/notification')
 export class NotificationInternalController {

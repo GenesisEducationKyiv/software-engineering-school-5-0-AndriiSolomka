@@ -1,13 +1,13 @@
 import { Test } from '@nestjs/testing';
-import { EmailConfig } from 'src/infrastructure/email/config/email.config';
 import { SubscriptionInterface } from 'src/core/abstracts/subscription/subscription.interface';
 import {
   Frequency,
   SubscriptionEntity,
 } from 'src/core/entities/subscription.entity';
+import { EmailConfig } from 'src/infrastructure/email/config/email.config';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
 import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
-import { NotificationService } from 'src/infrastructure/notification/services/notification.service';
+import { NotificationService } from 'src/infrastructure/notification/infrastructure/services/notification.service';
 import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application/api/clients/application.client';
 import {
   WeatherData,

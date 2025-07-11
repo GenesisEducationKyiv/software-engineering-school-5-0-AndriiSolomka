@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { NotificationToken } from 'src/core/abstracts/notification/notification.interface';
+import { NotificationToken } from 'src/infrastructure/notification/core/notification.interface';
 import { HttpClientModule } from 'src/libs/http/http-client.module';
 
-import { NotificationApiClient } from './api/client/notification.client';
-import { NotificationService } from './services/notification.service';
 import { InternalEmailModule } from '../email/email.module';
-import { InternalWeatherModule } from '../weather/weather.module';
-import { NotificationInternalController } from './api/controllers/notification.controller';
-import { ScheduleService } from './services/schedule.service';
 import { SubscriptionManagementModule } from '../subscription-management/subscription-management.module';
+import { InternalWeatherModule } from '../weather/weather.module';
+import { NotificationService } from './infrastructure/services/notification.service';
+import { ScheduleService } from './infrastructure/services/schedule.service';
+import { NotificationApiClient } from './interface/client/notification.client';
+import { NotificationInternalController } from './interface/controllers/notification.controller';
 
 @Module({
   imports: [
