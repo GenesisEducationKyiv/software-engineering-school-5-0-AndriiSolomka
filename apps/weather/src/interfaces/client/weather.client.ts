@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   WeatherData,
   WeatherInterface,
-} from 'apps/weather_api/src/infrastructure/weather/core/weather.interface';
+} from 'apps/weather/src/core/weather.interface';
 import { AppConfig } from 'libs/config/app.config';
 import { HttpClientService } from 'libs/infrastructure/http/http-client.service';
 

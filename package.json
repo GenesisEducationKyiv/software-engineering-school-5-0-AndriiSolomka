@@ -22,6 +22,8 @@
     "test:architecture": "jest --config ./test/jest-architecture.json"
   },
   "dependencies": {
+    "@grpc/grpc-js": "^1.13.4",
+    "@grpc/proto-loader": "^0.7.15",
     "@itgorillaz/configify": "^4.0.1",
     "@keyv/redis": "^4.4.0",
     "@nestjs-modules/mailer": "^2.0.2",

@@ -2,7 +2,7 @@ import { Controller, Get, Inject, Param, UsePipes } from '@nestjs/common';
 import {
   WeatherInterface,
   WeatherToken,
-} from 'apps/weather_api/src/infrastructure/weather/core/weather.interface';
+} from 'apps/weather/src/core/weather.interface';
 import { WeatherCityValidationPipe } from 'common/pipes/city-validation.pipe';
 
 @Controller('internal/weather')

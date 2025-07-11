@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CacheConfig } from 'apps/weather_api/src/infrastructure/weather/config/cache.config';
-import { WeatherData } from 'apps/weather_api/src/infrastructure/weather/core/weather.interface';
+import { CacheConfig } from 'apps/weather/config/cache.config';
+import { WeatherData } from 'apps/weather/src/core/weather.interface';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,

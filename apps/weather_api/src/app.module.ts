@@ -20,8 +20,8 @@ import { InternalEmailModule } from './infrastructure/email/email.module';
 import { InternalNotificationModule } from './infrastructure/notification/notification.module';
 import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
 import { SubscriptionManagementModule } from './infrastructure/subscription-management/subscription-management.module';
+import { AppModule } from '../../weather/src/app.module';
 import { CacheWeatherModule } from './infrastructure/weather/infrastructure/cache/cache-weather.module';
-import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
 
@@ -31,7 +31,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     MetricsModule,
     LoggerModule,
     HttpClientModule,
-    InternalWeatherModule,
+    AppModule,
     PrismaModule,
     RedisModule,
     LoggerModule,
@@ -43,7 +43,7 @@ import { WeatherControllersModule } from './interface/modules/weather-controller
     SubscriptionControllersModule,
     WeatherControllersModule,
     InternalEmailModule,
-    InternalWeatherModule,
+    AppModule,
     InternalNotificationModule,
     SubscriptionManagementModule,
   ],

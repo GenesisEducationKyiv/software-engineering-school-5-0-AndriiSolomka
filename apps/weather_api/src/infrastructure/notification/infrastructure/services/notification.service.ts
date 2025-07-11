@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { WeatherApiClient } from 'apps/weather/src/interfaces/client/weather.client';
 import { EmailConfig } from 'apps/weather_api/src/infrastructure/email/config/email.config';
 import { EmailApiClient } from 'apps/weather_api/src/infrastructure/email/interface/clients/email.client';
 import { NotificationInterface } from 'apps/weather_api/src/infrastructure/notification/core/notification.interface';
 import { Frequency } from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 import { SubscriptionApiClient } from 'apps/weather_api/src/infrastructure/subscription-management/interface/clients/application.client';
-import { WeatherApiClient } from 'apps/weather_api/src/infrastructure/weather/interfaces/client/weather.client';
 import { buildWeatherNotification } from 'libs/utils/notification/notification-builder';
 
 @Injectable()
