@@ -1,26 +1,29 @@
 import { Test } from '@nestjs/testing';
-import { EmailConfig } from 'src/infrastructure/email/config/email.config';
-import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
-import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
-import { NotificationService } from 'src/infrastructure/notification/infrastructure/services/notification.service';
+import { EmailConfig } from 'apps/weather_api/src/infrastructure/email/config/email.config';
+import { EmailInterface } from 'apps/weather_api/src/infrastructure/email/core/email.interface';
+import { EmailApiClient } from 'apps/weather_api/src/infrastructure/email/interface/clients/email.client';
+import { NotificationService } from 'apps/weather_api/src/infrastructure/notification/infrastructure/services/notification.service';
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
-import { SubscriptionInterface } from 'src/infrastructure/subscription-management/core/subscription/subscription.interface';
-import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/interface/clients/application.client';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { SubscriptionInterface } from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription.interface';
+import { SubscriptionApiClient } from 'apps/weather_api/src/infrastructure/subscription-management/interface/clients/application.client';
 import {
   WeatherData,
   WeatherInterface,
-} from 'src/infrastructure/weather/core/weather.interface';
-import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
-import * as notificationBuilder from 'src/libs/utils/notification/notification-builder';
+} from 'apps/weather_api/src/infrastructure/weather/core/weather.interface';
+import { WeatherApiClient } from 'apps/weather_api/src/infrastructure/weather/interfaces/client/weather.client';
+import * as notificationBuilder from 'libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
 
-jest.mock('src/utils/notification/notification-builder', () => ({
-  buildWeatherNotification: jest.fn(),
-}));
+jest.mock(
+  'apps/weather_api/src/utils/notification/notification-builder',
+  () => ({
+    buildWeatherNotification: jest.fn(),
+  }),
+);
 
 function makeSubscription(
   id = 1,

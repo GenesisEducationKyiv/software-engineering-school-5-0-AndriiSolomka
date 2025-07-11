@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LoggerInterface } from 'src/libs/core/logger/logger.interface';
-import { LoggerService } from 'src/libs/infrastructure/logger/logger.service';
-import { createPinoLogger } from 'src/libs/utils/logger/logger.factory';
+import { LoggerInterface } from 'libs/core/logger/logger.interface';
+import { LoggerService } from 'libs/infrastructure/logger/logger.service';
+import { createPinoLogger } from 'libs/utils/logger/logger.factory';
 
-jest.mock('src/utils/logger/logger.factory', () => ({
+jest.mock('apps/weather_api/src/utils/logger/logger.factory', () => ({
   createPinoLogger: jest.fn(),
 }));
 

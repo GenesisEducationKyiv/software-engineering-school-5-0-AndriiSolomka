@@ -1,4 +1,4 @@
-import { appendToLogFile } from 'src/libs/utils/logger/custom.logger';
+import { appendToLogFile } from 'libs/utils/logger/custom.logger';
 
 import { HttpClientService } from '../http-client.service';
 

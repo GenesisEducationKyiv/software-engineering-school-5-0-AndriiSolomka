@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { TokenInterfaceToken } from 'src/infrastructure/subscription-management/core/token/token-interface';
-import { TokenRepositoryToken } from 'src/infrastructure/subscription-management/core/token/token-repository.interface';
-import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
+import { TokenInterfaceToken } from 'apps/weather_api/src/infrastructure/subscription-management/core/token/token-interface';
+import { TokenRepositoryToken } from 'apps/weather_api/src/infrastructure/subscription-management/core/token/token-repository.interface';
+import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { PrismaModule } from '../database/prisma.module';
 import { PrismaTokenRepository } from '../repositories/prisma-token.repository';

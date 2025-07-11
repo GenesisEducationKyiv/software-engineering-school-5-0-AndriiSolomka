@@ -1,7 +1,7 @@
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 
 export type SubscriptionParams = {
   email: string;

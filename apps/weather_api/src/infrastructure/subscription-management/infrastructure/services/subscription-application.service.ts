@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
-import { SubscriptionParams } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { EmailApiClient } from 'apps/weather_api/src/infrastructure/email/interface/clients/email.client';
+import { SubscriptionParams } from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
 
 import { SubscriptionService } from './subscription.service';
 import { TokenService } from './token.service';

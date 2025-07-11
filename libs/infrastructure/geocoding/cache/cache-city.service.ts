@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CacheConfig } from 'src/libs/config/cache.config';
-import { City } from 'src/libs/core/geocoding/geocoding.interface';
+import { CacheConfig } from 'libs/config/cache.config';
+import { City } from 'libs/core/geocoding/geocoding.interface';
 
 import {
   CacheRepositoryInterface,

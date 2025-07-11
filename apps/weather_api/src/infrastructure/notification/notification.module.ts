@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { NotificationToken } from 'src/infrastructure/notification/core/notification.interface';
-import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
+import { NotificationToken } from 'apps/weather_api/src/infrastructure/notification/core/notification.interface';
+import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { InternalEmailModule } from '../email/email.module';
 import { SubscriptionManagementModule } from '../subscription-management/subscription-management.module';

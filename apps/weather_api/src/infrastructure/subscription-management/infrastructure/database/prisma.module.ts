@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LoggerModule } from 'src/libs/infrastructure/logger/logger.module';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
 import { PrismaService } from './prisma.service';
 

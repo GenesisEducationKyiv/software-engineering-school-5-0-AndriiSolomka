@@ -1,15 +1,15 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Frequency } from '@prisma/client';
-import { Server } from 'http';
-import { AppModule } from 'src/app.module';
+import { AppModule } from 'apps/weather_api/src/app.module';
+import { EmailInterface } from 'apps/weather_api/src/infrastructure/email/core/email.interface';
+import { EmailApiClient } from 'apps/weather_api/src/infrastructure/email/interface/clients/email.client';
+import { PrismaService } from 'apps/weather_api/src/infrastructure/subscription-management/infrastructure/database/prisma.service';
 import { searchApi } from 'common/setup/msw/handlers/geocoding';
 import { weatherApi } from 'common/setup/msw/handlers/weather-api';
 import { mockServer } from 'common/setup/msw/setup';
 import { setupApp } from 'common/setup/setup';
-import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
-import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
-import { PrismaService } from 'src/infrastructure/subscription-management/infrastructure/database/prisma.service';
+import { Server } from 'http';
 import * as request from 'supertest';
 
 const makeDto = (

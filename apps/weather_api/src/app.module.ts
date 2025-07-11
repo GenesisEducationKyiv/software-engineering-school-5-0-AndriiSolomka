@@ -6,8 +6,16 @@ import {
   RequestMethod,
 } from '@nestjs/common';
 import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
+import { HttpLoggerMiddleware } from 'common/middlewares/http-logger.middleware';
+import { CacheModule } from 'libs/infrastructure/cache/cache.module';
+import { RedisModule } from 'libs/infrastructure/cache/providers/redis.module';
+import { CacheCityModule } from 'libs/infrastructure/geocoding/cache/cache-city.module';
+import { CacheCityService } from 'libs/infrastructure/geocoding/cache/cache-city.service';
+import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
+import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
+import { MetricsModule } from 'libs/infrastructure/metrics/metrics.module';
 
-import { HttpLoggerMiddleware } from '../common/middlewares/http-logger.middleware';
 import { InternalEmailModule } from './infrastructure/email/email.module';
 import { InternalNotificationModule } from './infrastructure/notification/notification.module';
 import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
@@ -16,14 +24,6 @@ import { CacheWeatherModule } from './infrastructure/weather/infrastructure/cach
 import { InternalWeatherModule } from './infrastructure/weather/weather.module';
 import { SubscriptionControllersModule } from './interface/modules/subscription-controllers.module';
 import { WeatherControllersModule } from './interface/modules/weather-controller.module';
-import { CacheModule } from './libs/infrastructure/cache/cache.module';
-import { RedisModule } from './libs/infrastructure/cache/providers/redis.module';
-import { CacheCityModule } from './libs/infrastructure/geocoding/cache/cache-city.module';
-import { CacheCityService } from './libs/infrastructure/geocoding/cache/cache-city.service';
-import { GeocodingModule } from './libs/infrastructure/geocoding/geocoding.module';
-import { HttpClientModule } from './libs/infrastructure/http/http-client.module';
-import { LoggerModule } from './libs/infrastructure/logger/logger.module';
-import { MetricsModule } from './libs/infrastructure/metrics/metrics.module';
 
 @Module({
   imports: [

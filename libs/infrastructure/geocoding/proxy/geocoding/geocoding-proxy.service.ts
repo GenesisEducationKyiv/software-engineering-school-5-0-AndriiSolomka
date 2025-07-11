@@ -2,7 +2,7 @@ import {
   City,
   Coordinates,
   GeocodingInterface,
-} from 'src/libs/core/geocoding/geocoding.interface';
+} from 'libs/core/geocoding/geocoding.interface';
 
 import { CacheCityService } from '../../cache/cache-city.service';
 import { GeocodingService } from '../../geocoding.service';

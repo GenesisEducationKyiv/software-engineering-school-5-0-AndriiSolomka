@@ -2,11 +2,11 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "../",
   "testEnvironment": "node",
-  "testRegex": "(test|src/.*/tests/architecture)/.*\\.architecture-spec\\.ts$",
+  "testRegex": "(test|apps/weather_api/src/.*/tests/architecture)/.*\\.architecture-spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "^src/(.*)$": "<rootDir>/src/$1"
+    "^apps/weather_api/src/(.*)$": "<rootDir>/apps/weather_api/src/$1"
   }
 }

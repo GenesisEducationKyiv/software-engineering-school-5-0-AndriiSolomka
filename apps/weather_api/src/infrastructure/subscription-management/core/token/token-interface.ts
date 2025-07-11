@@ -1,4 +1,4 @@
-import { TokenEntity } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { TokenEntity } from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 
 export const TokenInterfaceToken = Symbol('TokenInterface');
 

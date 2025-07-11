@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { InternalWeatherModule } from 'src/infrastructure/weather/weather.module';
-import { WeatherHandlersController } from 'src/interface/controllers/weather.controller';
+import { InternalWeatherModule } from 'apps/weather_api/src/infrastructure/weather/weather.module';
+import { WeatherHandlersController } from 'apps/weather_api/src/interface/controllers/weather.controller';
 
 @Module({
   imports: [InternalWeatherModule],

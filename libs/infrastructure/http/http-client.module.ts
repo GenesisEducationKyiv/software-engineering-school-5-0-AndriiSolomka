@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { LoggingConfig } from 'src/libs/config/logging.config';
+import { LoggingConfig } from 'libs/config/logging.config';
 
 import { LoggingHttpClientService } from './decorators/weather-logger.decorator';
 import { HttpClientService } from './http-client.service';

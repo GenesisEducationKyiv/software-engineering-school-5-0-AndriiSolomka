@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { SubscriptionCityValidationPipe } from 'common/pipes/city-validation.pipe';
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
-import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { SubscriptionService } from 'apps/weather_api/src/infrastructure/subscription-management/infrastructure/services/subscription.service';
+import { SubscriptionCityValidationPipe } from 'common/pipes/city-validation.pipe';
 
 import {
   SubscriptionCreateDto,

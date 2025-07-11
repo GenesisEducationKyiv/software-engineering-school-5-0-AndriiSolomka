@@ -1,4 +1,4 @@
-import { Frequency } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { Frequency } from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 
 export const NotificationToken = Symbol('NotificationToken');
 

@@ -1,16 +1,16 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Server } from 'http';
-import { AppModule } from 'src/app.module';
+import { AppModule } from 'apps/weather_api/src/app.module';
 import { searchApi } from 'common/setup/msw/handlers/geocoding';
 import { openMeteoApi } from 'common/setup/msw/handlers/openmeteo';
 import { weatherApi } from 'common/setup/msw/handlers/weather-api';
 import { mockServer } from 'common/setup/msw/setup';
 import { setupApp } from 'common/setup/setup';
+import { Server } from 'http';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/libs/core/cache/cache-repository.interface';
+} from 'libs/core/cache/cache-repository.interface';
 import * as request from 'supertest';
 
 function resetMockServerWeatherApi() {
@@ -123,7 +123,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData!)).toEqual(res1.body);
+      expect(JSON.parse(cachedData)).toEqual(res1.body);
     });
 
     it('should cache weather data from OpenMeteoProvider and return cached value on second request', async () => {
@@ -149,7 +149,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData!)).toEqual(res1.body);
+      expect(JSON.parse(cachedData)).toEqual(res1.body);
     });
   });
 });

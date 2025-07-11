@@ -1,5 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
-import { HttpClientInterface } from 'src/libs/core/http/http-client.interface';
+import { HttpClientInterface } from 'libs/core/http/http-client.interface';
 
 @Injectable()
 export class HttpClientService implements HttpClientInterface {

@@ -1,16 +1,16 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Server } from 'http';
-import { AppModule } from 'src/app.module';
+import { AppModule } from 'apps/weather_api/src/app.module';
 import { searchApi } from 'common/setup/msw/handlers/geocoding';
 import { mockServer } from 'common/setup/msw/setup';
 import { setupApp } from 'common/setup/setup';
+import { Server } from 'http';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/libs/core/cache/cache-repository.interface';
-import { GeocodingInterface } from 'src/libs/core/geocoding/geocoding.interface';
-import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
+} from 'libs/core/cache/cache-repository.interface';
+import { GeocodingInterface } from 'libs/core/geocoding/geocoding.interface';
+import { GeocodingService } from 'libs/infrastructure/geocoding/geocoding.service';
 
 describe('GeocodingService (integration)', () => {
   let app: INestApplication<Server>;

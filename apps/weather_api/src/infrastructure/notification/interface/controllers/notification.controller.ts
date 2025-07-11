@@ -1,5 +1,5 @@
 import { Body, Controller, Inject, Post } from '@nestjs/common';
-import { NotificationToken } from 'src/infrastructure/notification/core/notification.interface';
+import { NotificationToken } from 'apps/weather_api/src/infrastructure/notification/core/notification.interface';
 
 import { SendUpdatesDto } from './dto/notification.dto';
 import { NotificationService } from '../../infrastructure/services/notification.service';

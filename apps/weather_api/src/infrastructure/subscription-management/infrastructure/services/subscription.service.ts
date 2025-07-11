@@ -1,15 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SubscriptionAlreadyExistsException } from 'common/errors/subscription.errors';
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 import {
   SubscriptionParams,
   SubscriptionRepositoryInterface,
   SubscriptionRepositoryToken,
-} from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
-import { SubscriptionInterface } from 'src/infrastructure/subscription-management/core/subscription/subscription.interface';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { SubscriptionInterface } from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription.interface';
+import { SubscriptionAlreadyExistsException } from 'common/errors/subscription.errors';
 
 @Injectable()
 export class SubscriptionService implements SubscriptionInterface {

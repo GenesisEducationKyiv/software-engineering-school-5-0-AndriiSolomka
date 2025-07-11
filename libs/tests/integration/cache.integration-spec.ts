@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'src/app.module';
+import { AppModule } from 'apps/weather_api/src/app.module';
 import { setupApp } from 'common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/libs/core/cache/cache-repository.interface';
+} from 'libs/core/cache/cache-repository.interface';
 
 describe('RedisRepository (integration)', () => {
   let app: INestApplication;

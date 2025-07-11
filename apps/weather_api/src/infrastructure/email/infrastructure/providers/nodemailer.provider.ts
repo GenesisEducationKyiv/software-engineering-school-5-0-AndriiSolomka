@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { EmailConfig } from 'apps/weather_api/src/infrastructure/email/config/email.config';
+import { EmailTransportInterface } from 'apps/weather_api/src/infrastructure/email/core/email-transport.interface';
 import * as nodemailer from 'nodemailer';
-import { EmailConfig } from 'src/infrastructure/email/config/email.config';
-import { EmailTransportInterface } from 'src/infrastructure/email/core/email-transport.interface';
 
 @Injectable()
 export class NodemailerService implements EmailTransportInterface {

@@ -1,11 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { TokenEntity } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
-import { TokenInterface } from 'src/infrastructure/subscription-management/core/token/token-interface';
+import { TokenEntity } from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { TokenInterface } from 'apps/weather_api/src/infrastructure/subscription-management/core/token/token-interface';
 import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
-} from 'src/infrastructure/subscription-management/core/token/token-repository.interface';
-import { randomByteGenerator } from 'src/libs/utils/generator/random-generator';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/token/token-repository.interface';
+import { randomByteGenerator } from 'libs/utils/generator/random-generator';
 
 @Injectable()
 export class TokenService implements TokenInterface {

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { InternalEmailModule } from 'src/infrastructure/email/email.module';
-import { GeocodingModule } from 'src/libs/infrastructure/geocoding/geocoding.module';
-import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
+import { InternalEmailModule } from 'apps/weather_api/src/infrastructure/email/email.module';
+import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
+import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { InternalSubscriptionModule } from './infrastructure/modules/subscription.module';
 import { InternalTokenModule } from './infrastructure/modules/token.module';

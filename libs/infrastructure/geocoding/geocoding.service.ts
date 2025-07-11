@@ -3,7 +3,7 @@ import {
   City,
   Coordinates,
   GeocodingInterface,
-} from 'src/libs/core/geocoding/geocoding.interface';
+} from 'libs/core/geocoding/geocoding.interface';
 
 import { HttpClientService } from '../http/http-client.service';
 

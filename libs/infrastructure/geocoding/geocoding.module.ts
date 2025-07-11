@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GeocodingConfig } from 'src/libs/config/geocoding.config';
+import { GeocodingConfig } from 'libs/config/geocoding.config';
 
 import { CacheCityModule } from './cache/cache-city.module';
 import { CacheCityService } from './cache/cache-city.service';

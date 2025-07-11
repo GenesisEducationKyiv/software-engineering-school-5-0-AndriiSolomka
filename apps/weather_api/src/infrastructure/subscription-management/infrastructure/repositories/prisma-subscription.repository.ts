@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 import {
   SubscriptionParams,
   SubscriptionRepositoryInterface,
-} from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
 
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 import { SubscriptionMapper } from '../../infrastructure/mappers/subscription.mapper';

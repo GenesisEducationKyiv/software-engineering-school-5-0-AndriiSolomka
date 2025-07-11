@@ -3,12 +3,12 @@ import { Test } from '@nestjs/testing';
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
 import {
   SubscriptionRepositoryInterface,
   SubscriptionRepositoryToken,
-} from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
-import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
+} from 'apps/weather_api/src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { SubscriptionService } from 'apps/weather_api/src/infrastructure/subscription-management/infrastructure/services/subscription.service';
 
 import { SubscriptionInterface } from '../../core/subscription/subscription.interface';
 

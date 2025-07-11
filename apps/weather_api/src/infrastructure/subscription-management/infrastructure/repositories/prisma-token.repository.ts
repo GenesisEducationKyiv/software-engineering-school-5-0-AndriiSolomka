@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { TokenEntity } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
-import { TokenRepositoryInterface } from 'src/infrastructure/subscription-management/core/token/token-repository.interface';
+import { TokenEntity } from 'apps/weather_api/src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { TokenRepositoryInterface } from 'apps/weather_api/src/infrastructure/subscription-management/core/token/token-repository.interface';
 
 import { PrismaService } from '../../infrastructure/database/prisma.service';
 import { TokenMapper } from '../../infrastructure/mappers/token.mapper';

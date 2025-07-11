@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { SubscriptionManagementModule } from 'src/infrastructure/subscription-management/subscription-management.module';
-import { SubscriptionHandlersController } from 'src/interface/controllers/subscription.controller';
-import { GeocodingModule } from 'src/libs/infrastructure/geocoding/geocoding.module';
+import { SubscriptionManagementModule } from 'apps/weather_api/src/infrastructure/subscription-management/subscription-management.module';
+import { SubscriptionHandlersController } from 'apps/weather_api/src/interface/controllers/subscription.controller';
+import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 
 @Module({
   imports: [SubscriptionManagementModule, GeocodingModule],

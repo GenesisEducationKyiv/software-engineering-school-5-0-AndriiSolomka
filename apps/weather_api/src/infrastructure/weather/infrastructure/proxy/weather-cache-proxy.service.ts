@@ -1,7 +1,7 @@
 import {
   WeatherData,
   WeatherInterface,
-} from 'src/infrastructure/weather/core/weather.interface';
+} from 'apps/weather_api/src/infrastructure/weather/core/weather.interface';
 
 import { WeatherProviderInterface } from '../../core/weather-provider.interface';
 import { CacheWeatherService } from '../cache/cache-weather.service';

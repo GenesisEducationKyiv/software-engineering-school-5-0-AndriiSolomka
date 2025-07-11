@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { ApiConfig } from 'src/infrastructure/weather/config/api.config';
-import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
-import { Coordinates } from 'src/libs/core/geocoding/geocoding.interface';
-import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
-import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
+import { ApiConfig } from 'apps/weather_api/src/infrastructure/weather/config/api.config';
+import { WeatherData } from 'apps/weather_api/src/infrastructure/weather/core/weather.interface';
+import { Coordinates } from 'libs/core/geocoding/geocoding.interface';
+import { GeocodingService } from 'libs/infrastructure/geocoding/geocoding.service';
+import { HttpClientService } from 'libs/infrastructure/http/http-client.service';
 
 import { WeatherProviderInterface } from '../../core/weather-provider.interface';
 import {
