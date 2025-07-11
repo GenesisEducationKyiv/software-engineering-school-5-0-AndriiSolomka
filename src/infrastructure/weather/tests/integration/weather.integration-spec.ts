@@ -103,7 +103,7 @@ describe('WeatherInternalController (integration)', () => {
 
       const cachedData = await cacheRepository.get(WEATHER_CACHE_PREFIX, key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData)).toEqual(res1.body);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
 
     it('should cache invalid city data', async () => {

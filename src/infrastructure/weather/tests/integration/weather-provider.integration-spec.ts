@@ -123,7 +123,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData)).toEqual(res1.body);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
 
     it('should cache weather data from OpenMeteoProvider and return cached value on second request', async () => {
@@ -149,7 +149,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData)).toEqual(res1.body);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
   });
 });
