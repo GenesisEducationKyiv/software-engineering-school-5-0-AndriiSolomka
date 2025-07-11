@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { SubscriptionCityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+import { SubscriptionCityValidationPipe } from 'common/pipes/city-validation.pipe';
 import {
   Frequency,
   SubscriptionEntity,

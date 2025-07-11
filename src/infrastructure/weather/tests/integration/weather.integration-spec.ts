@@ -2,10 +2,10 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Server } from 'http';
 import { AppModule } from 'src/app.module';
-import { searchApi } from 'src/common/setup/msw/handlers/geocoding';
-import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
-import { mockServer } from 'src/common/setup/msw/setup';
-import { setupApp } from 'src/common/setup/setup';
+import { searchApi } from 'common/setup/msw/handlers/geocoding';
+import { weatherApi } from 'common/setup/msw/handlers/weather-api';
+import { mockServer } from 'common/setup/msw/setup';
+import { setupApp } from 'common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,

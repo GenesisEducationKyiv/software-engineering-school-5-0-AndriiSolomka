@@ -1,5 +1,5 @@
 import { Controller, Get, Inject, Param, UsePipes } from '@nestjs/common';
-import { WeatherCityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+import { WeatherCityValidationPipe } from 'common/pipes/city-validation.pipe';
 import {
   WeatherInterface,
   WeatherToken,

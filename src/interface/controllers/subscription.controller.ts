@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { WeatherCityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+import { WeatherCityValidationPipe } from 'common/pipes/city-validation.pipe';
 import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/interface/clients/application.client';
 
 import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';

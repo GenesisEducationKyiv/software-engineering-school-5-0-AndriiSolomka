@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SubscriptionAlreadyExistsException } from 'src/common/errors/subscription.errors';
+import { SubscriptionAlreadyExistsException } from 'common/errors/subscription.errors';
 import {
   Frequency,
   SubscriptionEntity,

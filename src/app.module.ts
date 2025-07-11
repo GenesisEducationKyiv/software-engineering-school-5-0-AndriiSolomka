@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { ScheduleModule as ScheduleNestModule } from '@nestjs/schedule';
 
-import { HttpLoggerMiddleware } from './common/middlewares/http-logger.middleware';
+import { HttpLoggerMiddleware } from '../common/middlewares/http-logger.middleware';
 import { InternalEmailModule } from './infrastructure/email/email.module';
 import { InternalNotificationModule } from './infrastructure/notification/notification.module';
 import { PrismaModule } from './infrastructure/subscription-management/infrastructure/database/prisma.module';
