@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { WeatherFactory } from 'apps/weather/src/application/weather.factory';
 import { WeatherInterface } from 'apps/weather/src/core/weather.interface';
+import { WeatherFactory } from 'apps/weather/src/weather.factory';
 
 describe('WeatherUseCase', () => {
   let service: WeatherInterface;
