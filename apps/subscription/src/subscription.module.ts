@@ -1,5 +1,8 @@
+import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { InternalEmailModule } from 'apps/email/email.module';
+import { GeocodingConfig } from 'libs/config/geocoding.config';
+import { LoggingConfig } from 'libs/config/logging.config';
 import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
@@ -11,6 +14,7 @@ import { SubscriptionController } from './interface/controllers/subscription.con
 
 @Module({
   imports: [
+    ConfigifyModule.forRootAsync({}),
     InternalSubscriptionModule,
     InternalTokenModule,
     HttpClientModule,
@@ -18,7 +22,12 @@ import { SubscriptionController } from './interface/controllers/subscription.con
     GeocodingModule,
   ],
   controllers: [SubscriptionController],
-  providers: [SubscriptionHandlersService, SubscriptionApiClient],
+  providers: [
+    SubscriptionHandlersService,
+    SubscriptionApiClient,
+    GeocodingConfig,
+    LoggingConfig,
+  ],
   exports: [SubscriptionApiClient],
 })
 export class SubscriptionManagementModule {}

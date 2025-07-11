@@ -72,3 +72,20 @@ services:
         condition: service_started
     networks:
       - weather-api
+
+  subscription:
+    container_name: subscription
+    build:
+      context: .
+      dockerfile: apps/subscription/Dockerfile
+    env_file:
+      - apps/subscription/.env
+    ports:
+      - '5052:5052'
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    networks:
+      - weather-api
