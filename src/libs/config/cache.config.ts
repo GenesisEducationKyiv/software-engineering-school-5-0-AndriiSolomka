@@ -15,17 +15,4 @@ export class CacheConfig {
     default: 600,
   })
   cityCacheTTL: number;
-
-  @IsString()
-  @IsNotEmpty()
-  @Value('WEATHER_CACHE_PREFIX', { default: 'weather' })
-  weatherCachePrefix: string;
-
-  @IsInt()
-  @IsPositive()
-  @Value('WEATHER_CACHE_TTL', {
-    parse: (val: string) => parseInt(val, 10),
-    default: 600,
-  })
-  weatherCacheTTL: number;
 }

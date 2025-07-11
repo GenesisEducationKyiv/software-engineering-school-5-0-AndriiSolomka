@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CacheConfig } from 'src/config/cache.config';
+import { CacheConfig } from 'src/infrastructure/weather/config/cache.config';
 import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 import {
   CacheRepositoryInterface,

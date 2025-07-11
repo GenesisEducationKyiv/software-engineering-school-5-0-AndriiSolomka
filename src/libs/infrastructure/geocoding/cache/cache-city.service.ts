@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CacheConfig } from 'src/config/cache.config';
+import { CacheConfig } from 'src/libs/config/cache.config';
 import { City } from 'src/libs/core/geocoding/geocoding.interface';
 
 import {
