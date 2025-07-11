@@ -16,6 +16,8 @@ import {
 import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
 import * as notificationBuilder from 'src/utils/notification/notification-builder';
 
+import { NotificationInterface } from '../../core/notification.interface';
+
 jest.mock('src/utils/notification/notification-builder', () => ({
   buildWeatherNotification: jest.fn(),
 }));
@@ -47,7 +49,7 @@ function makeWeather(): WeatherData {
 }
 
 describe('SendWeatherUpdatesUseCase', () => {
-  let service: NotificationService;
+  let service: NotificationInterface;
   let subClientMock: jest.Mocked<Pick<SubscriptionInterface, 'getByFrequency'>>;
   let weatherClientMock: jest.Mocked<Pick<WeatherInterface, 'getWeather'>>;
   let emailClientMock: jest.Mocked<Pick<EmailInterface, 'sendWeatherEmail'>>;
@@ -103,7 +105,7 @@ describe('SendWeatherUpdatesUseCase', () => {
       ],
     }).compile();
 
-    service = module.get<NotificationService>(NotificationService);
+    service = module.get<NotificationInterface>(NotificationService);
   });
 
   afterEach(() => {
