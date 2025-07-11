@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ApiConfig } from 'src/config/api.config';
+import { ApiConfig } from 'src/infrastructure/weather/config/api.config';
 import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 import { Coordinates } from 'src/libs/core/geocoding/geocoding.interface';
 import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';

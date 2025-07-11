@@ -17,9 +17,4 @@ export class ApiConfig {
   @IsNotEmpty()
   @Value('OPEN_METEO_API_URL')
   openMeteoApiUrl: string;
-
-  @IsUrl()
-  @IsNotEmpty()
-  @Value('GEOCODING_API_URL')
-  geocodingApiUrl: string;
 }
