@@ -7,6 +7,8 @@ import {
 } from 'src/infrastructure/subscription-management/core/token/token-repository.interface';
 import { TokenService } from 'src/infrastructure/subscription-management/infrastructure/services/token.service';
 
+import { TokenInterface } from '../../core/token/token-interface';
+
 jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
 }));
@@ -23,7 +25,7 @@ function makeToken(): TokenEntity {
 }
 
 describe('TokenService', () => {
-  let service: TokenService;
+  let service: TokenInterface;
   let repoMock: jest.Mocked<
     Pick<TokenRepositoryInterface, 'create' | 'findOne'>
   >;
@@ -44,7 +46,7 @@ describe('TokenService', () => {
       ],
     }).compile();
 
-    service = module.get<TokenService>(TokenService);
+    service = module.get<TokenInterface>(TokenService);
   });
 
   describe('create', () => {

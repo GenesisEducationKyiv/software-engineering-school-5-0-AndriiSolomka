@@ -21,7 +21,7 @@ function makeToken(id = 1, subscriptionId = 123): TokenEntity {
   };
 }
 
-describe('SubscriptionHandlersService', () => {
+describe('SubscriptionApplicationService', () => {
   let service: SubscriptionHandlersService;
   let subServiceMock: jest.Mocked<
     Pick<SubscriptionService, 'create' | 'confirm' | 'delete'>

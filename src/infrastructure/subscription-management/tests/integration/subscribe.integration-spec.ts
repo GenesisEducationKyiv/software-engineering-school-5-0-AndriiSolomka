@@ -21,7 +21,7 @@ const makeDto = (
   ...overrides,
 });
 
-describe('SubscriptionHandlersController (integration)', () => {
+describe('SubscriptionController (integration)', () => {
   let app: INestApplication<Server>;
   let prisma: PrismaService;
   let emailService: EmailInterface;

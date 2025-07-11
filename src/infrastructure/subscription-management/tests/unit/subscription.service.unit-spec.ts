@@ -10,6 +10,8 @@ import {
 } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
 import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
 
+import { SubscriptionInterface } from '../../core/subscription/subscription.interface';
+
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
   return {
@@ -25,7 +27,7 @@ function makeSubscription(): SubscriptionEntity {
 }
 
 describe('SubscriptionService', () => {
-  let service: SubscriptionService;
+  let service: SubscriptionInterface;
   let repoMock: jest.Mocked<
     Pick<
       SubscriptionRepositoryInterface,
@@ -58,7 +60,7 @@ describe('SubscriptionService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionService>(SubscriptionService);
+    service = module.get<SubscriptionInterface>(SubscriptionService);
   });
 
   describe('create', () => {
