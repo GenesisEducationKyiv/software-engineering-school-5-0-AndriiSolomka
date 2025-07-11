@@ -5,7 +5,7 @@ import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
 } from 'src/infrastructure/subscription-management/core/token/token-repository.interface';
-import { randomByteGenerator } from 'src/utils/generator/random-generator';
+import { randomByteGenerator } from 'src/libs/utils/generator/random-generator';
 
 @Injectable()
 export class TokenService implements TokenInterface {

@@ -14,7 +14,7 @@ import {
   WeatherInterface,
 } from 'src/infrastructure/weather/core/weather.interface';
 import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
-import * as notificationBuilder from 'src/utils/notification/notification-builder';
+import * as notificationBuilder from 'src/libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
 

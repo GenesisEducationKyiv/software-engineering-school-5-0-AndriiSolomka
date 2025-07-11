@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { ensureLogDirExists } from 'src/utils/logger/logger.config';
+import { ensureLogDirExists } from 'src/libs/utils/logger/logger.config';
 
 import { AppModule } from './app.module';
 import { setupApp } from './common/setup/setup';

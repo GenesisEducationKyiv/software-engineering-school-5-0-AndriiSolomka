@@ -5,7 +5,7 @@ import { NotificationInterface } from 'src/infrastructure/notification/core/noti
 import { Frequency } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
 import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/interface/clients/application.client';
 import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
-import { buildWeatherNotification } from 'src/utils/notification/notification-builder';
+import { buildWeatherNotification } from 'src/libs/utils/notification/notification-builder';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {
