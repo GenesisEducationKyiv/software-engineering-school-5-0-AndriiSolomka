@@ -7,18 +7,18 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/apps/weather_api/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test:unit": "jest --config ./test/jest-unit.json",
     "test:integration": "jest --config ./test/jest-integration.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright apps/weather_api/test",
     "test:architecture": "jest --config ./test/jest-architecture.json"
   },
   "dependencies": {

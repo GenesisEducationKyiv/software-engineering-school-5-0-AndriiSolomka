@@ -1,8 +1,32 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/weather_api/src",
   "compilerOptions": {
-    "deleteOutDir": true
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/weather_api/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/weather_api",
+  "projects": {
+    "weather": {
+      "type": "application",
+      "root": "apps/weather",
+      "entryFile": "main",
+      "sourceRoot": "apps/weather/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/weather/tsconfig.app.json"
+      }
+    },
+    "weather_api": {
+      "type": "application",
+      "root": "apps/weather_api",
+      "entryFile": "main",
+      "sourceRoot": "apps/weather_api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/weather_api/tsconfig.app.json"
+      }
+    }
   }
 }
