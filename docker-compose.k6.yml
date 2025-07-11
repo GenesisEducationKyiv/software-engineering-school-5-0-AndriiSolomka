@@ -1,0 +1,6 @@
+services:
+  k6:
+    image: grafana/k6
+    volumes:
+      - ./scripts/subscribe.k6.js:/scripts/subscribe.k6.js
+    command: run /scripts/subscribe.k6.js
