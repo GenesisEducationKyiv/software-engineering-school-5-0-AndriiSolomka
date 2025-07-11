@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AppConfig } from 'src/libs/config/app.config';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
+import { AppConfig } from 'src/libs/config/app.config';
 import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 
 import { SendWeatherEmailDto } from '../controllers/dto/email.dto';

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { AppConfig } from 'src/libs/config/app.config';
 import {
   WeatherData,
   WeatherInterface,
 } from 'src/infrastructure/weather/core/weather.interface';
+import { AppConfig } from 'src/libs/config/app.config';
 import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 
 @Injectable()

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
+import { SubscriptionCityValidationPipe } from 'src/common/pipes/city-validation.pipe';
 import {
   Frequency,
   SubscriptionEntity,
@@ -21,8 +21,8 @@ export class SubscriptionController {
   ) {}
 
   @Post()
+  @UsePipes(SubscriptionCityValidationPipe)
   async subscribe(
-    @Body('city', CityValidationPipe) city: string,
     @Body() params: SubscriptionCreateDto,
   ): Promise<SuccessResponseDto> {
     return await this.subscriptionHandlers.subscribe(params);
