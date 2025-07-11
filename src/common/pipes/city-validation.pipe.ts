@@ -1,5 +1,5 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { GeocodingService } from 'src/libs/geocoding/geocoding.service';
+import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
 
 @Injectable()
 export class CityValidationPipe implements PipeTransform {

@@ -1,14 +1,14 @@
 import { ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import {
-  SubscriptionRepositoryInterface,
-  SubscriptionRepositoryToken,
-} from 'src/core/abstracts/subscription/subscription-repository.interface';
-import {
   Frequency,
   SubscriptionEntity,
-} from 'src/core/entities/subscription.entity';
-import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/services/subscription.service';
+} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import {
+  SubscriptionRepositoryInterface,
+  SubscriptionRepositoryToken,
+} from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();

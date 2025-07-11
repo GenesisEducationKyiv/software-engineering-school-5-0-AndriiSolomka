@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { Frequency } from 'src/core/entities/subscription.entity';
 import { NotificationToken } from 'src/infrastructure/notification/core/notification.interface';
-import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application/api/clients/application.client';
+import { Frequency } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/interface/clients/application.client';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';

@@ -1,11 +1,11 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { TokenEntity } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
 import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
-} from 'src/core/abstracts/token/token-repository.interface';
-import { TokenEntity } from 'src/core/entities/subscription.entity';
-import { TokenService } from 'src/infrastructure/subscription-management/token/services/token.service';
+} from 'src/infrastructure/subscription-management/core/token/token-repository.interface';
+import { TokenService } from 'src/infrastructure/subscription-management/infrastructure/services/token.service';
 
 jest.mock('src/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',

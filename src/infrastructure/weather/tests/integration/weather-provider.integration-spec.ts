@@ -10,7 +10,7 @@ import { setupApp } from 'src/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
-} from 'src/libs/cache/core/cache-repository.interface';
+} from 'src/libs/core/cache/cache-repository.interface';
 import * as request from 'supertest';
 
 function resetMockServerWeatherApi() {
@@ -123,7 +123,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData!)).toEqual(res1.body);
+      expect(JSON.parse(cachedData)).toEqual(res1.body);
     });
 
     it('should cache weather data from OpenMeteoProvider and return cached value on second request', async () => {
@@ -149,7 +149,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData!)).toEqual(res1.body);
+      expect(JSON.parse(cachedData)).toEqual(res1.body);
     });
   });
 });

@@ -1,5 +1,5 @@
 import { Token } from '@prisma/client';
-import { TokenEntity } from 'src/core/entities/subscription.entity';
+import { TokenEntity } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
 
 export class TokenMapper {
   static toDomain(token: Token): TokenEntity {

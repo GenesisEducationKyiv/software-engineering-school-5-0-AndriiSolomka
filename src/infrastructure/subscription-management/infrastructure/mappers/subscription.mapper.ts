@@ -2,7 +2,7 @@ import { Subscription, Token } from '@prisma/client';
 import {
   Frequency,
   SubscriptionEntity,
-} from 'src/core/entities/subscription.entity';
+} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
 
 import { TokenMapper } from './token.mapper';
 

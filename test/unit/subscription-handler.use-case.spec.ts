@@ -1,11 +1,14 @@
 import { Test } from '@nestjs/testing';
-import { SubscriptionParams } from 'src/core/abstracts/subscription/subscription-repository.interface';
-import { Frequency, TokenEntity } from 'src/core/entities/subscription.entity';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
 import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
-import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/application/services/subscription-application.service';
-import { SubscriptionService } from 'src/infrastructure/subscription-management/subscription/services/subscription.service';
-import { TokenService } from 'src/infrastructure/subscription-management/token/services/token.service';
+import {
+  Frequency,
+  TokenEntity,
+} from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { SubscriptionParams } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription-application.service';
+import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
+import { TokenService } from 'src/infrastructure/subscription-management/infrastructure/services/token.service';
 
 function makeToken(id = 1, subscriptionId = 123): TokenEntity {
   const now = new Date();

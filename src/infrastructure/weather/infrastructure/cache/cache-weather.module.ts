@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { CacheModule } from 'src/libs/cache/cache.module';
-import { CacheMetricsService } from 'src/libs/cache/metrics/cache-metrics.service';
-import { MetricsCacheDecorator } from 'src/libs/cache/metrics/decorators/metrics-cache.decorator';
+import { CacheModule } from 'src/libs/infrastructure/cache/cache.module';
+import { CacheMetricsService } from 'src/libs/infrastructure/cache/metrics/cache-metrics.service';
+import { MetricsCacheDecorator } from 'src/libs/infrastructure/cache/metrics/decorators/metrics-cache.decorator';
 
 import { CacheWeatherService } from './cache-weather.service';
 

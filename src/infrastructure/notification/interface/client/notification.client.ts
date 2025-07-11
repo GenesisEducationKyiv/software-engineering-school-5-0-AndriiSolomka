@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { AppConfig } from 'src/config/app.config';
-import { Frequency } from 'src/core/entities/subscription.entity';
-import { NotificationInterface } from 'src/infrastructure/notification/core/notification.interface';
-import { HttpClientService } from 'src/libs/http/http-client.service';
+import { Frequency } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
+
+import { NotificationInterface } from '../../core/notification.interface';
 
 @Injectable()
 export class NotificationApiClient implements NotificationInterface {
