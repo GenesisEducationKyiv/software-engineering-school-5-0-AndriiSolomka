@@ -70,13 +70,13 @@ describe('SubscriptionController (integration)', () => {
     await app.close();
   });
 
-  describe('POST /subscribe', () => {
+  describe('POST /api/internal/subscription', () => {
     it('should subscribe successfully with valid city', async () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const dto = makeDto();
       const res = await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(201);
 
@@ -95,7 +95,7 @@ describe('SubscriptionController (integration)', () => {
 
       const dto = makeDto({ city: 'InvalidCity' });
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(404);
     });
@@ -103,14 +103,14 @@ describe('SubscriptionController (integration)', () => {
     it('should return 400 for invalid email', async () => {
       const dto = makeDto({ email: 'invalid-email' });
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(400);
     });
 
     it('should return 400 for missing required fields', async () => {
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send({ city: 'Kyiv' })
         .expect(400);
     });
@@ -118,19 +118,19 @@ describe('SubscriptionController (integration)', () => {
     it('should return 400 for invalid frequency', async () => {
       const dto = makeDto({ frequency: 'weekly' });
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(400);
     });
   });
 
-  describe('GET /confirm/:token', () => {
+  describe('GET /internal/subscription/confirm/:token', () => {
     it('should confirm subscription', async () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(201);
 
@@ -141,7 +141,7 @@ describe('SubscriptionController (integration)', () => {
       expect(tokenEntity).not.toBeNull();
 
       const res = await request(app.getHttpServer())
-        .get(`/api/confirm/${tokenEntity!.token}`)
+        .get(`/api/internal/subscription/confirm/${tokenEntity!.token}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('message');
@@ -155,18 +155,18 @@ describe('SubscriptionController (integration)', () => {
 
     it('should return 404 for invalid token', async () => {
       await request(app.getHttpServer())
-        .get('/api/confirm/invalid-token')
+        .get('/api/internal/subscription/confirm/invalid-token')
         .expect(404);
     });
   });
 
-  describe('GET /unsubscribe/:token', () => {
+  describe('POST /internal/subscription/unsubscribe/:token', () => {
     it('should unsubscribe successfully', async () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(201);
 
@@ -175,12 +175,12 @@ describe('SubscriptionController (integration)', () => {
       });
 
       await request(app.getHttpServer())
-        .get(`/api/confirm/${tokenEntity!.token}`)
+        .get(`/api/internal/subscription/confirm/${tokenEntity!.token}`)
         .expect(200);
 
       const res = await request(app.getHttpServer())
-        .get(`/api/unsubscribe/${tokenEntity!.token}`)
-        .expect(200);
+        .post(`/api/internal/subscription/unsubscribe/${tokenEntity!.token}`)
+        .expect(201);
 
       expect(res.body).toHaveProperty('message');
 
@@ -196,7 +196,7 @@ describe('SubscriptionController (integration)', () => {
 
       const dto = makeDto();
       await request(app.getHttpServer())
-        .post('/api/subscribe')
+        .post('/api/internal/subscription')
         .send(dto)
         .expect(201);
 
@@ -205,19 +205,21 @@ describe('SubscriptionController (integration)', () => {
       });
 
       await request(app.getHttpServer())
-        .get(`/api/confirm/${tokenEntity!.token}`)
+        .get(`/api/internal/subscription/confirm/${tokenEntity!.token}`)
         .expect(200);
+
       await request(app.getHttpServer())
-        .get(`/api/unsubscribe/${tokenEntity!.token}`)
-        .expect(200);
+        .post(`/api/internal/subscription/unsubscribe/${tokenEntity!.token}`)
+        .expect(201);
+
       await request(app.getHttpServer())
-        .get(`/api/unsubscribe/${tokenEntity!.token}`)
+        .post(`/api/internal/subscription/unsubscribe/${tokenEntity!.token}`)
         .expect(404);
     });
 
     it('should return 404 for invalid token', async () => {
       await request(app.getHttpServer())
-        .get('/api/unsubscribe/invalid-token')
+        .post('/api/internal/subscription/unsubscribe/invalid-token')
         .expect(404);
     });
   });

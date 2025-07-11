@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { InternalEmailModule } from 'src/infrastructure/email/email.module';
+import { GeocodingModule } from 'src/libs/infrastructure/geocoding/geocoding.module';
 import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
 
 import { InternalSubscriptionModule } from './infrastructure/modules/subscription.module';
@@ -14,6 +15,7 @@ import { SubscriptionController } from './interface/controllers/subscription.con
     InternalTokenModule,
     HttpClientModule,
     InternalEmailModule,
+    GeocodingModule,
   ],
   controllers: [SubscriptionController],
   providers: [SubscriptionHandlersService, SubscriptionApiClient],
