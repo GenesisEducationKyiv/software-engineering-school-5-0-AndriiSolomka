@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { EmailApiClient } from 'apps/email/src/interface/clients/email.client';
 
 import { SubscriptionService } from './subscription.service';
 import { TokenService } from './token.service';
@@ -10,14 +9,14 @@ export class SubscriptionHandlersService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly subClient: SubscriptionService,
-    private readonly emailClient: EmailApiClient,
   ) {}
 
-  async subscribe(params: SubscriptionParams): Promise<{ message: string }> {
+  async subscribe(
+    params: SubscriptionParams,
+  ): Promise<{ email: string; token: string }> {
     const subscription = await this.subClient.create(params);
     const token = await this.tokenService.create(subscription.subscriptionId);
-    await this.emailClient.sendConfirmationEmail(params.email, token);
-    return { message: 'Confirmation email sent' };
+    return { email: params.email, token };
   }
 
   async confirm(token: string): Promise<{ message: string }> {
