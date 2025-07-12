@@ -5,10 +5,10 @@ import { EmailInterface } from 'apps/email/src/core/email.interface';
 import { EmailApiClient } from 'apps/email/src/interface/clients/email.client';
 import { PrismaService } from 'apps/subscription/src/infrastructure/database/prisma.service';
 import { AppModule } from 'apps/weather_api/src/app.module';
-import { searchApi } from 'common/setup/msw/handlers/geocoding';
-import { weatherApi } from 'common/setup/msw/handlers/weather-api';
-import { mockServer } from 'common/setup/msw/setup';
-import { setupApp } from 'common/setup/setup';
+import { searchApi } from 'libs/common/setup/msw/handlers/geocoding';
+import { weatherApi } from 'libs/common/setup/msw/handlers/weather-api';
+import { mockServer } from 'libs/common/setup/msw/setup';
+import { setupApp } from 'libs/common/setup/setup';
 import { Server } from 'http';
 import * as request from 'supertest';
 

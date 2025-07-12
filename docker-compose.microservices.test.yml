@@ -1,0 +1,33 @@
+volumes:
+  redis-data-test:
+
+networks:
+  test-network:
+    driver: bridge
+
+services:
+  redis-test:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6380:6379
+    volumes:
+      - redis-data-test:/data
+    networks:
+      - test-network
+
+  weather-test:
+    container_name: weather-test
+    build:
+      context: .
+      dockerfile: apps/weather/Dockerfile.test
+    env_file:
+      - apps/weather/.env.test
+    ports:
+      - '50051:5051'
+    depends_on:
+      redis-test:
+        condition: service_started
+    networks:
+      - test-network
+    command: sh -c "npm run test:integration"

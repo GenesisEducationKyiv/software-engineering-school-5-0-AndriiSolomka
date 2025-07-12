@@ -1,7 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'apps/weather_api/src/app.module';
-import { setupApp } from 'common/setup/setup';
+import { setupApp } from 'libs/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
