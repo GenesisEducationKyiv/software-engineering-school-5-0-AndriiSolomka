@@ -1,6 +1,6 @@
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
-import { InternalEmailModule } from 'apps/email/src/app.module';
+import { AppModule } from 'apps/email/src/app.module';
 import { NotificationToken } from 'apps/notification/src/core/notification.interface';
 import { AppModule } from 'apps/subscription/src/app.module';
 import { AppModule } from 'apps/weather/src/app.module';
@@ -15,7 +15,7 @@ import { NotificationInternalController } from './interface/controllers/notifica
   imports: [
     ConfigifyModule.forRootAsync({}),
     HttpClientModule,
-    InternalEmailModule,
+    AppModule,
     AppModule,
     AppModule,
   ],

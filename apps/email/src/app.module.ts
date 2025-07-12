@@ -6,7 +6,6 @@ import { EmailService } from 'apps/email/src/infrastructure/services/email.servi
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { NodemailerService } from './infrastructure/providers/nodemailer.provider';
-import { EmailApiClient } from './interface/clients/email.client';
 import { EmailController } from './interface/email.controller';
 
 @Module({
@@ -21,8 +20,6 @@ import { EmailController } from './interface/email.controller';
       provide: EmailToken,
       useClass: EmailService,
     },
-    EmailApiClient,
   ],
-  exports: [EmailApiClient],
 })
-export class InternalEmailModule {}
+export class AppModule {}
