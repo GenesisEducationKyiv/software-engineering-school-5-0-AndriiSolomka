@@ -12,13 +12,11 @@ async function bootstrap(): Promise<void> {
   setupApp(app);
 
   await app.listen(app.get(AppConfig).port, () => {
-    console.log(
-      `Notification app is running on port ${app.get(AppConfig).port}`,
-    );
+    console.log(`Gateway app is running on port ${app.get(AppConfig).port}`);
   });
 }
 
 bootstrap().catch((error) => {
-  console.error('Error Notification app initialization:', error);
+  console.error('Error Gateway app initialization:', error);
   process.exit(1);
 });

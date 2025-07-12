@@ -1,14 +1,9 @@
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 
-import { SubscriptionControllersModule } from './modules/subscription-controllers.module';
-import { WeatherControllersModule } from './modules/weather-controller.module';
+import { WeatherClientModule } from './weather/weather.module';
 
 @Module({
-  imports: [
-    ConfigifyModule.forRootAsync({}),
-    SubscriptionControllersModule,
-    WeatherControllersModule,
-  ],
+  imports: [ConfigifyModule.forRootAsync({}), WeatherClientModule],
 })
 export class GatewayModule {}

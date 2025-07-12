@@ -7,8 +7,7 @@ import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { CacheWeatherModule } from './infrastructure/cache/cache-weather.module';
 import { WeatherProviderModule } from './infrastructure/providers/weather-provider.module';
-import { WeatherApiClient } from './interfaces/client/weather.client';
-import { WeatherController } from './interfaces/controllers/weather.controller';
+import { WeatherController } from './interfaces/weather.controller';
 import { WeatherFactory } from './weather.factory';
 
 @Module({
@@ -22,7 +21,6 @@ import { WeatherFactory } from './weather.factory';
   ],
   controllers: [WeatherController],
   providers: [
-    WeatherApiClient,
     WeatherFactory,
     {
       provide: WeatherToken,
@@ -30,6 +28,5 @@ import { WeatherFactory } from './weather.factory';
       inject: [WeatherFactory],
     },
   ],
-  exports: [WeatherApiClient],
 })
 export class AppModule {}

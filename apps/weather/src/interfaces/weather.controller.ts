@@ -5,7 +5,7 @@ import {
   GetWeatherResponse,
 } from 'libs/proto/generated/weather';
 
-import { WeatherInterface, WeatherToken } from '../../core/weather.interface';
+import { WeatherInterface, WeatherToken } from '../core/weather.interface';
 
 @GrpcService()
 export class WeatherController {
