@@ -8,7 +8,7 @@ enum Frequency {
 }
 
 service SubscriptionService {
-  rpc Subscribe (SubscribeRequest) returns (ActionResponse);
+  rpc Subscribe (SubscribeRequest) returns (SubscribeResponse);
   rpc Confirm (ConfirmRequest) returns (ActionResponse);
   rpc Unsubscribe (UnsubscribeRequest) returns (ActionResponse);
 }
@@ -29,4 +29,9 @@ message UnsubscribeRequest {
 
 message ActionResponse {
   string message = 2;
+}
+
+message SubscribeResponse {
+  string email = 1;
+  string token = 2;
 }

@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SubscriptionAlreadyExistsException } from 'common/errors/subscription.errors';
 
 import {
   Frequency,
@@ -11,6 +10,7 @@ import {
   SubscriptionRepositoryToken,
 } from '../../core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from '../../core/subscription/subscription.interface';
+import { SubscriptionAlreadyExistsException } from '../errors/custom.errors';
 
 @Injectable()
 export class SubscriptionService implements SubscriptionInterface {

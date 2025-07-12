@@ -4,10 +4,11 @@ import {
   ActionResponse,
   ConfirmRequest,
   SubscribeRequest,
+  SubscribeResponse,
   UnsubscribeRequest,
 } from 'libs/proto/generated/subscription';
 
-import { mapProtoToDomain } from '../infrastructure/mappers/frequency.mapper';
+import { mapProtoToDomain } from './frequency.mapper';
 import { SubscriptionHandlersService } from '../infrastructure/services/subscription-application.service';
 
 @Controller()
@@ -17,13 +18,16 @@ export class SubscriptionGrpcController {
   ) {}
 
   @GrpcMethod('SubscriptionService', 'Subscribe')
-  async subscribe(data: SubscribeRequest) {
+  async subscribe(data: SubscribeRequest): Promise<SubscribeResponse> {
     const domainParams = {
       email: data.email,
       city: data.city,
       frequency: mapProtoToDomain(data.frequency),
     };
-    return await this.subscriptionHandlers.subscribe(domainParams);
+    const test = await this.subscriptionHandlers.subscribe(domainParams);
+    console.log(test);
+
+    return test;
   }
 
   @GrpcMethod('SubscriptionService', 'Confirm')

@@ -72,6 +72,11 @@ export interface ActionResponse {
   message: string;
 }
 
+export interface SubscribeResponse {
+  email: string;
+  token: string;
+}
+
 function createBaseSubscribeRequest(): SubscribeRequest {
   return { email: "", city: "", frequency: 0 };
 }
@@ -338,6 +343,82 @@ export const ActionResponse: MessageFns<ActionResponse> = {
   },
 };
 
+function createBaseSubscribeResponse(): SubscribeResponse {
+  return { email: "", token: "" };
+}
+
+export const SubscribeResponse: MessageFns<SubscribeResponse> = {
+  encode(message: SubscribeResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.email !== "") {
+      writer.uint32(10).string(message.email);
+    }
+    if (message.token !== "") {
+      writer.uint32(18).string(message.token);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SubscribeResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSubscribeResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.token = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SubscribeResponse {
+    return {
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      token: isSet(object.token) ? globalThis.String(object.token) : "",
+    };
+  },
+
+  toJSON(message: SubscribeResponse): unknown {
+    const obj: any = {};
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    if (message.token !== "") {
+      obj.token = message.token;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SubscribeResponse>, I>>(base?: I): SubscribeResponse {
+    return SubscribeResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SubscribeResponse>, I>>(object: I): SubscribeResponse {
+    const message = createBaseSubscribeResponse();
+    message.email = object.email ?? "";
+    message.token = object.token ?? "";
+    return message;
+  },
+};
+
 export type SubscriptionServiceDefinition = typeof SubscriptionServiceDefinition;
 export const SubscriptionServiceDefinition = {
   name: "SubscriptionService",
@@ -347,7 +428,7 @@ export const SubscriptionServiceDefinition = {
       name: "Subscribe",
       requestType: SubscribeRequest,
       requestStream: false,
-      responseType: ActionResponse,
+      responseType: SubscribeResponse,
       responseStream: false,
       options: {},
     },
@@ -378,8 +459,8 @@ export const SubscriptionServiceService = {
     responseStream: false,
     requestSerialize: (value: SubscribeRequest): Buffer => Buffer.from(SubscribeRequest.encode(value).finish()),
     requestDeserialize: (value: Buffer): SubscribeRequest => SubscribeRequest.decode(value),
-    responseSerialize: (value: ActionResponse): Buffer => Buffer.from(ActionResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): ActionResponse => ActionResponse.decode(value),
+    responseSerialize: (value: SubscribeResponse): Buffer => Buffer.from(SubscribeResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): SubscribeResponse => SubscribeResponse.decode(value),
   },
   confirm: {
     path: "/subscription.SubscriptionService/Confirm",
@@ -402,7 +483,7 @@ export const SubscriptionServiceService = {
 } as const;
 
 export interface SubscriptionServiceServer extends UntypedServiceImplementation {
-  subscribe: handleUnaryCall<SubscribeRequest, ActionResponse>;
+  subscribe: handleUnaryCall<SubscribeRequest, SubscribeResponse>;
   confirm: handleUnaryCall<ConfirmRequest, ActionResponse>;
   unsubscribe: handleUnaryCall<UnsubscribeRequest, ActionResponse>;
 }
@@ -410,18 +491,18 @@ export interface SubscriptionServiceServer extends UntypedServiceImplementation 
 export interface SubscriptionServiceClient extends Client {
   subscribe(
     request: SubscribeRequest,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
+    callback: (error: ServiceError | null, response: SubscribeResponse) => void,
   ): ClientUnaryCall;
   subscribe(
     request: SubscribeRequest,
     metadata: Metadata,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
+    callback: (error: ServiceError | null, response: SubscribeResponse) => void,
   ): ClientUnaryCall;
   subscribe(
     request: SubscribeRequest,
     metadata: Metadata,
     options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
+    callback: (error: ServiceError | null, response: SubscribeResponse) => void,
   ): ClientUnaryCall;
   confirm(
     request: ConfirmRequest,
