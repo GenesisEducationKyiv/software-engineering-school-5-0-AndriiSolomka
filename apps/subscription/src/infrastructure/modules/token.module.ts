@@ -23,4 +23,4 @@ import { TokenService } from '../services/token.service';
   ],
   exports: [TokenService],
 })
-export class InternalTokenModule {}
+export class TokenModule {}

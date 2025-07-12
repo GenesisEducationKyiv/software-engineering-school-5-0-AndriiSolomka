@@ -1,56 +1,32 @@
-import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { SubscriptionCityValidationPipe } from 'common/pipes/city-validation.pipe';
+import { Controller } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
+import {
+  ActionResponse,
+  ConfirmRequest,
+  SubscribeRequest,
+  UnsubscribeRequest,
+} from 'libs/proto/generated/subscription';
 
-import {
-  SubscriptionCreateDto,
-  SuccessResponseDto,
-  TokenParamDto,
-} from './dto/handlers.dto';
-import {
-  Frequency,
-  SubscriptionEntity,
-} from '../../core/entities/subscription.entity';
 import { SubscriptionHandlersService } from '../../infrastructure/services/subscription-application.service';
-import { SubscriptionService } from '../../infrastructure/services/subscription.service';
 
-@Controller('internal/subscription')
-export class SubscriptionController {
+@Controller()
+export class SubscriptionGrpcController {
   constructor(
     private readonly subscriptionHandlers: SubscriptionHandlersService,
-    private readonly subscriptionService: SubscriptionService,
   ) {}
 
-  @Post()
-  @UsePipes(SubscriptionCityValidationPipe)
-  async subscribe(
-    @Body() params: SubscriptionCreateDto,
-  ): Promise<SuccessResponseDto> {
-    return await this.subscriptionHandlers.subscribe(params);
+  @GrpcMethod('SubscriptionService', 'Subscribe')
+  async subscribe(data: SubscribeRequest): Promise<ActionResponse> {
+    return await this.subscriptionHandlers.subscribe(data);
   }
 
-  @Get('confirm/:token')
-  async confirm(
-    @Param() { token }: TokenParamDto,
-  ): Promise<SuccessResponseDto> {
-    return await this.subscriptionHandlers.confirm(token);
+  @GrpcMethod('SubscriptionService', 'Confirm')
+  async confirm(data: ConfirmRequest): Promise<ActionResponse> {
+    return await this.subscriptionHandlers.confirm(data.token);
   }
 
-  @Post('unsubscribe/:token')
-  async unsubscribe(
-    @Param() { token }: TokenParamDto,
-  ): Promise<SuccessResponseDto> {
-    return await this.subscriptionHandlers.unsubscribe(token);
-  }
-
-  @Post('delete-unconfirmed')
-  async deleteUnconfirmed(): Promise<{ count: number }> {
-    return await this.subscriptionService.deleteUnconfirmed();
-  }
-
-  @Get('by-frequency/:frequency')
-  async getByFrequency(
-    @Param('frequency') frequency: Frequency,
-  ): Promise<SubscriptionEntity[]> {
-    return await this.subscriptionService.getByFrequency(frequency);
+  @GrpcMethod('SubscriptionService', 'Unsubscribe')
+  async unsubscribe(data: UnsubscribeRequest): Promise<ActionResponse> {
+    return await this.subscriptionHandlers.unsubscribe(data.token);
   }
 }

@@ -1,6 +1,6 @@
 export enum Frequency {
-  Hourly = 'hourly',
-  Daily = 'daily',
+  hourly = 0,
+  daily = 1,
 }
 
 export interface TokenEntity {

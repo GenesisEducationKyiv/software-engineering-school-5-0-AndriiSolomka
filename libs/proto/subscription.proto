@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package subscription;
+
+enum Frequency {
+  HOURLY = 0;
+  DAILY = 1;
+}
+
+service SubscriptionService {
+  rpc Subscribe (SubscribeRequest) returns (ActionResponse);
+  rpc Confirm (ConfirmRequest) returns (ActionResponse);
+  rpc Unsubscribe (UnsubscribeRequest) returns (ActionResponse);
+}
+
+message SubscribeRequest {
+  string email = 1;
+  string city = 2;
+  Frequency frequency = 3;
+}
+
+message ConfirmRequest {
+  string token = 1;
+}
+
+message UnsubscribeRequest {
+  string token = 1;
+}
+
+message ActionResponse {
+  string message = 2;
+}

@@ -6,28 +6,27 @@ import { LoggingConfig } from 'libs/config/logging.config';
 import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
-import { InternalSubscriptionModule } from './infrastructure/modules/subscription.module';
-import { InternalTokenModule } from './infrastructure/modules/token.module';
+import { SubscriptionModule } from './infrastructure/modules/subscription.module';
+import { TokenModule } from './infrastructure/modules/token.module';
 import { SubscriptionHandlersService } from './infrastructure/services/subscription-application.service';
 import { SubscriptionApiClient } from './interface/clients/application.client';
-import { SubscriptionController } from './interface/controllers/subscription.controller';
+import { SubscriptionGrpcController } from './interface/controllers/subscription.controller';
 
 @Module({
   imports: [
     ConfigifyModule.forRootAsync({}),
-    InternalSubscriptionModule,
-    InternalTokenModule,
+    SubscriptionModule,
+    TokenModule,
     HttpClientModule,
     InternalEmailModule,
     GeocodingModule,
   ],
-  controllers: [SubscriptionController],
+  controllers: [SubscriptionGrpcController],
   providers: [
     SubscriptionHandlersService,
     SubscriptionApiClient,
     GeocodingConfig,
     LoggingConfig,
   ],
-  exports: [SubscriptionApiClient],
 })
-export class SubscriptionManagementModule {}
+export class AppModule {}

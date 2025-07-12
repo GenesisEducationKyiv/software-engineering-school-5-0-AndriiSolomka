@@ -22,4 +22,4 @@ import { SubscriptionService } from '../services/subscription.service';
   ],
   exports: [SubscriptionService],
 })
-export class InternalSubscriptionModule {}
+export class SubscriptionModule {}

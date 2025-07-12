@@ -2,7 +2,7 @@ import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { InternalEmailModule } from 'apps/email/src/email.module';
 import { NotificationToken } from 'apps/notification/src/core/notification.interface';
-import { SubscriptionManagementModule } from 'apps/subscription/src/subscription.module';
+import { AppModule } from 'apps/subscription/src/app.module';
 import { WeatherAppModule } from 'apps/weather/src/weather.module';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
@@ -17,7 +17,7 @@ import { NotificationInternalController } from './interface/controllers/notifica
     HttpClientModule,
     InternalEmailModule,
     WeatherAppModule,
-    SubscriptionManagementModule,
+    AppModule,
   ],
   controllers: [NotificationInternalController],
   providers: [

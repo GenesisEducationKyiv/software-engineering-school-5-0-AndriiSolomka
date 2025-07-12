@@ -20,7 +20,8 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "playwright apps/weather_api/test",
-    "test:architecture": "jest --config ./test/jest-architecture.json"
+    "test:architecture": "jest --config ./test/jest-architecture.json",
+    "proto:gen": "npx protoc   --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto   --ts_proto_out=libs/proto/generated   --ts_proto_opt=outputServices=grpc-js,outputServices=generic-definitions,useOptionals=messages   -I libs/proto   libs/proto/*.proto"
   },
   "dependencies": {
     "@grpc/grpc-js": "^1.13.4",
@@ -85,6 +86,7 @@
     "ts-jest": "^29.2.5",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",
+    "ts-proto": "^2.7.5",
     "tsarch": "^5.4.1",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",

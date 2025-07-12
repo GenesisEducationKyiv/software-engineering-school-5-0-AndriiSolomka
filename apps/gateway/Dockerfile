@@ -18,6 +18,8 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/package-lock.json ./
+COPY --from=builder /app/libs/proto ./libs/proto
+
 
 RUN npm ci --only=production
 

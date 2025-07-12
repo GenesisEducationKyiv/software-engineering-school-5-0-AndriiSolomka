@@ -1,21 +1,27 @@
 import { NestFactory } from '@nestjs/core';
-import { setupApp } from 'common/setup/setup';
-import { AppConfig } from 'libs/config/app.config';
-import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
-import { SubscriptionManagementModule } from './subscription.module';
+import { AppModule } from './app.module';
+import { AppConfig } from './config/app.config';
 
-ensureLogDirExists();
+async function bootstrap() {
+  const appContext = await NestFactory.createApplicationContext(AppModule);
+  const config = appContext.get(AppConfig);
 
-async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(SubscriptionManagementModule);
-  setupApp(app);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'subscription',
+        protoPath: 'libs/proto/subscription.proto',
+        url: `0.0.0.0:${config.port}`,
+      },
+    },
+  );
 
-  await app.listen(app.get(AppConfig).port, () => {
-    console.log(
-      `Subscription app is running on port ${app.get(AppConfig).port}`,
-    );
-  });
+  await app.listen();
+  console.log(`Subscription microservice running on gRPC port ${config.port}`);
 }
 
 bootstrap().catch((error) => {
