@@ -15,7 +15,7 @@ services:
     restart: always
     shm_size: 128mb
     env_file:
-      - apps/subscription/.env
+      - .env
     volumes:
       - postgres-db:/var/lib/postgresql/data
     ports:
@@ -104,10 +104,6 @@ services:
       weather:
         condition: service_started
       subscription:
-        condition: service_started
-      notification:
-        condition: service_started
-      email:
         condition: service_started
     networks:
       - weather-api

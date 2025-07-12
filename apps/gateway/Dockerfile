@@ -6,7 +6,6 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-RUN npx prisma generate --schema ./apps/subscription/prisma/schema.prisma
 
 RUN npm run build gateway
 
