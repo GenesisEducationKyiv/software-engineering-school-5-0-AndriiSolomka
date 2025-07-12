@@ -103,6 +103,10 @@ services:
     depends_on:
       weather:
         condition: service_started
+      subscription:
+        condition: service_started
+      email:
+        condition: service_started
     networks:
       - weather-api
 

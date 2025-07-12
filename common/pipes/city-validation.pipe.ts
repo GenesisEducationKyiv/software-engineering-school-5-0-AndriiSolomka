@@ -1,12 +1,23 @@
 import { Injectable, PipeTransform } from '@nestjs/common';
-import { SubscriptionParams } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
 import { GeocodingService } from 'libs/infrastructure/geocoding/geocoding.service';
+
+export enum Frequency {
+  hourly = 'hourly',
+  daily = 'daily',
+}
+
+export type SubscriptionParams = {
+  email: string;
+  city: string;
+  frequency: Frequency;
+};
 
 @Injectable()
 export class WeatherCityValidationPipe implements PipeTransform {
   constructor(private readonly geocodingService: GeocodingService) {}
 
   async transform(value: string) {
+    console.log(`Validating city: ${value}`);
     await this.geocodingService.findCity(value);
     return value;
   }
@@ -17,6 +28,7 @@ export class SubscriptionCityValidationPipe implements PipeTransform {
   constructor(private readonly geocodingService: GeocodingService) {}
 
   async transform(value: SubscriptionParams) {
+    console.log(`Validating city: ${value.city}`);
     await this.geocodingService.findCity(value.city);
     return value;
   }

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { WeatherConfig } from 'apps/gateway/config/weather.config';
+import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 
 import { WEATHER_PACKAGE } from './core/weather.interface';
 import { WeatherClientService } from './infrastructure/weather.grpc.client';
@@ -8,6 +9,7 @@ import { WeatherHandlersController } from './interface/weather.controller';
 
 @Module({
   imports: [
+    GeocodingModule,
     ClientsModule.registerAsync([
       {
         name: WEATHER_PACKAGE,

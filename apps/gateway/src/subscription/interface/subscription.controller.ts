@@ -12,12 +12,14 @@ export class SubscriptionHandlersController {
     private readonly emailClient: EmailClientService,
   ) {}
 
-  @UsePipes(WeatherCityValidationPipe)
+  //@UsePipes(WeatherCityValidationPipe)
   @Post('subscribe')
   async subscribe(@Body() dto: CreateSubscriptionDto) {
     const { email, token } = await this.subscribeService.subscribe(dto);
+    console.log(`Subscription created for email: ${email}, token: ${token}`);
+
     if (email && token)
-      await this.emailClient.sendConfirmationEmail(email, token);
+      return await this.emailClient.sendConfirmationEmail(email, token);
   }
 
   @Get('confirm/:token')
