@@ -1,21 +1,30 @@
 import { NestFactory } from '@nestjs/core';
-import { setupApp } from 'libs/common/setup/setup';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
 
-import { AppConfig } from './config/app.config';
-import { InternalNotificationModule } from './notification.module';
-
-ensureLogDirExists();
+import { AppModule } from './app.module';
+import { AppConfig } from '../config/app.config';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(InternalNotificationModule);
-  setupApp(app);
+  ensureLogDirExists();
 
-  await app.listen(app.get(AppConfig).port, () => {
-    console.log(
-      `Notification app is running on port ${app.get(AppConfig).port}`,
-    );
-  });
+  const appContext = await NestFactory.createApplicationContext(AppModule);
+  const config = appContext.get(AppConfig);
+
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'notification',
+        protoPath: 'libs/proto/notification.proto',
+        url: `0.0.0.0:${config.port}`,
+      },
+    },
+  );
+
+  await app.listen();
+  console.log(`Notification gRPC service is running on port ${config.port}`);
 }
 
 bootstrap().catch((error) => {

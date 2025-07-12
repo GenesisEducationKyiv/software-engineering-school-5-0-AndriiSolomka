@@ -1,4 +1,4 @@
-import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
+import { Frequency } from './subscription.interface';
 
 export const NotificationToken = Symbol('NotificationToken');
 

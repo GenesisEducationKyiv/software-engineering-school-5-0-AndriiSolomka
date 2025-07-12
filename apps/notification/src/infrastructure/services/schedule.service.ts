@@ -1,17 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { NotificationToken } from 'apps/notification/src/core/notification.interface';
-import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
-import { SubscriptionApiClient } from 'apps/subscription/src/interface/clients/application.client';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';
 import { NotificationService } from './notification.service';
+import { Frequency } from '../../core/subscription.interface';
+import { SubscriptionClientService } from '../clients/subscription.client';
 
 @Injectable()
 export class ScheduleService {
   constructor(
-    private readonly subService: SubscriptionApiClient,
+    private readonly subService: SubscriptionClientService,
     @Inject(NotificationToken)
     private readonly notificationService: NotificationService,
   ) {}
@@ -23,11 +23,11 @@ export class ScheduleService {
 
   @Cron(NOTIFICATION.HOURLY)
   async sendHourlyWeatherUpdates(): Promise<void> {
-    await this.notificationService.sendWeatherUpdates(Frequency.Hourly);
+    await this.notificationService.sendWeatherUpdates(Frequency.hourly);
   }
 
   @Cron(NOTIFICATION.DAILY)
   async sendDailyWeatherUpdates(): Promise<void> {
-    await this.notificationService.sendWeatherUpdates(Frequency.Daily);
+    await this.notificationService.sendWeatherUpdates(Frequency.daily);
   }
 }

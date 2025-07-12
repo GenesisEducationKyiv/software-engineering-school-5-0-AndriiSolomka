@@ -11,6 +11,9 @@ service SubscriptionService {
   rpc Subscribe (SubscribeRequest) returns (SubscribeResponse);
   rpc Confirm (ConfirmRequest) returns (ActionResponse);
   rpc Unsubscribe (UnsubscribeRequest) returns (ActionResponse);
+
+  rpc GetByFrequency (GetByFrequencyRequest) returns (GetByFrequencyResponse);
+  rpc DeleteUnconfirmed (DeleteUnconfirmedRequest) returns (DeleteUnconfirmedResponse);
 }
 
 message SubscribeRequest {
@@ -27,11 +30,33 @@ message UnsubscribeRequest {
   string token = 1;
 }
 
+message GetByFrequencyRequest {
+  Frequency frequency = 1;
+}
+
+message GetByFrequencyResponse {
+  repeated SubscriptionEntity subscriptions = 1;
+}
+
+message DeleteUnconfirmedRequest {}
+
+message DeleteUnconfirmedResponse {
+  int32 count = 1;
+}
+
 message ActionResponse {
-  string message = 2;
+  string message = 1;
 }
 
 message SubscribeResponse {
   string email = 1;
   string token = 2;
+}
+
+message SubscriptionEntity {
+  int64 subscriptionId = 1;
+  string email = 2;
+  string city = 3;
+  Frequency frequency = 4;
+  bool confirmed = 5;
 }

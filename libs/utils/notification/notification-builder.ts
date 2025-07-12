@@ -1,4 +1,4 @@
-import { SubscriptionEntity } from 'apps/subscription/src/core/entities/subscription.entity';
+//import { SubscriptionEntity } from 'apps/subscription/src/core/entities/subscription.entity';
 import { WeatherData } from 'apps/weather/src/core/weather.interface';
 
 const createWeatherEmailText = (
@@ -18,12 +18,11 @@ ${unsubscribeLink}
 `;
 
 export function buildWeatherNotification(
-  sub: SubscriptionEntity,
   weather: WeatherData,
   unsubscribeUrl: string,
 ): { subject: string; text: string } {
-  const token = sub.tokens[0].token;
-  const city = sub.city;
+  //const token = sub.tokens[0].token;
+  const city = '1';
 
   return {
     subject: `Weather forecast for ${city}`,
@@ -32,7 +31,7 @@ export function buildWeatherNotification(
       weather.temperature,
       weather.humidity,
       weather.description,
-      `${unsubscribeUrl}${token}`,
+      `${unsubscribeUrl}`,
     ),
   };
 }

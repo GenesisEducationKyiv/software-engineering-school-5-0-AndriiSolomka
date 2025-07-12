@@ -68,6 +68,21 @@ export interface UnsubscribeRequest {
   token: string;
 }
 
+export interface GetByFrequencyRequest {
+  frequency: Frequency;
+}
+
+export interface GetByFrequencyResponse {
+  subscriptions: SubscriptionEntity[];
+}
+
+export interface DeleteUnconfirmedRequest {
+}
+
+export interface DeleteUnconfirmedResponse {
+  count: number;
+}
+
 export interface ActionResponse {
   message: string;
 }
@@ -75,6 +90,14 @@ export interface ActionResponse {
 export interface SubscribeResponse {
   email: string;
   token: string;
+}
+
+export interface SubscriptionEntity {
+  subscriptionId: number;
+  email: string;
+  city: string;
+  frequency: Frequency;
+  confirmed: boolean;
 }
 
 function createBaseSubscribeRequest(): SubscribeRequest {
@@ -285,6 +308,227 @@ export const UnsubscribeRequest: MessageFns<UnsubscribeRequest> = {
   },
 };
 
+function createBaseGetByFrequencyRequest(): GetByFrequencyRequest {
+  return { frequency: 0 };
+}
+
+export const GetByFrequencyRequest: MessageFns<GetByFrequencyRequest> = {
+  encode(message: GetByFrequencyRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.frequency !== 0) {
+      writer.uint32(8).int32(message.frequency);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetByFrequencyRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetByFrequencyRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.frequency = reader.int32() as any;
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetByFrequencyRequest {
+    return { frequency: isSet(object.frequency) ? frequencyFromJSON(object.frequency) : 0 };
+  },
+
+  toJSON(message: GetByFrequencyRequest): unknown {
+    const obj: any = {};
+    if (message.frequency !== 0) {
+      obj.frequency = frequencyToJSON(message.frequency);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetByFrequencyRequest>, I>>(base?: I): GetByFrequencyRequest {
+    return GetByFrequencyRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetByFrequencyRequest>, I>>(object: I): GetByFrequencyRequest {
+    const message = createBaseGetByFrequencyRequest();
+    message.frequency = object.frequency ?? 0;
+    return message;
+  },
+};
+
+function createBaseGetByFrequencyResponse(): GetByFrequencyResponse {
+  return { subscriptions: [] };
+}
+
+export const GetByFrequencyResponse: MessageFns<GetByFrequencyResponse> = {
+  encode(message: GetByFrequencyResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    for (const v of message.subscriptions) {
+      SubscriptionEntity.encode(v!, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): GetByFrequencyResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseGetByFrequencyResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.subscriptions.push(SubscriptionEntity.decode(reader, reader.uint32()));
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): GetByFrequencyResponse {
+    return {
+      subscriptions: globalThis.Array.isArray(object?.subscriptions)
+        ? object.subscriptions.map((e: any) => SubscriptionEntity.fromJSON(e))
+        : [],
+    };
+  },
+
+  toJSON(message: GetByFrequencyResponse): unknown {
+    const obj: any = {};
+    if (message.subscriptions?.length) {
+      obj.subscriptions = message.subscriptions.map((e) => SubscriptionEntity.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<GetByFrequencyResponse>, I>>(base?: I): GetByFrequencyResponse {
+    return GetByFrequencyResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<GetByFrequencyResponse>, I>>(object: I): GetByFrequencyResponse {
+    const message = createBaseGetByFrequencyResponse();
+    message.subscriptions = object.subscriptions?.map((e) => SubscriptionEntity.fromPartial(e)) || [];
+    return message;
+  },
+};
+
+function createBaseDeleteUnconfirmedRequest(): DeleteUnconfirmedRequest {
+  return {};
+}
+
+export const DeleteUnconfirmedRequest: MessageFns<DeleteUnconfirmedRequest> = {
+  encode(_: DeleteUnconfirmedRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteUnconfirmedRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteUnconfirmedRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): DeleteUnconfirmedRequest {
+    return {};
+  },
+
+  toJSON(_: DeleteUnconfirmedRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeleteUnconfirmedRequest>, I>>(base?: I): DeleteUnconfirmedRequest {
+    return DeleteUnconfirmedRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeleteUnconfirmedRequest>, I>>(_: I): DeleteUnconfirmedRequest {
+    const message = createBaseDeleteUnconfirmedRequest();
+    return message;
+  },
+};
+
+function createBaseDeleteUnconfirmedResponse(): DeleteUnconfirmedResponse {
+  return { count: 0 };
+}
+
+export const DeleteUnconfirmedResponse: MessageFns<DeleteUnconfirmedResponse> = {
+  encode(message: DeleteUnconfirmedResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.count !== 0) {
+      writer.uint32(8).int32(message.count);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): DeleteUnconfirmedResponse {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseDeleteUnconfirmedResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.count = reader.int32();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): DeleteUnconfirmedResponse {
+    return { count: isSet(object.count) ? globalThis.Number(object.count) : 0 };
+  },
+
+  toJSON(message: DeleteUnconfirmedResponse): unknown {
+    const obj: any = {};
+    if (message.count !== 0) {
+      obj.count = Math.round(message.count);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<DeleteUnconfirmedResponse>, I>>(base?: I): DeleteUnconfirmedResponse {
+    return DeleteUnconfirmedResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<DeleteUnconfirmedResponse>, I>>(object: I): DeleteUnconfirmedResponse {
+    const message = createBaseDeleteUnconfirmedResponse();
+    message.count = object.count ?? 0;
+    return message;
+  },
+};
+
 function createBaseActionResponse(): ActionResponse {
   return { message: "" };
 }
@@ -292,7 +536,7 @@ function createBaseActionResponse(): ActionResponse {
 export const ActionResponse: MessageFns<ActionResponse> = {
   encode(message: ActionResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.message !== "") {
-      writer.uint32(18).string(message.message);
+      writer.uint32(10).string(message.message);
     }
     return writer;
   },
@@ -304,8 +548,8 @@ export const ActionResponse: MessageFns<ActionResponse> = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2: {
-          if (tag !== 18) {
+        case 1: {
+          if (tag !== 10) {
             break;
           }
 
@@ -419,6 +663,130 @@ export const SubscribeResponse: MessageFns<SubscribeResponse> = {
   },
 };
 
+function createBaseSubscriptionEntity(): SubscriptionEntity {
+  return { subscriptionId: 0, email: "", city: "", frequency: 0, confirmed: false };
+}
+
+export const SubscriptionEntity: MessageFns<SubscriptionEntity> = {
+  encode(message: SubscriptionEntity, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.subscriptionId !== 0) {
+      writer.uint32(8).int64(message.subscriptionId);
+    }
+    if (message.email !== "") {
+      writer.uint32(18).string(message.email);
+    }
+    if (message.city !== "") {
+      writer.uint32(26).string(message.city);
+    }
+    if (message.frequency !== 0) {
+      writer.uint32(32).int32(message.frequency);
+    }
+    if (message.confirmed !== false) {
+      writer.uint32(40).bool(message.confirmed);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SubscriptionEntity {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSubscriptionEntity();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 8) {
+            break;
+          }
+
+          message.subscriptionId = longToNumber(reader.int64());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.city = reader.string();
+          continue;
+        }
+        case 4: {
+          if (tag !== 32) {
+            break;
+          }
+
+          message.frequency = reader.int32() as any;
+          continue;
+        }
+        case 5: {
+          if (tag !== 40) {
+            break;
+          }
+
+          message.confirmed = reader.bool();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SubscriptionEntity {
+    return {
+      subscriptionId: isSet(object.subscriptionId) ? globalThis.Number(object.subscriptionId) : 0,
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      city: isSet(object.city) ? globalThis.String(object.city) : "",
+      frequency: isSet(object.frequency) ? frequencyFromJSON(object.frequency) : 0,
+      confirmed: isSet(object.confirmed) ? globalThis.Boolean(object.confirmed) : false,
+    };
+  },
+
+  toJSON(message: SubscriptionEntity): unknown {
+    const obj: any = {};
+    if (message.subscriptionId !== 0) {
+      obj.subscriptionId = Math.round(message.subscriptionId);
+    }
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    if (message.city !== "") {
+      obj.city = message.city;
+    }
+    if (message.frequency !== 0) {
+      obj.frequency = frequencyToJSON(message.frequency);
+    }
+    if (message.confirmed !== false) {
+      obj.confirmed = message.confirmed;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(base?: I): SubscriptionEntity {
+    return SubscriptionEntity.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(object: I): SubscriptionEntity {
+    const message = createBaseSubscriptionEntity();
+    message.subscriptionId = object.subscriptionId ?? 0;
+    message.email = object.email ?? "";
+    message.city = object.city ?? "";
+    message.frequency = object.frequency ?? 0;
+    message.confirmed = object.confirmed ?? false;
+    return message;
+  },
+};
+
 export type SubscriptionServiceDefinition = typeof SubscriptionServiceDefinition;
 export const SubscriptionServiceDefinition = {
   name: "SubscriptionService",
@@ -445,6 +813,22 @@ export const SubscriptionServiceDefinition = {
       requestType: UnsubscribeRequest,
       requestStream: false,
       responseType: ActionResponse,
+      responseStream: false,
+      options: {},
+    },
+    getByFrequency: {
+      name: "GetByFrequency",
+      requestType: GetByFrequencyRequest,
+      requestStream: false,
+      responseType: GetByFrequencyResponse,
+      responseStream: false,
+      options: {},
+    },
+    deleteUnconfirmed: {
+      name: "DeleteUnconfirmed",
+      requestType: DeleteUnconfirmedRequest,
+      requestStream: false,
+      responseType: DeleteUnconfirmedResponse,
       responseStream: false,
       options: {},
     },
@@ -480,12 +864,36 @@ export const SubscriptionServiceService = {
     responseSerialize: (value: ActionResponse): Buffer => Buffer.from(ActionResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): ActionResponse => ActionResponse.decode(value),
   },
+  getByFrequency: {
+    path: "/subscription.SubscriptionService/GetByFrequency",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetByFrequencyRequest): Buffer =>
+      Buffer.from(GetByFrequencyRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): GetByFrequencyRequest => GetByFrequencyRequest.decode(value),
+    responseSerialize: (value: GetByFrequencyResponse): Buffer =>
+      Buffer.from(GetByFrequencyResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): GetByFrequencyResponse => GetByFrequencyResponse.decode(value),
+  },
+  deleteUnconfirmed: {
+    path: "/subscription.SubscriptionService/DeleteUnconfirmed",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: DeleteUnconfirmedRequest): Buffer =>
+      Buffer.from(DeleteUnconfirmedRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer): DeleteUnconfirmedRequest => DeleteUnconfirmedRequest.decode(value),
+    responseSerialize: (value: DeleteUnconfirmedResponse): Buffer =>
+      Buffer.from(DeleteUnconfirmedResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer): DeleteUnconfirmedResponse => DeleteUnconfirmedResponse.decode(value),
+  },
 } as const;
 
 export interface SubscriptionServiceServer extends UntypedServiceImplementation {
   subscribe: handleUnaryCall<SubscribeRequest, SubscribeResponse>;
   confirm: handleUnaryCall<ConfirmRequest, ActionResponse>;
   unsubscribe: handleUnaryCall<UnsubscribeRequest, ActionResponse>;
+  getByFrequency: handleUnaryCall<GetByFrequencyRequest, GetByFrequencyResponse>;
+  deleteUnconfirmed: handleUnaryCall<DeleteUnconfirmedRequest, DeleteUnconfirmedResponse>;
 }
 
 export interface SubscriptionServiceClient extends Client {
@@ -534,6 +942,36 @@ export interface SubscriptionServiceClient extends Client {
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: ActionResponse) => void,
   ): ClientUnaryCall;
+  getByFrequency(
+    request: GetByFrequencyRequest,
+    callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
+  ): ClientUnaryCall;
+  getByFrequency(
+    request: GetByFrequencyRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
+  ): ClientUnaryCall;
+  getByFrequency(
+    request: GetByFrequencyRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
+  ): ClientUnaryCall;
+  deleteUnconfirmed(
+    request: DeleteUnconfirmedRequest,
+    callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
+  ): ClientUnaryCall;
+  deleteUnconfirmed(
+    request: DeleteUnconfirmedRequest,
+    metadata: Metadata,
+    callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
+  ): ClientUnaryCall;
+  deleteUnconfirmed(
+    request: DeleteUnconfirmedRequest,
+    metadata: Metadata,
+    options: Partial<CallOptions>,
+    callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
+  ): ClientUnaryCall;
 }
 
 export const SubscriptionServiceClient = makeGenericClientConstructor(
@@ -556,6 +994,17 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function longToNumber(int64: { toString(): string }): number {
+  const num = globalThis.Number(int64.toString());
+  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
+  }
+  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
+    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
+  }
+  return num;
+}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

@@ -1,8 +1,8 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'apps/weather_api/src/app.module';
-import { setupApp } from 'libs/common/setup/setup';
 import { Server } from 'http';
+import { setupApp } from 'libs/common/setup/setup';
 import { CacheMetricsService } from 'libs/infrastructure/cache/metrics/cache-metrics.service';
 import { CACHE_OPERATION_STATUS } from 'libs/infrastructure/cache/metrics/constants/metrics.constants';
 import * as request from 'supertest';

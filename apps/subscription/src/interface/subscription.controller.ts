@@ -3,12 +3,15 @@ import { GrpcMethod } from '@nestjs/microservices';
 import {
   ActionResponse,
   ConfirmRequest,
+  DeleteUnconfirmedResponse,
+  Frequency,
   SubscribeRequest,
   SubscribeResponse,
+  SubscriptionEntity,
   UnsubscribeRequest,
 } from 'libs/proto/generated/subscription';
 
-import { mapProtoToDomain } from './frequency.mapper';
+import { mapDomainToProto, mapProtoToDomain } from './frequency.mapper';
 import { SubscriptionHandlersService } from '../infrastructure/services/subscription-application.service';
 
 @Controller()
@@ -24,10 +27,7 @@ export class SubscriptionGrpcController {
       city: data.city,
       frequency: mapProtoToDomain(data.frequency),
     };
-    const test = await this.subscriptionHandlers.subscribe(domainParams);
-    console.log(test);
-
-    return test;
+    return await this.subscriptionHandlers.subscribe(domainParams);
   }
 
   @GrpcMethod('SubscriptionService', 'Confirm')
@@ -38,5 +38,25 @@ export class SubscriptionGrpcController {
   @GrpcMethod('SubscriptionService', 'Unsubscribe')
   async unsubscribe(data: UnsubscribeRequest): Promise<ActionResponse> {
     return await this.subscriptionHandlers.unsubscribe(data.token);
+  }
+
+  @GrpcMethod('SubscriptionService', 'GetByFrequency')
+  async getByFrequency(
+    data: Frequency,
+  ): Promise<{ subscriptions: SubscriptionEntity[] }> {
+    const frequency = mapProtoToDomain(data);
+    const subs = await this.subscriptionHandlers.getByFrequency(frequency);
+
+    const subscriptions = subs.map((sub) => ({
+      ...sub,
+      frequency: mapDomainToProto(sub.frequency),
+    }));
+
+    return { subscriptions };
+  }
+
+  @GrpcMethod('SubscriptionService', 'DeleteUnconfirmed')
+  async deleteUnconfirmed(): Promise<DeleteUnconfirmedResponse> {
+    return this.subscriptionHandlers.deleteUnconfirmed();
   }
 }

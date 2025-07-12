@@ -1,19 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { EmailConfig } from 'apps/email/config/email.config';
-import { EmailApiClient } from 'apps/email/src/interface/clients/email.client';
+import { EmailConfig } from 'apps/notification/config/email.config';
 import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
-import { SubscriptionApiClient } from 'apps/subscription/src/interface/clients/application.client';
-import { WeatherApiClient } from 'apps/weather/src/interfaces/client/weather.client';
 import { buildWeatherNotification } from 'libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
+import { EmailClientService } from '../clients/email.grcp.client';
+import { SubscriptionClientService } from '../clients/subscription.client';
+import { WeatherClientService } from '../clients/weather.grcp.client';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {
   constructor(
-    private readonly subService: SubscriptionApiClient,
-    private readonly weatherService: WeatherApiClient,
-    private readonly emailService: EmailApiClient,
+    private readonly subService: SubscriptionClientService,
+    private readonly weatherService: WeatherClientService,
+    private readonly emailService: EmailClientService,
     private readonly emailConfig: EmailConfig,
   ) {}
 
@@ -23,7 +23,6 @@ export class NotificationService implements NotificationInterface {
     for (const sub of subscriptions) {
       const weather = await this.weatherService.getWeather(sub.city);
       const { subject, text } = buildWeatherNotification(
-        sub,
         weather,
         this.emailConfig.unsubscribeLink,
       );
