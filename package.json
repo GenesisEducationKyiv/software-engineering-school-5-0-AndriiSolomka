@@ -21,6 +21,7 @@
     "test:integration": "jest --config ./test/jest-integration.json",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "test:all": "npm run test:unit",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "playwright apps/weather_api/test",
     "test:architecture": "jest --config ./test/jest-architecture.json",

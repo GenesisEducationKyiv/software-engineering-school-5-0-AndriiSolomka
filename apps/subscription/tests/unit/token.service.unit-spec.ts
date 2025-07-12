@@ -8,7 +8,7 @@ import {
 } from 'apps/subscription/src/core/token/token-repository.interface';
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
 
-jest.mock('apps/weather_api/src/utils/generator/random-generator', () => ({
+jest.mock('libs/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
 }));
 

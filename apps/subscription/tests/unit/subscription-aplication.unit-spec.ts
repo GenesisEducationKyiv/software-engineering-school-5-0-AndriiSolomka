@@ -62,8 +62,8 @@ describe('SubscriptionApplicationService', () => {
   });
 
   describe('subscribe', () => {
-    it('should create subscription, generate token and send confirmation email', async () => {
-      const params: SubscriptionParams = {
+    it('should create subscription and generate token', async () => {
+      const params = {
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.daily,
@@ -85,14 +85,12 @@ describe('SubscriptionApplicationService', () => {
       subServiceMock.create.mockResolvedValueOnce(mockSubscription);
       tokenServiceMock.create.mockResolvedValueOnce(mockToken);
 
-      const result = await service.subscribe(params);
+      await service.subscribe(params);
 
       expect(subServiceMock.create).toHaveBeenCalledWith(params);
       expect(tokenServiceMock.create).toHaveBeenCalledWith(
         mockSubscription.subscriptionId,
       );
-
-      expect(result).toEqual({ message: 'Confirmation email sent' });
     });
 
     it('should throw error when subscription creation fails', async () => {

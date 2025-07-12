@@ -1,4 +1,3 @@
-import { ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import {
   Frequency,
@@ -9,6 +8,7 @@ import {
   SubscriptionRepositoryToken,
 } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from 'apps/subscription/src/core/subscription/subscription.interface';
+import { SubscriptionAlreadyExistsException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
 
 function makeSubscription(): SubscriptionEntity {
@@ -72,7 +72,7 @@ describe('SubscriptionService', () => {
           city: 'Kyiv',
           frequency: Frequency.daily,
         }),
-      ).rejects.toBeInstanceOf(ConflictException);
+      ).rejects.toBeInstanceOf(SubscriptionAlreadyExistsException);
 
       expect(repoMock.findOne).toHaveBeenCalledWith('test@mail.com', 'Kyiv');
       expect(repoMock.create).not.toHaveBeenCalled();

@@ -1,4 +1,5 @@
 volumes:
+  postgres-db-test:
   redis-data-test:
 
 networks:
@@ -6,13 +7,35 @@ networks:
     driver: bridge
 
 services:
+  db-test:
+    container_name: db-test
+    image: postgres:17-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - apps/subscription/.env.test
+    volumes:
+      - postgres-db-test:/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+    user: postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -d ${POSTGRES_DB}']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - test-network
+
   redis-test:
+    container_name: redis-test
     image: redis:7-alpine
     restart: always
     ports:
       - 6380:6379
     volumes:
       - redis-data-test:/data
+    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
     networks:
       - test-network
 
@@ -30,4 +53,93 @@ services:
         condition: service_started
     networks:
       - test-network
-    command: sh -c "npm run test:unit"
+
+  subscription-test:
+    container_name: subscription-test
+    build:
+      context: .
+      dockerfile: apps/subscription/Dockerfile.test
+    env_file:
+      - apps/subscription/.env.test
+    ports:
+      - '50052:5052'
+    depends_on:
+      db-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_started
+    networks:
+      - test-network
+
+  email-test:
+    container_name: email-test
+    build:
+      context: .
+      dockerfile: apps/email/Dockerfile.test
+    env_file:
+      - apps/email/.env.test
+    ports:
+      - '50054:5054'
+    networks:
+      - test-network
+
+  notification-test:
+    container_name: notification-test
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile.test
+    env_file:
+      - apps/notification/.env.test
+    ports:
+      - '50053:5053'
+    depends_on:
+      weather-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      email-test:
+        condition: service_started
+    networks:
+      - test-network
+
+  gateway-test:
+    container_name: gateway-test
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile.test
+    env_file:
+      - apps/gateway/.env.test
+    ports:
+      - '50055:5055'
+    depends_on:
+      weather-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      email-test:
+        condition: service_started
+    networks:
+      - test-network
+
+  tests-runner:
+    container_name: tests-runner
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      db-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      email-test:
+        condition: service_started
+      notification-test:
+        condition: service_started
+      gateway-test:
+        condition: service_started
+    networks:
+      - test-network
