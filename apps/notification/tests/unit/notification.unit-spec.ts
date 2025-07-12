@@ -1,8 +1,20 @@
 import { Test } from '@nestjs/testing';
-
+import { EmailClientService } from 'apps/gateway/src/email/infrastructure/email.grcp.client';
+import { SubscriptionClientService } from 'apps/gateway/src/subscription/infrastructure/subscription.grpc.client';
+import { WeatherClientService } from 'apps/gateway/src/weather/infrastructure/weather.grpc.client';
+import { EmailConfig } from 'apps/notification/config/email.config';
+import { EmailInterface } from 'apps/notification/src/core/email.interface';
+import { NotificationInterface } from 'apps/notification/src/core/notification.interface';
+import {
+  Frequency,
+  SubscriptionInterface,
+} from 'apps/notification/src/core/subscription.interface';
+import {
+  WeatherData,
+  WeatherInterface,
+} from 'apps/notification/src/core/weather.interface';
+import { NotificationService } from 'apps/notification/src/infrastructure/services/notification.service';
 import * as notificationBuilder from 'libs/utils/notification/notification-builder';
-
-
 
 jest.mock('libs/utils/notification/notification-builder', () => ({
   buildWeatherNotification: jest.fn(),
@@ -73,15 +85,15 @@ describe('SendWeatherUpdatesUseCase', () => {
       providers: [
         NotificationService,
         {
-          provide: SubscriptionApiClient,
+          provide: SubscriptionClientService,
           useValue: subClientMock,
         },
         {
-          provide: WeatherApiClient,
+          provide: WeatherClientService,
           useValue: weatherClientMock,
         },
         {
-          provide: EmailApiClient,
+          provide: EmailClientService,
           useValue: emailClientMock,
         },
         {
@@ -110,10 +122,10 @@ describe('SendWeatherUpdatesUseCase', () => {
       weatherClientMock.getWeather.mockResolvedValue(weather);
       emailClientMock.sendWeatherEmail.mockResolvedValue(undefined);
 
-      await service.sendWeatherUpdates(Frequency.Daily);
+      await service.sendWeatherUpdates(Frequency.daily);
 
       expect(subClientMock.getByFrequency).toHaveBeenCalledWith(
-        Frequency.Daily,
+        Frequency.daily,
       );
 
       expect(weatherClientMock.getWeather).toHaveBeenCalledTimes(2);
@@ -156,10 +168,10 @@ describe('SendWeatherUpdatesUseCase', () => {
     it('should not send any emails if there are no subscriptions with matching frequency', async () => {
       subClientMock.getByFrequency.mockResolvedValue([]);
 
-      await service.sendWeatherUpdates(Frequency.Hourly);
+      await service.sendWeatherUpdates(Frequency.hourly);
 
       expect(subClientMock.getByFrequency).toHaveBeenCalledWith(
-        Frequency.Hourly,
+        Frequency.hourly,
       );
 
       expect(weatherClientMock.getWeather).not.toHaveBeenCalled();
