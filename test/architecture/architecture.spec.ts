@@ -27,13 +27,14 @@ describe('Clean Architecture Compliance', () => {
     return expect(rule).toPassAsync();
   });
 
-  it('infrastructure depends only on core and use-cases', () => {
+  it('infrastructure depends only on core', () => {
     const rule = filesOfProject()
       .inFolder('src/infrastructure')
       .shouldNot()
       .dependOnFiles()
       .inFolder('src/interface')
-      .inFolder('src/application');
+      .inFolder('src/application')
+      .inFolder('src/use-cases');
 
     expect(rule).toPassAsync();
   });
