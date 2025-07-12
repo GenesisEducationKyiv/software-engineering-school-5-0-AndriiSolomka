@@ -3,8 +3,8 @@ syntax = "proto3";
 package subscription;
 
 enum Frequency {
-  HOURLY = 0;
-  DAILY = 1;
+  hourly = 0;
+  daily = 1;
 }
 
 service SubscriptionService {

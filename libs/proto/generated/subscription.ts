@@ -22,19 +22,19 @@ import {
 export const protobufPackage = "subscription";
 
 export enum Frequency {
-  HOURLY = 0,
-  DAILY = 1,
+  hourly = 0,
+  daily = 1,
   UNRECOGNIZED = -1,
 }
 
 export function frequencyFromJSON(object: any): Frequency {
   switch (object) {
     case 0:
-    case "HOURLY":
-      return Frequency.HOURLY;
+    case "hourly":
+      return Frequency.hourly;
     case 1:
-    case "DAILY":
-      return Frequency.DAILY;
+    case "daily":
+      return Frequency.daily;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -44,10 +44,10 @@ export function frequencyFromJSON(object: any): Frequency {
 
 export function frequencyToJSON(object: Frequency): string {
   switch (object) {
-    case Frequency.HOURLY:
-      return "HOURLY";
-    case Frequency.DAILY:
-      return "DAILY";
+    case Frequency.hourly:
+      return "hourly";
+    case Frequency.daily:
+      return "daily";
     case Frequency.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
