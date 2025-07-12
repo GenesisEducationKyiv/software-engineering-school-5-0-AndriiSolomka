@@ -1,31 +1,35 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
+import { GrpcMethod, GrpcService } from '@nestjs/microservices';
 import {
   EmailInterface,
   EmailToken,
 } from 'apps/email/src/core/email.interface';
+import {
+  SendConfirmationEmailRequest,
+  SendWeatherEmailRequest,
+  SuccessResponse,
+} from 'libs/proto/generated/email';
 
-import { SendConfirmationEmailDto, SendWeatherEmailDto } from './dto/email.dto';
-
-@Controller('/internal/email')
-export class EmailInternalController {
+@GrpcService()
+export class EmailController {
   constructor(
     @Inject(EmailToken)
     private readonly emailService: EmailInterface,
   ) {}
 
-  @Post('send-confirmation')
+  @GrpcMethod('EmailService', 'SendConfirmationEmail')
   async sendConfirmationEmail(
-    @Body() { email, token }: SendConfirmationEmailDto,
-  ): Promise<{ success: boolean }> {
-    await this.emailService.sendConfirmationEmail(email, token);
+    data: SendConfirmationEmailRequest,
+  ): Promise<SuccessResponse> {
+    await this.emailService.sendConfirmationEmail(data.email, data.token);
     return { success: true };
   }
 
-  @Post('send-weather')
+  @GrpcMethod('EmailService', 'SendWeatherEmail')
   async sendWeatherEmail(
-    @Body() { email, subject, text }: SendWeatherEmailDto,
-  ): Promise<{ success: boolean }> {
-    await this.emailService.sendWeatherEmail({ email, subject, text });
+    data: SendWeatherEmailRequest,
+  ): Promise<SuccessResponse> {
+    await this.emailService.sendWeatherEmail(data);
     return { success: true };
   }
 }

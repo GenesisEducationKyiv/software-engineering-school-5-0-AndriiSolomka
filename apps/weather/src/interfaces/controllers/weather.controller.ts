@@ -1,5 +1,5 @@
-import { Controller, Inject } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import { Inject } from '@nestjs/common';
+import { GrpcMethod, GrpcService } from '@nestjs/microservices';
 import {
   GetWeatherRequest,
   GetWeatherResponse,
@@ -7,7 +7,7 @@ import {
 
 import { WeatherInterface, WeatherToken } from '../../core/weather.interface';
 
-@Controller('internal/weather')
+@GrpcService()
 export class WeatherController {
   constructor(
     @Inject(WeatherToken)

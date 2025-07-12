@@ -1,6 +1,6 @@
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
-import { InternalEmailModule } from 'apps/email/src/email.module';
+import { InternalEmailModule } from 'apps/email/src/app.module';
 import { GeocodingConfig } from 'libs/config/geocoding.config';
 import { LoggingConfig } from 'libs/config/logging.config';
 import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';

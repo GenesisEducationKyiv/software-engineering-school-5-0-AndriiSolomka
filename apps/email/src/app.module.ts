@@ -7,11 +7,11 @@ import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { NodemailerService } from './infrastructure/providers/nodemailer.provider';
 import { EmailApiClient } from './interface/clients/email.client';
-import { EmailInternalController } from './interface/controllers/email.controller';
+import { EmailController } from './interface/controllers/email.controller';
 
 @Module({
   imports: [ConfigifyModule.forRootAsync({}), HttpClientModule],
-  controllers: [EmailInternalController],
+  controllers: [EmailController],
   providers: [
     {
       provide: EmailTransportToken,
