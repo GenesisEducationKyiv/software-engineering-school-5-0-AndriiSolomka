@@ -32,4 +32,4 @@ import { WeatherFactory } from './weather.factory';
   ],
   exports: [WeatherApiClient],
 })
-export class WeatherAppModule {}
+export class AppModule {}

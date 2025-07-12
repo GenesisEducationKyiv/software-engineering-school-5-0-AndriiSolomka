@@ -1,5 +1,9 @@
-import { Controller, Get, Inject, Param, UsePipes } from '@nestjs/common';
-import { WeatherCityValidationPipe } from 'common/pipes/city-validation.pipe';
+import { Controller, Inject } from '@nestjs/common';
+import { GrpcMethod } from '@nestjs/microservices';
+import {
+  GetWeatherRequest,
+  GetWeatherResponse,
+} from 'libs/proto/generated/weather';
 
 import { WeatherInterface, WeatherToken } from '../../core/weather.interface';
 
@@ -10,9 +14,8 @@ export class WeatherController {
     private readonly weatherService: WeatherInterface,
   ) {}
 
-  @UsePipes(WeatherCityValidationPipe)
-  @Get(':city')
-  async getWeather(@Param('city') city: string) {
+  @GrpcMethod('WeatherService', 'GetWeather')
+  async getWeather({ city }: GetWeatherRequest): Promise<GetWeatherResponse> {
     return await this.weatherService.getWeather(city);
   }
 }

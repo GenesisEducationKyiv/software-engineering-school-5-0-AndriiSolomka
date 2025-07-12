@@ -1,7 +1,6 @@
-import { ValidationPipe } from '@nestjs/common';
-import { MicroserviceOptions } from '@nestjs/microservices';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 
-export function setupApp(app: MicroserviceOptions): void {
+export function setupApp(app: INestApplication): void {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

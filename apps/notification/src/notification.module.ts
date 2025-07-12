@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { InternalEmailModule } from 'apps/email/src/email.module';
 import { NotificationToken } from 'apps/notification/src/core/notification.interface';
 import { AppModule } from 'apps/subscription/src/app.module';
-import { WeatherAppModule } from 'apps/weather/src/weather.module';
+import { AppModule } from 'apps/weather/src/app.module';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { NotificationService } from './infrastructure/services/notification.service';
@@ -16,7 +16,7 @@ import { NotificationInternalController } from './interface/controllers/notifica
     ConfigifyModule.forRootAsync({}),
     HttpClientModule,
     InternalEmailModule,
-    WeatherAppModule,
+    AppModule,
     AppModule,
   ],
   controllers: [NotificationInternalController],

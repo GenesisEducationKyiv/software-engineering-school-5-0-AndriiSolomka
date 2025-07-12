@@ -1,19 +1,30 @@
 import { NestFactory } from '@nestjs/core';
-import { setupApp } from 'common/setup/setup';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
 
-import { WeatherAppModule } from './weather.module';
+import { AppModule } from './app.module';
 import { AppConfig } from '../config/app.config';
 
-ensureLogDirExists();
+async function bootstrap() {
+  ensureLogDirExists();
 
-async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(WeatherAppModule);
-  setupApp(app);
+  const appContext = await NestFactory.createApplicationContext(AppModule);
+  const config = appContext.get(AppConfig);
 
-  await app.listen(app.get(AppConfig).port, () => {
-    console.log(`Weather app is running on port ${app.get(AppConfig).port}`);
-  });
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        package: 'weather',
+        protoPath: 'libs/proto/weather.proto',
+        url: `0.0.0.0:${config.port}`,
+      },
+    },
+  );
+
+  await app.listen();
+  console.log(`Weather microservice is running on gRPC port ${config.port}`);
 }
 
 bootstrap().catch((error) => {
