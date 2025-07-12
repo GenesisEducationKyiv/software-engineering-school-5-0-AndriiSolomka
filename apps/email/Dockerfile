@@ -7,8 +7,7 @@ RUN npm ci
 
 COPY . .
 
-RUN npx prisma generate --schema ./apps/subscription/prisma/schema.prisma
-RUN npm run build subscription
+RUN npm run build email
 
 FROM node:20-alpine AS production
 
@@ -19,9 +18,9 @@ WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/package-lock.json ./
-COPY --from=builder /app/apps/subscription/prisma ./prisma
+
 RUN npm ci --only=production
 
-EXPOSE 5052
+EXPOSE 5054
 
-CMD ["node", "dist/apps/subscription/main.js"]
+CMD ["node", "dist/apps/email/main.js"]

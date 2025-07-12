@@ -1,5 +1,6 @@
+import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
-import { InternalEmailModule } from 'apps/email/email.module';
+import { InternalEmailModule } from 'apps/email/src/email.module';
 import { NotificationToken } from 'apps/notification/src/core/notification.interface';
 import { SubscriptionManagementModule } from 'apps/subscription/src/subscription.module';
 import { WeatherAppModule } from 'apps/weather/src/weather.module';
@@ -12,6 +13,7 @@ import { NotificationInternalController } from './interface/controllers/notifica
 
 @Module({
   imports: [
+    ConfigifyModule.forRootAsync({}),
     HttpClientModule,
     InternalEmailModule,
     WeatherAppModule,
