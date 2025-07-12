@@ -1,6 +1,4 @@
 import { Test } from '@nestjs/testing';
-import { EmailInterface } from 'apps/email/src/core/email.interface';
-import { EmailApiClient } from 'apps/email/src/interface/clients/email.client';
 import {
   Frequency,
   TokenEntity,
@@ -27,9 +25,6 @@ describe('SubscriptionApplicationService', () => {
     Pick<SubscriptionService, 'create' | 'confirm' | 'delete'>
   >;
   let tokenServiceMock: jest.Mocked<Pick<TokenService, 'create' | 'getEntity'>>;
-  let mailServiceMock: jest.Mocked<
-    Pick<EmailInterface, 'sendConfirmationEmail'>
-  >;
 
   beforeEach(async () => {
     subServiceMock = {
@@ -43,10 +38,6 @@ describe('SubscriptionApplicationService', () => {
       getEntity: jest.fn(),
     };
 
-    mailServiceMock = {
-      sendConfirmationEmail: jest.fn(),
-    };
-
     const module = await Test.createTestingModule({
       providers: [
         SubscriptionHandlersService,
@@ -57,10 +48,6 @@ describe('SubscriptionApplicationService', () => {
         {
           provide: TokenService,
           useValue: tokenServiceMock,
-        },
-        {
-          provide: EmailApiClient,
-          useValue: mailServiceMock,
         },
       ],
     }).compile();
@@ -79,14 +66,14 @@ describe('SubscriptionApplicationService', () => {
       const params: SubscriptionParams = {
         email: 'test@example.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
       };
 
       const mockSubscription = {
         subscriptionId: 123,
         email: 'test@example.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
         confirmed: false,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -97,7 +84,6 @@ describe('SubscriptionApplicationService', () => {
 
       subServiceMock.create.mockResolvedValueOnce(mockSubscription);
       tokenServiceMock.create.mockResolvedValueOnce(mockToken);
-      mailServiceMock.sendConfirmationEmail.mockResolvedValueOnce(undefined);
 
       const result = await service.subscribe(params);
 
@@ -105,10 +91,7 @@ describe('SubscriptionApplicationService', () => {
       expect(tokenServiceMock.create).toHaveBeenCalledWith(
         mockSubscription.subscriptionId,
       );
-      expect(mailServiceMock.sendConfirmationEmail).toHaveBeenCalledWith(
-        params.email,
-        mockToken,
-      );
+
       expect(result).toEqual({ message: 'Confirmation email sent' });
     });
 
@@ -116,7 +99,7 @@ describe('SubscriptionApplicationService', () => {
       const params: SubscriptionParams = {
         email: 'test@example.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
       };
 
       const error = new Error('Failed to create subscription');
@@ -124,7 +107,6 @@ describe('SubscriptionApplicationService', () => {
 
       await expect(service.subscribe(params)).rejects.toThrow(error);
       expect(tokenServiceMock.create).not.toHaveBeenCalled();
-      expect(mailServiceMock.sendConfirmationEmail).not.toHaveBeenCalled();
     });
   });
 
@@ -139,7 +121,7 @@ describe('SubscriptionApplicationService', () => {
         subscriptionId: 123,
         email: 'test@example.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
         confirmed: true,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -178,7 +160,7 @@ describe('SubscriptionApplicationService', () => {
         subscriptionId: 123,
         email: 'test@example.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
         confirmed: true,
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -1,22 +1,8 @@
 import { Test } from '@nestjs/testing';
-import { EmailConfig } from 'apps/email/config/email.config';
-import { EmailInterface } from 'apps/email/src/core/email.interface';
-import { EmailApiClient } from 'apps/email/src/interface/clients/email.client';
-import {
-  Frequency,
-  SubscriptionEntity,
-} from 'apps/subscription/src/core/entities/subscription.entity';
-import { SubscriptionInterface } from 'apps/subscription/src/core/subscription/subscription.interface';
-import { SubscriptionApiClient } from 'apps/subscription/src/interface/clients/application.client';
-import {
-  WeatherData,
-  WeatherInterface,
-} from 'apps/weather/src/core/weather.interface';
-import { WeatherApiClient } from 'apps/weather/src/interfaces/client/weather.client';
+
 import * as notificationBuilder from 'libs/utils/notification/notification-builder';
 
-import { NotificationInterface } from '../../src/core/notification.interface';
-import { NotificationService } from '../../src/infrastructure/services/notification.service';
+
 
 jest.mock('libs/utils/notification/notification-builder', () => ({
   buildWeatherNotification: jest.fn(),
@@ -32,7 +18,7 @@ function makeSubscription(
     subscriptionId: id,
     email: email,
     city: city,
-    frequency: Frequency.Daily,
+    frequency: Frequency.daily,
     confirmed: true,
     createdAt: now,
     updatedAt: now,

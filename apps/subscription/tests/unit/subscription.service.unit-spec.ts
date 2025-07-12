@@ -17,7 +17,7 @@ function makeSubscription(): SubscriptionEntity {
     subscriptionId: 1,
     email: 'test@mail.com',
     city: 'Kyiv',
-    frequency: Frequency.Daily,
+    frequency: Frequency.daily,
     confirmed: false,
     createdAt: now,
     updatedAt: now,
@@ -70,7 +70,7 @@ describe('SubscriptionService', () => {
         service.create({
           email: 'test@mail.com',
           city: 'Kyiv',
-          frequency: Frequency.Daily,
+          frequency: Frequency.daily,
         }),
       ).rejects.toBeInstanceOf(ConflictException);
 
@@ -87,14 +87,14 @@ describe('SubscriptionService', () => {
       const result = await service.create({
         email: 'test@mail.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
       });
 
       expect(repoMock.findOne).toHaveBeenCalledWith('test@mail.com', 'Kyiv');
       expect(repoMock.create).toHaveBeenCalledWith({
         email: 'test@mail.com',
         city: 'Kyiv',
-        frequency: Frequency.Daily,
+        frequency: Frequency.daily,
       });
       expect(result).toBe(created);
     });

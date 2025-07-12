@@ -1,6 +1,5 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { NotificationToken } from 'apps/notification/src/core/notification.interface';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';
@@ -12,7 +11,6 @@ import { SubscriptionClientService } from '../clients/subscription.client';
 export class ScheduleService {
   constructor(
     private readonly subService: SubscriptionClientService,
-    @Inject(NotificationToken)
     private readonly notificationService: NotificationService,
   ) {}
 

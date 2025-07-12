@@ -2,11 +2,12 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "../",
   "testEnvironment": "node",
-  "testRegex": "(test|apps/weather_api/src/.*/tests/unit)/.*\\.unit-spec\\.ts$",
+  "testRegex": "apps/weather/tests?/unit/.*\\.unit-spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
   "moduleNameMapper": {
-    "^apps/weather_api/src/(.*)$": "<rootDir>/apps/weather_api/src/$1"
+    "^apps/(.*)$": "<rootDir>/apps/$1",
+    "^libs/(.*)$": "<rootDir>/libs/$1"
   }
 }

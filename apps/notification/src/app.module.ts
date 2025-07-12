@@ -2,11 +2,13 @@ import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
-import { NotificationService } from './infrastructure/services/notification.service';
-import { ScheduleService } from './infrastructure/services/schedule.service';
+import { NotificationModule } from './infrastructure/notification.module';
 
 @Module({
-  imports: [ConfigifyModule.forRootAsync({}), HttpClientModule],
-  providers: [NotificationService, ScheduleService],
+  imports: [
+    ConfigifyModule.forRootAsync({}),
+    HttpClientModule,
+    NotificationModule,
+  ],
 })
 export class AppModule {}

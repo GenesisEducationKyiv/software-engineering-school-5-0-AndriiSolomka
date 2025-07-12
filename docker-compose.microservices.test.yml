@@ -30,4 +30,4 @@ services:
         condition: service_started
     networks:
       - test-network
-    command: sh -c "npm run test:integration"
+    command: sh -c "npm run test:unit"

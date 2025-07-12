@@ -11,6 +11,7 @@ import { WEATHER_PACKAGE } from '../core/weather.interface';
 import { EmailClientService } from './clients/email.grcp.client';
 import { SubscriptionClientService } from './clients/subscription.client';
 import { WeatherClientService } from './clients/weather.grcp.client';
+import { ScheduleService } from './services/schedule.service';
 
 @Module({
   imports: [
@@ -58,6 +59,7 @@ import { WeatherClientService } from './clients/weather.grcp.client';
     EmailClientService,
     WeatherClientService,
     SubscriptionClientService,
+    ScheduleService,
   ],
   exports: [NotificationService],
 })
