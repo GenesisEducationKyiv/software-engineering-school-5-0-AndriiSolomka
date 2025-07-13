@@ -1,4 +1,5 @@
-import { InternalServerErrorException } from '@nestjs/common';
+import { status } from '@grpc/grpc-js';
+import { RpcException } from '@nestjs/microservices';
 
 import { WeatherProviderInterface } from '../../core/weather-provider.interface';
 import { WeatherData } from '../../core/weather.interface';
@@ -15,8 +16,9 @@ export class WeatherProviderChain implements WeatherProviderInterface {
       }
     }
 
-    throw new InternalServerErrorException(
-      'No weather provider could handle the request',
-    );
+    throw new RpcException({
+      code: status.INTERNAL,
+      message: 'No weather provider could handle the request',
+    });
   }
 }
