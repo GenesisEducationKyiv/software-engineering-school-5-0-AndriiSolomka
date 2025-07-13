@@ -16,6 +16,12 @@ import {
 } from 'libs/proto/generated/weather';
 import { Observable, firstValueFrom } from 'rxjs';
 
+const grpcOptions = {
+  package: 'weather',
+  protoPath: 'libs/proto/weather.proto',
+  url: 'localhost:50051',
+};
+
 function resetMockServerWeatherApi() {
   mockServer.clearHandlers();
   mockServer.addHandlers([searchApi.ok()]);
@@ -51,11 +57,7 @@ describe('WeatherService gRPC (integration)', () => {
           {
             name: 'WEATHER_PACKAGE',
             transport: Transport.GRPC,
-            options: {
-              package: 'weather',
-              protoPath: 'libs/proto/weather.proto',
-              url: 'localhost:50051',
-            },
+            options: grpcOptions,
           },
         ]),
       ],
@@ -65,11 +67,7 @@ describe('WeatherService gRPC (integration)', () => {
 
     app.connectMicroservice({
       transport: Transport.GRPC,
-      options: {
-        package: 'weather',
-        protoPath: 'libs/proto/weather.proto',
-        url: 'localhost:50051',
-      },
+      options: grpcOptions,
     });
 
     await app.startAllMicroservices();

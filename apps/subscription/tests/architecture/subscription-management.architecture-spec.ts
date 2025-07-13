@@ -1,87 +1,52 @@
 import { filesOfProject } from 'tsarch';
 import 'tsarch/dist/jest';
 
-describe('Subscription Management Module Architecture Compliance', () => {
-  it('core does not depend on infrastructure, interface, or tests', () => {
+describe('Subscription Microservice Architecture test', () => {
+  it('core does not depend on infrastructure or interfaces', () => {
     const rule = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/core',
-      )
+      .inFolder('apps/subscription/src/core')
       .shouldNot()
       .dependOnFiles()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/infrastructure',
-      )
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/interface',
-      )
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/tests',
-      );
+      .inFolder('apps/subscription/src/infrastructure')
+      .inFolder('apps/subscription/src/interfaces');
 
     return expect(rule).toPassAsync();
   });
 
-  it('infrastructure does not depend on interface or tests', () => {
+  it('infrastructure does not depend on interfaces', () => {
     const rule = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/infrastructure',
-      )
+      .inFolder('apps/subscription/src/infrastructure')
       .shouldNot()
       .dependOnFiles()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/interface',
-      )
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/tests',
-      );
+      .inFolder('apps/subscription/src/interfaces');
 
     return expect(rule).toPassAsync();
   });
 
-  it('interface depends only on core and infrastructure', () => {
+  it('interfaces depend only on core and infrastructure', () => {
     const rule = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/interface',
-      )
+      .inFolder('apps/subscription/src/interfaces')
       .shouldNot()
-      .dependOnFiles()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/tests',
-      );
-
+      .dependOnFiles();
     return expect(rule).toPassAsync();
   });
 
   it('all layers are free of cycles', () => {
     const coreCycleFree = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/core',
-      )
+      .inFolder('apps/subscription/src/core')
       .should()
       .beFreeOfCycles();
     const infrastructureCycleFree = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/infrastructure',
-      )
+      .inFolder('apps/subscription/src/infrastructure')
       .should()
       .beFreeOfCycles();
-    const interfaceCycleFree = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/interface',
-      )
-      .should()
-      .beFreeOfCycles();
-    const testsCycleFree = filesOfProject()
-      .inFolder(
-        'apps/weather_api/src/infrastructure/subscription-management/tests',
-      )
+    const interfacesCycleFree = filesOfProject()
+      .inFolder('apps/subscription/src/interfaces')
       .should()
       .beFreeOfCycles();
 
     expect(coreCycleFree).toPassAsync();
     expect(infrastructureCycleFree).toPassAsync();
-    expect(interfaceCycleFree).toPassAsync();
-    expect(testsCycleFree).toPassAsync();
+    expect(interfacesCycleFree).toPassAsync();
   });
 });

@@ -9,7 +9,7 @@ import {
 import { SubscriptionParams } from '../../core/subscription/subscription-repository.interface';
 
 @Injectable()
-export class SubscriptionHandlersService {
+export class SubscriptionApplicationService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly subClient: SubscriptionService,

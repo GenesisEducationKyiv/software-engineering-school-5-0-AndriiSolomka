@@ -4,7 +4,7 @@ import {
   TokenEntity,
 } from 'apps/subscription/src/core/entities/subscription.entity';
 import { SubscriptionParams } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
-import { SubscriptionHandlersService } from 'apps/subscription/src/infrastructure/services/subscription-application.service';
+import { SubscriptionApplicationService } from 'apps/subscription/src/infrastructure/services/subscription-application.service';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
 
@@ -19,10 +19,13 @@ function makeToken(id = 1, subscriptionId = 123): TokenEntity {
   };
 }
 
-describe('SubscriptionApplicationService', () => {
-  let service: SubscriptionHandlersService;
+describe('SubscriptionApplicationService (unit)', () => {
+  let service: SubscriptionApplicationService;
   let subServiceMock: jest.Mocked<
-    Pick<SubscriptionService, 'create' | 'confirm' | 'delete'>
+    Pick<
+      SubscriptionService,
+      'create' | 'confirm' | 'delete' | 'getByFrequency' | 'deleteUnconfirmed'
+    >
   >;
   let tokenServiceMock: jest.Mocked<Pick<TokenService, 'create' | 'getEntity'>>;
 
@@ -31,6 +34,8 @@ describe('SubscriptionApplicationService', () => {
       create: jest.fn(),
       confirm: jest.fn(),
       delete: jest.fn(),
+      getByFrequency: jest.fn(),
+      deleteUnconfirmed: jest.fn(),
     };
 
     tokenServiceMock = {
@@ -40,7 +45,7 @@ describe('SubscriptionApplicationService', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        SubscriptionHandlersService,
+        SubscriptionApplicationService,
         {
           provide: SubscriptionService,
           useValue: subServiceMock,
@@ -52,8 +57,8 @@ describe('SubscriptionApplicationService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionHandlersService>(
-      SubscriptionHandlersService,
+    service = module.get<SubscriptionApplicationService>(
+      SubscriptionApplicationService,
     );
   });
 
@@ -182,6 +187,56 @@ describe('SubscriptionApplicationService', () => {
 
       await expect(service.unsubscribe(token)).rejects.toThrow(error);
       expect(subServiceMock.delete).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('getByFrequency', () => {
+    it('should return subscriptions by frequency', async () => {
+      const frequency = Frequency.daily;
+      const mockSubs = [
+        {
+          subscriptionId: 1,
+          email: 'a@example.com',
+          city: 'Kyiv',
+          frequency,
+          confirmed: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          tokens: [],
+        },
+        {
+          subscriptionId: 2,
+          email: 'b@example.com',
+          city: 'Lviv',
+          frequency,
+          confirmed: false,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          tokens: [],
+        },
+      ];
+
+      subServiceMock.getByFrequency = jest.fn().mockResolvedValue(mockSubs);
+
+      const result = await service.getByFrequency(frequency);
+
+      expect(subServiceMock.getByFrequency).toHaveBeenCalledWith(frequency);
+      expect(result).toEqual(mockSubs);
+    });
+  });
+
+  describe('deleteUnconfirmed', () => {
+    it('should delete unconfirmed subscriptions and return count', async () => {
+      const mockResult = { count: 5 };
+
+      subServiceMock.deleteUnconfirmed = jest
+        .fn()
+        .mockResolvedValue(mockResult);
+
+      const result = await service.deleteUnconfirmed();
+
+      expect(subServiceMock.deleteUnconfirmed).toHaveBeenCalled();
+      expect(result).toEqual(mockResult);
     });
   });
 });

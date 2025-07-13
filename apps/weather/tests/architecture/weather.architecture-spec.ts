@@ -1,7 +1,7 @@
 import { filesOfProject } from 'tsarch';
 import 'tsarch/dist/jest';
 
-describe('Weather Microservice Clean Architecture Compliance', () => {
+describe('Weather Microservice Architecture test', () => {
   it('core does not depend on infrastructure or interfaces', () => {
     const rule = filesOfProject()
       .inFolder('apps/weather/src/core')

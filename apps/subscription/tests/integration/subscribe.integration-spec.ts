@@ -30,6 +30,12 @@ interface SubscriptionServiceClient {
   ): Observable<DeleteUnconfirmedResponse>;
 }
 
+const grpcOptions = {
+  package: 'subscription',
+  protoPath: 'libs/proto/subscription.proto',
+  url: 'localhost:50052',
+};
+
 const makeDto = (overrides?: Partial<SubscribeRequest>): SubscribeRequest => ({
   email: `integration+${Date.now()}@example.com`,
   city: 'Kyiv',
@@ -50,11 +56,7 @@ describe('SubscriptionService gRPC (integration)', () => {
           {
             name: 'SUBSCRIPTION_PACKAGE',
             transport: Transport.GRPC,
-            options: {
-              package: 'subscription',
-              protoPath: 'libs/proto/subscription.proto',
-              url: 'localhost:50052',
-            },
+            options: grpcOptions,
           },
         ]),
       ],
@@ -64,11 +66,7 @@ describe('SubscriptionService gRPC (integration)', () => {
 
     app.connectMicroservice({
       transport: Transport.GRPC,
-      options: {
-        package: 'subscription',
-        protoPath: 'libs/proto/subscription.proto',
-        url: 'localhost:50052',
-      },
+      options: grpcOptions,
     });
 
     await app.startAllMicroservices();

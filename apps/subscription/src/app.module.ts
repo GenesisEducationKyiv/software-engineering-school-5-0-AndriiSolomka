@@ -4,7 +4,7 @@ import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { SubscriptionModule } from './infrastructure/modules/subscription.module';
 import { TokenModule } from './infrastructure/modules/token.module';
-import { SubscriptionHandlersService } from './infrastructure/services/subscription-application.service';
+import { SubscriptionApplicationService } from './infrastructure/services/subscription-application.service';
 import { SubscriptionGrpcController } from './interface/subscription.controller';
 
 @Module({
@@ -15,6 +15,6 @@ import { SubscriptionGrpcController } from './interface/subscription.controller'
     HttpClientModule,
   ],
   controllers: [SubscriptionGrpcController],
-  providers: [SubscriptionHandlersService],
+  providers: [SubscriptionApplicationService],
 })
 export class AppModule {}

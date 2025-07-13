@@ -25,7 +25,7 @@ function makeSubscription(): SubscriptionEntity {
   };
 }
 
-describe('SubscriptionService', () => {
+describe('SubscriptionService (unit)', () => {
   let service: SubscriptionInterface;
   let repoMock: jest.Mocked<
     Pick<

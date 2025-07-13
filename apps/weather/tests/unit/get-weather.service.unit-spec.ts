@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { WeatherInterface } from 'apps/weather/src/core/weather.interface';
 import { WeatherFactory } from 'apps/weather/src/weather.factory';
 
-describe('WeatherUseCase', () => {
+describe('Weather Service (unit)', () => {
   let service: WeatherInterface;
   const mockWeatherService = {
     getWeather: jest.fn(),

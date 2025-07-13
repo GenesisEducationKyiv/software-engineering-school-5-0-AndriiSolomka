@@ -23,7 +23,7 @@ function makeToken(): TokenEntity {
   };
 }
 
-describe('TokenService', () => {
+describe('TokenService (unit)', () => {
   let service: TokenInterface;
   let repoMock: jest.Mocked<
     Pick<TokenRepositoryInterface, 'create' | 'findOne'>

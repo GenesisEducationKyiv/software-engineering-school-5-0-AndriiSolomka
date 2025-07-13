@@ -13,12 +13,12 @@ import {
 } from 'libs/proto/generated/subscription';
 
 import { mapProtoToDomain } from './frequency.mapper';
-import { SubscriptionHandlersService } from '../infrastructure/services/subscription-application.service';
+import { SubscriptionApplicationService } from '../infrastructure/services/subscription-application.service';
 
 @Controller()
 export class SubscriptionGrpcController {
   constructor(
-    private readonly subscriptionHandlers: SubscriptionHandlersService,
+    private readonly subscriptionHandlers: SubscriptionApplicationService,
   ) {}
 
   @GrpcMethod('SubscriptionService', 'Subscribe')
