@@ -46,6 +46,7 @@ export class SubscriptionGrpcController {
     data: GetByFrequencyRequest,
   ): Promise<GetByFrequencyResponse> {
     const frequency = mapProtoToDomain(data.frequency);
+
     const subs = await this.subscriptionHandlers.getByFrequency(frequency);
 
     const subscriptions: SubscriptionEntity[] = subs.map((sub) => ({
