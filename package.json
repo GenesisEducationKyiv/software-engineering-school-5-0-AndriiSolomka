@@ -9,7 +9,9 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "start:dev:weather": "nest start weather --watch",
+    "start:weather": "nest start weather",
+    "start:weather:dev": "nest start weather --watch",
+    "start:subscription": "nest start subscription",
     "start:subscription:dev": "nest start subscription --watch",
     "start:gateway:dev": "nest start gateway --watch",
     "start:email:dev": "nest start email --watch",
@@ -25,7 +27,11 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "playwright apps/weather_api/test",
     "test:architecture": "jest --config ./test/jest-architecture.json",
-    "proto:gen": "npx protoc   --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto   --ts_proto_out=libs/proto/generated   --ts_proto_opt=outputServices=grpc-js,outputServices=generic-definitions,useOptionals=messages   -I libs/proto   libs/proto/*.proto"
+    "proto:gen": "npx protoc   --plugin=protoc-gen-ts_proto=./node_modules/.bin/protoc-gen-ts_proto   --ts_proto_out=libs/proto/generated   --ts_proto_opt=outputServices=grpc-js,outputServices=generic-definitions,useOptionals=messages   -I libs/proto   libs/proto/*.proto",
+    "test:weather:unit": "jest --config apps/weather/tests/jest-unit.json",
+    "test:weather:integration": "jest --config apps/weather/tests/jest-integration.json",
+    "test:subscription:unit": "jest --config apps/subscription/tests/jest-unit.json",
+    "test:subscription:integration": "jest --config apps/subscription/tests/jest-integration.json"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.6.0",

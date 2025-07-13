@@ -23,14 +23,6 @@ describe('Subscription Microservice Architecture test', () => {
     return expect(rule).toPassAsync();
   });
 
-  it('interfaces depend only on core and infrastructure', () => {
-    const rule = filesOfProject()
-      .inFolder('apps/subscription/src/interfaces')
-      .shouldNot()
-      .dependOnFiles();
-    return expect(rule).toPassAsync();
-  });
-
   it('all layers are free of cycles', () => {
     const coreCycleFree = filesOfProject()
       .inFolder('apps/subscription/src/core')

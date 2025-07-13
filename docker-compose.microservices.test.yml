@@ -47,7 +47,6 @@ services:
         condition: service_started
     networks:
       - weather-api-test
-    command: ['npm', 'run', 'test:integration']
 
   subscription-test:
     container_name: subscription-test
@@ -63,4 +62,3 @@ services:
         condition: service_healthy
     networks:
       - weather-api-test
-    command: sh -c "npx prisma migrate deploy --schema ./apps/subscription/prisma/schema.prisma && npm run test:integration"

@@ -1,8 +1,8 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": "../",
+  "rootDir": "../../..",
   "testEnvironment": "node",
-  "testRegex": "apps/.+/tests?/architecture/.*\\.architecture-spec\\.ts$",
+  "testRegex": "apps/subscription/tests/architecture/.*\\.architecture-spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },

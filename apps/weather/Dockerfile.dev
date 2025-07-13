@@ -9,5 +9,5 @@ COPY . .
 
 EXPOSE 5051
 
-CMD ["npm", "run", "start:dev:weather"]
+CMD ["npm", "run", "start:weather:dev"]
 

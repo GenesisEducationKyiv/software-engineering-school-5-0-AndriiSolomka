@@ -9,3 +9,5 @@ RUN npm ci
 COPY . .
 
 RUN npm run build weather
+
+CMD ["npm", "run", "start:weather"]
