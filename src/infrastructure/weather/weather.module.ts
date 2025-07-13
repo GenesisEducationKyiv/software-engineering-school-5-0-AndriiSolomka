@@ -6,8 +6,8 @@ import { GeocodingModule } from 'src/libs/infrastructure/geocoding/geocoding.mod
 import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
 
 import { WeatherProviderModule } from './infrastructure/providers/weather-provider.module';
-import { WeatherApiClient } from './interfaces/client/weather.client';
 import { WeatherInternalController } from './interfaces/controllers/weather.controller';
+import { WeatherApiClient } from './weather.client';
 import { WeatherFactory } from './weather.factory';
 
 @Module({

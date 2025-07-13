@@ -8,7 +8,7 @@ import { weatherApi } from 'src/common/setup/msw/handlers/weather-api';
 import { mockServer } from 'src/common/setup/msw/setup';
 import { setupApp } from 'src/common/setup/setup';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
-import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
+import { EmailApiClient } from 'src/infrastructure/email/email.client';
 import { PrismaService } from 'src/infrastructure/subscription-management/infrastructure/database/prisma.service';
 import * as request from 'supertest';
 

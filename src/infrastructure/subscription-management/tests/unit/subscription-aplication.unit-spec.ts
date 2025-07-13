@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
-import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
+import { EmailApiClient } from 'src/infrastructure/email/email.client';
 import {
   Frequency,
   TokenEntity,

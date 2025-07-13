@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { EmailApiClient } from 'src/infrastructure/email/interface/clients/email.client';
+import { EmailApiClient } from 'src/infrastructure/email/email.client';
 import { SubscriptionParams } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
 
 import { SubscriptionService } from './subscription.service';

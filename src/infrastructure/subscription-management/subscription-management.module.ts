@@ -3,10 +3,10 @@ import { InternalEmailModule } from 'src/infrastructure/email/email.module';
 import { GeocodingModule } from 'src/libs/infrastructure/geocoding/geocoding.module';
 import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
 
+import { SubscriptionApiClient } from './application.client';
 import { InternalSubscriptionModule } from './infrastructure/modules/subscription.module';
 import { InternalTokenModule } from './infrastructure/modules/token.module';
 import { SubscriptionHandlersService } from './infrastructure/services/subscription-application.service';
-import { SubscriptionApiClient } from './interface/clients/application.client';
 import { SubscriptionController } from './interface/controllers/subscription.controller';
 
 @Module({

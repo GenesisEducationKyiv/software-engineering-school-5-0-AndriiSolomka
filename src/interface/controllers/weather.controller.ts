@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { WeatherApiClient } from 'src/infrastructure/weather/interfaces/client/weather.client';
+import { WeatherApiClient } from 'src/infrastructure/weather/weather.client';
 
 import { WeatherQueryDto } from '../dto/weather/weather-query.dto';
 
