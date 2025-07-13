@@ -3,7 +3,7 @@ import { Frequency } from 'src/infrastructure/subscription-management/core/entit
 import { AppConfig } from 'src/libs/config/app.config';
 import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 
-import { NotificationInterface } from '../../core/notification.interface';
+import { NotificationInterface } from './core/notification.interface';
 
 @Injectable()
 export class NotificationApiClient implements NotificationInterface {

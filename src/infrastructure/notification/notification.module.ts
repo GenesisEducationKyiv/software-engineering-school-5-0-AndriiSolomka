@@ -7,8 +7,8 @@ import { SubscriptionManagementModule } from '../subscription-management/subscri
 import { InternalWeatherModule } from '../weather/weather.module';
 import { NotificationService } from './infrastructure/services/notification.service';
 import { ScheduleService } from './infrastructure/services/schedule.service';
-import { NotificationApiClient } from './interface/client/notification.client';
 import { NotificationInternalController } from './interface/controllers/notification.controller';
+import { NotificationApiClient } from './notification.client';
 
 @Module({
   imports: [
