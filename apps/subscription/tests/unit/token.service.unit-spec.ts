@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { TokenEntity } from 'apps/subscription/src/core/entities/subscription.entity';
 import { TokenInterface } from 'apps/subscription/src/core/token/token-interface';
@@ -6,6 +5,7 @@ import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
 } from 'apps/subscription/src/core/token/token-repository.interface';
+import { TokenNotFoundException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
 
 jest.mock('libs/utils/generator/random-generator', () => ({
@@ -76,7 +76,7 @@ describe('TokenService', () => {
       repoMock.findOne.mockResolvedValueOnce(null);
 
       await expect(service.getEntity('not-exist')).rejects.toBeInstanceOf(
-        NotFoundException,
+        TokenNotFoundException,
       );
     });
   });

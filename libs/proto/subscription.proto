@@ -7,6 +7,16 @@ enum Frequency {
   daily = 1;
 }
 
+message TokenEntity {
+  string token = 1;
+}
+
+message SubscriptionEntity {
+  string email = 1;
+  string city = 2;
+  repeated TokenEntity tokens = 3;
+}
+
 service SubscriptionService {
   rpc Subscribe (SubscribeRequest) returns (SubscribeResponse);
   rpc Confirm (ConfirmRequest) returns (ActionResponse);
@@ -51,12 +61,4 @@ message ActionResponse {
 message SubscribeResponse {
   string email = 1;
   string token = 2;
-}
-
-message SubscriptionEntity {
-  int64 subscriptionId = 1;
-  string email = 2;
-  string city = 3;
-  Frequency frequency = 4;
-  bool confirmed = 5;
 }

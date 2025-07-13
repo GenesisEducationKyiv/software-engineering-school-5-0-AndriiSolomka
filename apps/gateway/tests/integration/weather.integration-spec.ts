@@ -1,11 +1,11 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'apps/weather_api/src/app.module';
-import { searchApi } from 'common/setup/msw/handlers/geocoding';
-import { weatherApi } from 'common/setup/msw/handlers/weather-api';
-import { mockServer } from 'common/setup/msw/setup';
-import { setupApp } from 'common/setup/setup';
+import { AppModule } from 'apps/gateway/src/app.module';
 import { Server } from 'http';
+import { searchApi } from 'libs/common/setup/msw/handlers/geocoding';
+import { weatherApi } from 'libs/common/setup/msw/handlers/weather-api';
+import { mockServer } from 'libs/common/setup/msw/setup';
+import { setupApp } from 'libs/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
@@ -55,7 +55,7 @@ describe('WeatherInternalController (integration)', () => {
     await app.close();
   });
 
-  describe('GET /internal/weather/:city', () => {
+  describe('GET /weather/:city', () => {
     const validCity = 'London';
     const invalidCity = 'NonExistentCityForTest';
 
@@ -68,7 +68,7 @@ describe('WeatherInternalController (integration)', () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const res = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('temperature');
@@ -80,7 +80,7 @@ describe('WeatherInternalController (integration)', () => {
       mockServer.addHandlers([searchApi.notFound()]);
 
       await request(app.getHttpServer())
-        .get(`/api/internal/weather/${invalidCity}`)
+        .get(`/api/weather/${invalidCity}`)
         .expect(404);
     });
 
@@ -90,20 +90,20 @@ describe('WeatherInternalController (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       resetMockServerWeatherApi();
 
       const res2 = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       expect(res2.body).toEqual(res1.body);
 
       const cachedData = await cacheRepository.get(WEATHER_CACHE_PREFIX, key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData)).toEqual(res1.body);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
 
     it('should cache invalid city data', async () => {
@@ -112,7 +112,7 @@ describe('WeatherInternalController (integration)', () => {
       const key = invalidCity.toLowerCase();
 
       await request(app.getHttpServer())
-        .get(`/api/internal/weather/${invalidCity}`)
+        .get(`/api/weather/${invalidCity}`)
         .expect(404);
 
       const cachedCityData = await cacheRepository.get(CITY_CACHE_PREFIX, key);
@@ -121,7 +121,7 @@ describe('WeatherInternalController (integration)', () => {
       const checkCitySpy = jest.spyOn(cityService, 'findCity');
 
       await request(app.getHttpServer())
-        .get(`/api/internal/weather/${invalidCity}`)
+        .get(`/api/weather/${invalidCity}`)
         .expect(404);
 
       expect(checkCitySpy).toHaveBeenCalledWith(invalidCity);

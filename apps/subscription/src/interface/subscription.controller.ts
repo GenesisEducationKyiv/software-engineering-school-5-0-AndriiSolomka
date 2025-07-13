@@ -4,14 +4,15 @@ import {
   ActionResponse,
   ConfirmRequest,
   DeleteUnconfirmedResponse,
-  Frequency,
+  GetByFrequencyRequest,
+  GetByFrequencyResponse,
   SubscribeRequest,
   SubscribeResponse,
   SubscriptionEntity,
   UnsubscribeRequest,
 } from 'libs/proto/generated/subscription';
 
-import { mapDomainToProto, mapProtoToDomain } from './frequency.mapper';
+import { mapProtoToDomain } from './frequency.mapper';
 import { SubscriptionHandlersService } from '../infrastructure/services/subscription-application.service';
 
 @Controller()
@@ -42,14 +43,15 @@ export class SubscriptionGrpcController {
 
   @GrpcMethod('SubscriptionService', 'GetByFrequency')
   async getByFrequency(
-    data: Frequency,
-  ): Promise<{ subscriptions: SubscriptionEntity[] }> {
-    const frequency = mapProtoToDomain(data);
+    data: GetByFrequencyRequest,
+  ): Promise<GetByFrequencyResponse> {
+    const frequency = mapProtoToDomain(data.frequency);
     const subs = await this.subscriptionHandlers.getByFrequency(frequency);
 
-    const subscriptions = subs.map((sub) => ({
-      ...sub,
-      frequency: mapDomainToProto(sub.frequency),
+    const subscriptions: SubscriptionEntity[] = subs.map((sub) => ({
+      email: sub.email,
+      city: sub.city,
+      tokens: sub.tokens.map((token) => ({ token: token.token })),
     }));
 
     return { subscriptions };

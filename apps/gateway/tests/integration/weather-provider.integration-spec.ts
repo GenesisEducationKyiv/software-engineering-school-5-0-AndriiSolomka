@@ -1,12 +1,12 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'apps/weather_api/src/app.module';
-import { searchApi } from 'common/setup/msw/handlers/geocoding';
-import { openMeteoApi } from 'common/setup/msw/handlers/openmeteo';
-import { weatherApi } from 'common/setup/msw/handlers/weather-api';
-import { mockServer } from 'common/setup/msw/setup';
-import { setupApp } from 'common/setup/setup';
+import { AppModule } from 'apps/gateway/src/app.module';
 import { Server } from 'http';
+import { searchApi } from 'libs/common/setup/msw/handlers/geocoding';
+import { openMeteoApi } from 'libs/common/setup/msw/handlers/openmeteo';
+import { weatherApi } from 'libs/common/setup/msw/handlers/weather-api';
+import { mockServer } from 'libs/common/setup/msw/setup';
+import { setupApp } from 'libs/common/setup/setup';
 import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
@@ -54,7 +54,7 @@ describe('Weather Providers (integration)', () => {
     await app.close();
   });
 
-  describe('GET /api/internal/weather/:city', () => {
+  describe('GET /api/weather/:city', () => {
     beforeEach(async () => {
       await clearCityCache(cacheRepository, validCity);
       await clearCityCache(cacheRepository, invalidCity);
@@ -64,7 +64,7 @@ describe('Weather Providers (integration)', () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const res = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       expect(res.body).toEqual({
@@ -82,7 +82,7 @@ describe('Weather Providers (integration)', () => {
       ]);
 
       const res = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       expect(res.body).toEqual({
@@ -100,7 +100,7 @@ describe('Weather Providers (integration)', () => {
       ]);
 
       await request(app.getHttpServer())
-        .get(`/api/internal/weather/${invalidCity}`)
+        .get(`/api/weather/${invalidCity}`)
         .expect(500);
     });
 
@@ -110,7 +110,7 @@ describe('Weather Providers (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       resetMockServerWeatherApi();
@@ -123,7 +123,7 @@ describe('Weather Providers (integration)', () => {
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData)).toEqual(res1.body);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
 
     it('should cache weather data from OpenMeteoProvider and return cached value on second request', async () => {
@@ -136,20 +136,20 @@ describe('Weather Providers (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       resetMockServerWeatherApi();
 
       const res2 = await request(app.getHttpServer())
-        .get(`/api/internal/weather/${validCity}`)
+        .get(`/api/weather/${validCity}`)
         .expect(200);
 
       expect(res2.body).toEqual(res1.body);
 
       const cachedData = await cacheRepository.get('weather', key);
       expect(cachedData).toBeTruthy();
-      expect(JSON.parse(cachedData)).toEqual(res1.body);
+      expect(JSON.parse(cachedData!)).toEqual(res1.body);
     });
   });
 });

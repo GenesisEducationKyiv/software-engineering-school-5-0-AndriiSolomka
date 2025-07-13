@@ -5,13 +5,15 @@ export enum Frequency {
   daily = 'daily',
 }
 
-export type SubscriptionEntity = {
-  subscriptionId: number;
+export interface SubscriptionEntity {
   email: string;
   city: string;
-  frequency: Frequency;
-  confirmed: boolean;
-};
+  tokens: TokenEntity[];
+}
+
+export interface TokenEntity {
+  token: string;
+}
 
 export interface SubscriptionInterface {
   getByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]>;

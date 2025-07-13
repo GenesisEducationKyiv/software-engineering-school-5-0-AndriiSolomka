@@ -1,6 +1,7 @@
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { WeatherToken } from 'apps/weather/src/core/weather.interface';
+import { GeocodingConfig } from 'libs/config/geocoding.config';
 import { RedisModule } from 'libs/infrastructure/cache/providers/redis.module';
 import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
@@ -16,6 +17,7 @@ import { WeatherFactory } from './weather.factory';
     WeatherProviderModule,
     RedisModule,
     CacheWeatherModule,
+    GeocodingConfig,
     GeocodingModule,
     HttpClientModule,
   ],

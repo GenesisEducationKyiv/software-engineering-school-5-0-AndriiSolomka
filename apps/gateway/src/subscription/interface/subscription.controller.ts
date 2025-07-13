@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { WeatherCityValidationPipe } from 'libs/common/pipes/city-validation.pipe';
+import { CityValidationPipe } from 'libs/common/pipes/city-validation.pipe';
 
 import { CreateSubscriptionDto } from './dto/subscription/subscription.dto';
 import { EmailClientService } from '../../email/infrastructure/email.grcp.client';
@@ -12,7 +12,7 @@ export class SubscriptionHandlersController {
     private readonly emailClient: EmailClientService,
   ) {}
 
-  //@UsePipes(WeatherCityValidationPipe)
+  @UsePipes(CityValidationPipe)
   @Post('subscribe')
   async subscribe(@Body() dto: CreateSubscriptionDto) {
     const { email, token } = await this.subscribeService.subscribe(dto);

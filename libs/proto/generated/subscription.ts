@@ -54,6 +54,16 @@ export function frequencyToJSON(object: Frequency): string {
   }
 }
 
+export interface TokenEntity {
+  token: string;
+}
+
+export interface SubscriptionEntity {
+  email: string;
+  city: string;
+  tokens: TokenEntity[];
+}
+
 export interface SubscribeRequest {
   email: string;
   city: string;
@@ -92,13 +102,155 @@ export interface SubscribeResponse {
   token: string;
 }
 
-export interface SubscriptionEntity {
-  subscriptionId: number;
-  email: string;
-  city: string;
-  frequency: Frequency;
-  confirmed: boolean;
+function createBaseTokenEntity(): TokenEntity {
+  return { token: "" };
 }
+
+export const TokenEntity: MessageFns<TokenEntity> = {
+  encode(message: TokenEntity, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.token !== "") {
+      writer.uint32(10).string(message.token);
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): TokenEntity {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseTokenEntity();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.token = reader.string();
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): TokenEntity {
+    return { token: isSet(object.token) ? globalThis.String(object.token) : "" };
+  },
+
+  toJSON(message: TokenEntity): unknown {
+    const obj: any = {};
+    if (message.token !== "") {
+      obj.token = message.token;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<TokenEntity>, I>>(base?: I): TokenEntity {
+    return TokenEntity.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<TokenEntity>, I>>(object: I): TokenEntity {
+    const message = createBaseTokenEntity();
+    message.token = object.token ?? "";
+    return message;
+  },
+};
+
+function createBaseSubscriptionEntity(): SubscriptionEntity {
+  return { email: "", city: "", tokens: [] };
+}
+
+export const SubscriptionEntity: MessageFns<SubscriptionEntity> = {
+  encode(message: SubscriptionEntity, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.email !== "") {
+      writer.uint32(10).string(message.email);
+    }
+    if (message.city !== "") {
+      writer.uint32(18).string(message.city);
+    }
+    for (const v of message.tokens) {
+      TokenEntity.encode(v!, writer.uint32(26).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): SubscriptionEntity {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    const end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseSubscriptionEntity();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.city = reader.string();
+          continue;
+        }
+        case 3: {
+          if (tag !== 26) {
+            break;
+          }
+
+          message.tokens.push(TokenEntity.decode(reader, reader.uint32()));
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): SubscriptionEntity {
+    return {
+      email: isSet(object.email) ? globalThis.String(object.email) : "",
+      city: isSet(object.city) ? globalThis.String(object.city) : "",
+      tokens: globalThis.Array.isArray(object?.tokens) ? object.tokens.map((e: any) => TokenEntity.fromJSON(e)) : [],
+    };
+  },
+
+  toJSON(message: SubscriptionEntity): unknown {
+    const obj: any = {};
+    if (message.email !== "") {
+      obj.email = message.email;
+    }
+    if (message.city !== "") {
+      obj.city = message.city;
+    }
+    if (message.tokens?.length) {
+      obj.tokens = message.tokens.map((e) => TokenEntity.toJSON(e));
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(base?: I): SubscriptionEntity {
+    return SubscriptionEntity.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(object: I): SubscriptionEntity {
+    const message = createBaseSubscriptionEntity();
+    message.email = object.email ?? "";
+    message.city = object.city ?? "";
+    message.tokens = object.tokens?.map((e) => TokenEntity.fromPartial(e)) || [];
+    return message;
+  },
+};
 
 function createBaseSubscribeRequest(): SubscribeRequest {
   return { email: "", city: "", frequency: 0 };
@@ -663,130 +815,6 @@ export const SubscribeResponse: MessageFns<SubscribeResponse> = {
   },
 };
 
-function createBaseSubscriptionEntity(): SubscriptionEntity {
-  return { subscriptionId: 0, email: "", city: "", frequency: 0, confirmed: false };
-}
-
-export const SubscriptionEntity: MessageFns<SubscriptionEntity> = {
-  encode(message: SubscriptionEntity, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.subscriptionId !== 0) {
-      writer.uint32(8).int64(message.subscriptionId);
-    }
-    if (message.email !== "") {
-      writer.uint32(18).string(message.email);
-    }
-    if (message.city !== "") {
-      writer.uint32(26).string(message.city);
-    }
-    if (message.frequency !== 0) {
-      writer.uint32(32).int32(message.frequency);
-    }
-    if (message.confirmed !== false) {
-      writer.uint32(40).bool(message.confirmed);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): SubscriptionEntity {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseSubscriptionEntity();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 8) {
-            break;
-          }
-
-          message.subscriptionId = longToNumber(reader.int64());
-          continue;
-        }
-        case 2: {
-          if (tag !== 18) {
-            break;
-          }
-
-          message.email = reader.string();
-          continue;
-        }
-        case 3: {
-          if (tag !== 26) {
-            break;
-          }
-
-          message.city = reader.string();
-          continue;
-        }
-        case 4: {
-          if (tag !== 32) {
-            break;
-          }
-
-          message.frequency = reader.int32() as any;
-          continue;
-        }
-        case 5: {
-          if (tag !== 40) {
-            break;
-          }
-
-          message.confirmed = reader.bool();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): SubscriptionEntity {
-    return {
-      subscriptionId: isSet(object.subscriptionId) ? globalThis.Number(object.subscriptionId) : 0,
-      email: isSet(object.email) ? globalThis.String(object.email) : "",
-      city: isSet(object.city) ? globalThis.String(object.city) : "",
-      frequency: isSet(object.frequency) ? frequencyFromJSON(object.frequency) : 0,
-      confirmed: isSet(object.confirmed) ? globalThis.Boolean(object.confirmed) : false,
-    };
-  },
-
-  toJSON(message: SubscriptionEntity): unknown {
-    const obj: any = {};
-    if (message.subscriptionId !== 0) {
-      obj.subscriptionId = Math.round(message.subscriptionId);
-    }
-    if (message.email !== "") {
-      obj.email = message.email;
-    }
-    if (message.city !== "") {
-      obj.city = message.city;
-    }
-    if (message.frequency !== 0) {
-      obj.frequency = frequencyToJSON(message.frequency);
-    }
-    if (message.confirmed !== false) {
-      obj.confirmed = message.confirmed;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(base?: I): SubscriptionEntity {
-    return SubscriptionEntity.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(object: I): SubscriptionEntity {
-    const message = createBaseSubscriptionEntity();
-    message.subscriptionId = object.subscriptionId ?? 0;
-    message.email = object.email ?? "";
-    message.city = object.city ?? "";
-    message.frequency = object.frequency ?? 0;
-    message.confirmed = object.confirmed ?? false;
-    return message;
-  },
-};
-
 export type SubscriptionServiceDefinition = typeof SubscriptionServiceDefinition;
 export const SubscriptionServiceDefinition = {
   name: "SubscriptionService",
@@ -994,17 +1022,6 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
-
-function longToNumber(int64: { toString(): string }): number {
-  const num = globalThis.Number(int64.toString());
-  if (num > globalThis.Number.MAX_SAFE_INTEGER) {
-    throw new globalThis.Error("Value is larger than Number.MAX_SAFE_INTEGER");
-  }
-  if (num < globalThis.Number.MIN_SAFE_INTEGER) {
-    throw new globalThis.Error("Value is smaller than Number.MIN_SAFE_INTEGER");
-  }
-  return num;
-}
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;

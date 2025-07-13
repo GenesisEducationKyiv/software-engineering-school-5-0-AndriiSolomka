@@ -2,13 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { setupApp } from 'libs/common/setup/setup';
 import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
 
-import { GatewayModule } from './gateway.module';
+import { AppModule } from './app.module';
 import { AppConfig } from '../config/app.config';
 
 ensureLogDirExists();
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(GatewayModule);
+  const app = await NestFactory.create(AppModule);
   setupApp(app);
 
   await app.listen(app.get(AppConfig).port, () => {

@@ -1,5 +1,5 @@
-//import { SubscriptionEntity } from 'apps/subscription/src/core/entities/subscription.entity';
 import { WeatherData } from 'apps/weather/src/core/weather.interface';
+import { SubscriptionEntity } from 'libs/proto/generated/subscription';
 
 const createWeatherEmailText = (
   city: string,
@@ -18,11 +18,12 @@ ${unsubscribeLink}
 `;
 
 export function buildWeatherNotification(
+  sub: SubscriptionEntity,
   weather: WeatherData,
   unsubscribeUrl: string,
 ): { subject: string; text: string } {
-  //const token = sub.tokens[0].token;
-  const city = '1';
+  const token = sub.tokens[0].token;
+  const city = sub.city;
 
   return {
     subject: `Weather forecast for ${city}`,
@@ -31,7 +32,7 @@ export function buildWeatherNotification(
       weather.temperature,
       weather.humidity,
       weather.description,
-      `${unsubscribeUrl}`,
+      `${unsubscribeUrl}${token}`,
     ),
   };
 }

@@ -23,6 +23,7 @@ export class NotificationService implements NotificationInterface {
     for (const sub of subscriptions) {
       const weather = await this.weatherService.getWeather(sub.city);
       const { subject, text } = buildWeatherNotification(
+        sub,
         weather,
         this.emailConfig.unsubscribeLink,
       );

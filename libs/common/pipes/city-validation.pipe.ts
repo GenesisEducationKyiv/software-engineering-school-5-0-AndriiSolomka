@@ -13,22 +13,10 @@ export type SubscriptionParams = {
 };
 
 @Injectable()
-export class WeatherCityValidationPipe implements PipeTransform {
-  constructor(private readonly geocodingService: GeocodingService) {}
-
-  async transform(value: string) {
-    console.log(`Validating city: ${value}`);
-    await this.geocodingService.findCity(value);
-    return value;
-  }
-}
-
-@Injectable()
-export class SubscriptionCityValidationPipe implements PipeTransform {
+export class CityValidationPipe implements PipeTransform {
   constructor(private readonly geocodingService: GeocodingService) {}
 
   async transform(value: SubscriptionParams) {
-    console.log(`Validating city: ${value.city}`);
     await this.geocodingService.findCity(value.city);
     return value;
   }
