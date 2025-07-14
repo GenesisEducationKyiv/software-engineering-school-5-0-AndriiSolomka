@@ -7,9 +7,8 @@ import {
   SubscriptionParams,
   SubscriptionRepositoryInterface,
 } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
-
-import { PrismaService } from '../../infrastructure/database/prisma.service';
-import { SubscriptionMapper } from '../../infrastructure/mappers/subscription.mapper';
+import { PrismaService } from 'src/infrastructure/subscription-management/infrastructure/database/prisma.service';
+import { SubscriptionMapper } from 'src/infrastructure/subscription-management/infrastructure/mappers/subscription.mapper';
 
 @Injectable()
 export class PrismaSubscriptionRepository

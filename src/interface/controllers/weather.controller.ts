@@ -1,7 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { WeatherApiClient } from 'src/infrastructure/weather/weather.client';
-
-import { WeatherQueryDto } from '../dto/weather/weather-query.dto';
+import { WeatherQueryDto } from 'src/interface/dto/weather/weather-query.dto';
 
 @Controller('weather')
 export class WeatherHandlersController {

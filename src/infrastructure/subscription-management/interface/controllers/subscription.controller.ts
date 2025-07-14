@@ -4,6 +4,7 @@ import {
   Frequency,
   SubscriptionEntity,
 } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
+import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription-application.service';
 import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
 
 import {
@@ -11,7 +12,6 @@ import {
   SuccessResponseDto,
   TokenParamDto,
 } from './dto/handlers.dto';
-import { SubscriptionHandlersService } from '../../infrastructure/services/subscription-application.service';
 
 @Controller('internal/subscription')
 export class SubscriptionController {

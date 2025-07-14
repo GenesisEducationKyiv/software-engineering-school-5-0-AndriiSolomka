@@ -1,7 +1,6 @@
 import { InternalServerErrorException } from '@nestjs/common';
-
-import { WeatherProviderInterface } from '../../core/weather-provider.interface';
-import { WeatherData } from '../../core/weather.interface';
+import { WeatherProviderInterface } from 'src/infrastructure/weather/core/weather-provider.interface';
+import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
 
 export class WeatherProviderChain implements WeatherProviderInterface {
   constructor(private readonly providers: WeatherProviderInterface[]) {}

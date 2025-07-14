@@ -8,9 +8,8 @@ import {
   SubscriptionRepositoryInterface,
   SubscriptionRepositoryToken,
 } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
+import { SubscriptionInterface } from 'src/infrastructure/subscription-management/core/subscription/subscription.interface';
 import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
-
-import { SubscriptionInterface } from '../../core/subscription/subscription.interface';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();

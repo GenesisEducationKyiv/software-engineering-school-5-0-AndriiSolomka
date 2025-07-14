@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
+import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
+import { HttpClientService } from 'libs/infrastructure/http/http-client.service';
 import { GeocodingConfig } from 'src/libs/config/geocoding.config';
 
 import { CacheCityModule } from './cache/cache-city.module';
 import { CacheCityService } from './cache/cache-city.service';
 import { GeocodingService } from './geocoding.service';
-import { HttpClientModule } from '../http/http-client.module';
-import { HttpClientService } from '../http/http-client.service';
 import { GeocodingCacheProxyService } from './proxy/geocoding/geocoding-proxy.service';
 
 @Module({

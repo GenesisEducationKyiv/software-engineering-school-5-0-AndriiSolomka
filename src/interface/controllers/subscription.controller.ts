@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { WeatherCityValidationPipe } from 'src/common/pipes/city-validation.pipe';
 import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application.client';
-
-import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
+import { CreateSubscriptionDto } from 'src/interface/dto/subscription/subscription.dto';
 
 @Controller()
 export class SubscriptionHandlersController {

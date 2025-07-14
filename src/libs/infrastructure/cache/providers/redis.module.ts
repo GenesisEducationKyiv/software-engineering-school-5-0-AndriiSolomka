@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
 import { redisClientFactory } from './redis-client.factory';
 import { RedisRepository } from './redis.repository';
-import { LoggerModule } from '../../logger/logger.module';
 
 @Module({
   imports: [LoggerModule],

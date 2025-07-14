@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
+import { CacheRepositoryToken } from 'libs/core/cache/cache-repository.interface';
 
 import { RedisModule } from './providers/redis.module';
 import { RedisRepository } from './providers/redis.repository';
-import { CacheRepositoryToken } from '../../core/cache/cache-repository.interface';
 
 @Module({
   imports: [RedisModule],

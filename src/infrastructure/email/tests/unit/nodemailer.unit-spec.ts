@@ -1,12 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import * as nodemailer from 'nodemailer';
-
-import { EmailConfig } from '../../config/email.config';
+import { EmailConfig } from 'src/infrastructure/email/config/email.config';
 import {
   EmailTransportInterface,
   EmailTransportToken,
-} from '../../core/email-transport.interface';
-import { NodemailerService } from '../../infrastructure/providers/nodemailer.provider';
+} from 'src/infrastructure/email/core/email-transport.interface';
+import { NodemailerService } from 'src/infrastructure/email/infrastructure/providers/nodemailer.provider';
 
 jest.mock('nodemailer');
 

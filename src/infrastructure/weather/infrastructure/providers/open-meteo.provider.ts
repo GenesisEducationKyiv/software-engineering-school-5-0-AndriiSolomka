@@ -1,15 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ApiConfig } from 'src/infrastructure/weather/config/api.config';
+import { WeatherProviderInterface } from 'src/infrastructure/weather/core/weather-provider.interface';
 import { WeatherData } from 'src/infrastructure/weather/core/weather.interface';
-import { Coordinates } from 'src/libs/core/geocoding/geocoding.interface';
-import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
-import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
-
-import { WeatherProviderInterface } from '../../core/weather-provider.interface';
 import {
   OpenMeteoResponse,
   openMeteoWeatherCodeMap,
-} from '../../types/weather.interface';
+} from 'src/infrastructure/weather/types/weather.interface';
+import { Coordinates } from 'src/libs/core/geocoding/geocoding.interface';
+import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
+import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 
 const OPEN_METEO_CURRENT_WEATHER_FIELDS = [
   'temperature_2m',

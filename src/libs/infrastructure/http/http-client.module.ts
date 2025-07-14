@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 import { LoggingConfig } from 'src/libs/config/logging.config';
 
 import { LoggingHttpClientService } from './decorators/weather-logger.decorator';
 import { HttpClientService } from './http-client.service';
-import { LoggerModule } from '../logger/logger.module';
 
 @Module({
   imports: [LoggerModule],

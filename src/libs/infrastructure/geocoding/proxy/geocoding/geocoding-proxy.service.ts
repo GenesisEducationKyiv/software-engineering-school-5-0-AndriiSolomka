@@ -1,11 +1,10 @@
+import { CacheCityService } from 'libs/infrastructure/geocoding/cache/cache-city.service';
+import { GeocodingService } from 'libs/infrastructure/geocoding/geocoding.service';
 import {
   City,
   Coordinates,
   GeocodingInterface,
 } from 'src/libs/core/geocoding/geocoding.interface';
-
-import { CacheCityService } from '../../cache/cache-city.service';
-import { GeocodingService } from '../../geocoding.service';
 
 export class GeocodingCacheProxyService implements GeocodingInterface {
   constructor(
