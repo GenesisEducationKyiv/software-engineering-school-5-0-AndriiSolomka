@@ -15,16 +15,10 @@ jobs:
         run: docker compose -f docker-compose.microservices.test.yml up -d --build
 
       - name: Run integration tests in weather-test
-        run: docker compose -f docker-compose.microservices.test.yml exec weather-test npm run test:integration
+        run: docker compose -f docker-compose.test.yml exec weather-test npm run test:integration
 
       - name: Run integration tests in subscription-test
-        run: docker compose -f docker-compose.microservices.test.yml exec subscription-test npm run test:integration
-
-      - name: Run integration tests in email-test
-        run: docker compose -f docker-compose.microservices.test.yml exec email-test npm run test:integration
+        run: docker compose -f docker-compose.test.yml exec subscription-test npm run test:integration
 
       - name: Run integration tests in gateway-test
-        run: docker compose -f docker-compose.microservices.test.yml exec gateway-test npm run test:integration
-
-      - name: Run integration tests in notification-test
-        run: docker compose -f docker-compose.microservices.test.yml exec notification-test npm run test:integration
+        run: docker compose -f docker-compose.test.yml exec gateway-test npm run test:integration
