@@ -1,7 +1,6 @@
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { CacheCityConfig } from 'libs/config/cache.config';
-import { GeocodingConfig } from 'libs/config/geocoding.config';
 import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 
 import { EmailClientModule } from './email/email.module';
@@ -15,7 +14,6 @@ import { WeatherClientModule } from './weather/weather.module';
     EmailClientModule,
     SubscriptionClientModule,
     GeocodingModule,
-    GeocodingConfig,
     CacheCityConfig,
   ],
 })

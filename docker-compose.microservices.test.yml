@@ -62,3 +62,34 @@ services:
         condition: service_healthy
     networks:
       - weather-api-test
+
+  email-test:
+    container_name: email-test
+    build:
+      context: .
+      dockerfile: apps/email/Dockerfile.test
+    env_file:
+      - apps/email/.env.test
+    ports:
+      - '50054:5054'
+    networks:
+      - weather-api-test
+
+  gateway-test:
+    container_name: gateway-test
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile.test
+    env_file:
+      - apps/gateway/.env.test
+    ports:
+      - '50055:5055'
+    depends_on:
+      email-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+    networks:
+      - weather-api-test

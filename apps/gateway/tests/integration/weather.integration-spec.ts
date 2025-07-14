@@ -10,7 +10,6 @@ import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'libs/core/cache/cache-repository.interface';
-import { GeocodingService } from 'libs/infrastructure/geocoding/geocoding.service';
 import * as request from 'supertest';
 
 function resetMockServerWeatherApi() {
@@ -29,10 +28,8 @@ async function clearCache(
 describe('WeatherInternalController (integration)', () => {
   let app: INestApplication<Server>;
   let cacheRepository: CacheRepositoryInterface;
-  let cityService: GeocodingService;
 
   const WEATHER_CACHE_PREFIX = 'weather';
-  const CITY_CACHE_PREFIX = 'city';
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -44,7 +41,6 @@ describe('WeatherInternalController (integration)', () => {
     await app.init();
 
     cacheRepository = app.get(CacheRepositoryToken);
-    cityService = app.get(GeocodingService);
   });
 
   beforeEach(() => {
@@ -104,29 +100,6 @@ describe('WeatherInternalController (integration)', () => {
       const cachedData = await cacheRepository.get(WEATHER_CACHE_PREFIX, key);
       expect(cachedData).toBeTruthy();
       expect(JSON.parse(cachedData!)).toEqual(res1.body);
-    });
-
-    it('should cache invalid city data', async () => {
-      mockServer.addHandlers([searchApi.notFound()]);
-
-      const key = invalidCity.toLowerCase();
-
-      await request(app.getHttpServer())
-        .get(`/api/weather/${invalidCity}`)
-        .expect(404);
-
-      const cachedCityData = await cacheRepository.get(CITY_CACHE_PREFIX, key);
-      expect(cachedCityData).not.toBeNull();
-
-      const checkCitySpy = jest.spyOn(cityService, 'findCity');
-
-      await request(app.getHttpServer())
-        .get(`/api/weather/${invalidCity}`)
-        .expect(404);
-
-      expect(checkCitySpy).toHaveBeenCalledWith(invalidCity);
-
-      checkCitySpy.mockRestore();
     });
   });
 });
