@@ -63,3 +63,15 @@ services:
         condition: service_healthy
     networks:
       - weather-api
+
+  email:
+    container_name: email
+    build:
+      context: .
+      dockerfile: apps/email/Dockerfile
+    env_file:
+      - apps/email/.env
+    ports:
+      - '5054:5054'
+    networks:
+      - weather-api
