@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Run integration tests via Docker Compose
-        run: docker compose -f docker-compose.microservices.test.yml up --build --abort-on-container-exit test-integration
+        run: docker compose -f docker-compose.microservices.test.yml up -d
 
       - name: Run Integration Tests
         run: npm run test:integration
