@@ -16,10 +16,8 @@ export class SubscriptionHandlersController {
   @Post('subscribe')
   async subscribe(@Body() dto: CreateSubscriptionDto) {
     const { email, token } = await this.subscribeService.subscribe(dto);
-    console.log(`Subscription created for email: ${email}, token: ${token}`);
-    return { email, token };
-    // if (email && token)
-    //   return await this.emailClient.sendConfirmationEmail(email, token);
+    await this.emailClient.sendConfirmationEmail(email, token);
+    return { message: 'Confirmation email successfully sent' };
   }
 
   @Get('confirm/:token')

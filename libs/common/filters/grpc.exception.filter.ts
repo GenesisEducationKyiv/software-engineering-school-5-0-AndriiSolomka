@@ -3,15 +3,12 @@ import {
   ArgumentsHost,
   Catch,
   ExceptionFilter,
+  HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { Response } from 'express';
-
-interface GrpcErrorPayload {
-  code: number;
-  message: string;
-}
 
 @Catch()
 export class GrpcExceptionFilter implements ExceptionFilter {
@@ -39,36 +36,82 @@ export class GrpcExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
 
-    let code = GrpcStatus.UNKNOWN;
-    let message = 'Internal server error';
-
-    if (exception instanceof RpcException) {
-      const error = exception.getError() as GrpcErrorPayload;
-      code = error.code ?? GrpcStatus.UNKNOWN;
-      message = error.message ?? message;
-    } else if (this.isGrpcServiceError(exception)) {
-      code = exception.code;
-      message = exception.details ?? exception.message ?? message;
-    } else if (exception instanceof Error) {
-      message = exception.message;
+    // 1. Если это стандартная HTTP-ошибка NestJS — вернуть как есть
+    if (exception instanceof HttpException) {
+      const status = exception.getStatus();
+      const res = exception.getResponse();
+      response
+        .status(status)
+        .json(typeof res === 'string' ? { message: res } : res);
+      return;
     }
 
-    const httpStatus =
-      GrpcExceptionFilter.grpcToHttpMap[code] ??
-      HttpStatus.INTERNAL_SERVER_ERROR;
+    // 2. gRPC ServiceError (от клиента)
+    if (
+      typeof exception === 'object' &&
+      exception !== null &&
+      'code' in exception &&
+      typeof (exception as any).code === 'number'
+    ) {
+      const grpcError = exception as Partial<ServiceError> & {
+        message?: string;
+      };
+      const grpcCode = grpcError.code ?? GrpcStatus.UNKNOWN;
 
-    response.status(httpStatus).json({
-      statusCode: httpStatus,
-      message,
+      let grpcMessage = '';
+      if (grpcError.details) {
+        grpcMessage = grpcError.details;
+      } else if (grpcError.message) {
+        const idx = grpcError.message.indexOf(':');
+        grpcMessage =
+          idx !== -1
+            ? grpcError.message.slice(idx + 1).trim()
+            : grpcError.message;
+      } else {
+        grpcMessage = 'Unexpected error';
+      }
+
+      const httpStatus =
+        GrpcExceptionFilter.grpcToHttpMap[grpcCode] ??
+        HttpStatus.INTERNAL_SERVER_ERROR;
+
+      response.status(httpStatus).json({
+        statusCode: httpStatus,
+        message: grpcMessage,
+      });
+      return;
+    }
+
+    // 3. RpcException (от микросервиса)
+    if (exception instanceof RpcException) {
+      const error: any = exception.getError();
+      const codeToHttp: Record<number, number> = {
+        3: HttpStatus.BAD_REQUEST,
+        5: HttpStatus.NOT_FOUND,
+        6: HttpStatus.CONFLICT,
+        7: HttpStatus.FORBIDDEN,
+        16: HttpStatus.UNAUTHORIZED,
+      };
+
+      const status =
+        error?.statusCode ??
+        (typeof error?.code === 'number'
+          ? codeToHttp[error.code]
+          : undefined) ??
+        HttpStatus.INTERNAL_SERVER_ERROR;
+
+      response.status(status).json({
+        statusCode: status,
+        message: error?.message || 'Internal server error',
+        error: error?.error || 'RpcException',
+      });
+      return;
+    }
+
+    Logger.error(exception);
+    response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+      statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: 'Internal server error',
     });
-  }
-
-  private isGrpcServiceError(error: unknown): error is ServiceError {
-    return (
-      typeof error === 'object' &&
-      error !== null &&
-      typeof (error as ServiceError).code === 'number' &&
-      typeof (error as ServiceError).message === 'string'
-    );
   }
 }

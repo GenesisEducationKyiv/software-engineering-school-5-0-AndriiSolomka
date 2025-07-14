@@ -51,7 +51,7 @@ describe('WeatherInternalController (integration)', () => {
     await app.close();
   });
 
-  describe('GET /weather/:city', () => {
+  describe('GET /weather?city=', () => {
     const validCity = 'London';
     const invalidCity = 'NonExistentCityForTest';
 
@@ -64,7 +64,7 @@ describe('WeatherInternalController (integration)', () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
       const res = await request(app.getHttpServer())
-        .get(`/api/weather/${validCity}`)
+        .get(`/api/weather?city=${validCity}`)
         .expect(200);
 
       expect(res.body).toHaveProperty('temperature');
@@ -76,7 +76,7 @@ describe('WeatherInternalController (integration)', () => {
       mockServer.addHandlers([searchApi.notFound()]);
 
       await request(app.getHttpServer())
-        .get(`/api/weather/${invalidCity}`)
+        .get(`/api/weather?city=${invalidCity}`)
         .expect(404);
     });
 
@@ -86,13 +86,13 @@ describe('WeatherInternalController (integration)', () => {
       const key = validCity.toLowerCase();
 
       const res1 = await request(app.getHttpServer())
-        .get(`/api/weather/${validCity}`)
+        .get(`/api/weather?city=${validCity}`)
         .expect(200);
 
       resetMockServerWeatherApi();
 
       const res2 = await request(app.getHttpServer())
-        .get(`/api/weather/${validCity}`)
+        .get(`/api/weather?city=${validCity}`)
         .expect(200);
 
       expect(res2.body).toEqual(res1.body);
