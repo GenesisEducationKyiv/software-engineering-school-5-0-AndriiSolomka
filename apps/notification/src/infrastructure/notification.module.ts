@@ -8,9 +8,9 @@ import { NotificationService } from './services/notification.service';
 import { EMAIL_PACKAGE } from '../core/email.interface';
 import { SUBSCRIPTION_PACKAGE } from '../core/subscription.interface';
 import { WEATHER_PACKAGE } from '../core/weather.interface';
-import { EmailClientService } from './clients/email.grcp.client';
-import { SubscriptionClientService } from './clients/subscription.client';
-import { WeatherClientService } from './clients/weather.grcp.client';
+import { EmailClientService } from './clients/email.grpc.client';
+import { SubscriptionClientService } from './clients/subscription.grpc.client';
+import { WeatherClientService } from './clients/weather.grpc.client';
 import { ScheduleService } from './services/schedule.service';
 
 @Module({

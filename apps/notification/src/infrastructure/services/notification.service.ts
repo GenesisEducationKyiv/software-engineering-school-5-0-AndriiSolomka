@@ -4,9 +4,9 @@ import { Frequency } from 'apps/subscription/src/core/entities/subscription.enti
 import { buildWeatherNotification } from 'libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
-import { EmailClientService } from '../clients/email.grcp.client';
-import { SubscriptionClientService } from '../clients/subscription.client';
-import { WeatherClientService } from '../clients/weather.grcp.client';
+import { EmailClientService } from '../clients/email.grpc.client';
+import { SubscriptionClientService } from '../clients/subscription.grpc.client';
+import { WeatherClientService } from '../clients/weather.grpc.client';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {

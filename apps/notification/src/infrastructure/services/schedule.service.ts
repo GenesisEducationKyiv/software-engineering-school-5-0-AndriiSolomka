@@ -5,7 +5,7 @@ import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';
 import { NotificationService } from './notification.service';
 import { Frequency } from '../../core/subscription.interface';
-import { SubscriptionClientService } from '../clients/subscription.client';
+import { SubscriptionClientService } from '../clients/subscription.grpc.client';
 
 @Injectable()
 export class ScheduleService {

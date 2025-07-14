@@ -17,6 +17,8 @@
     "start:gateway:dev": "nest start gateway --watch",
     "start:email": "nest start email",
     "start:email:dev": "nest start email --watch",
+    "start:notification": "nest start notification",
+    "start:notification:dev": "nest start notification --watch",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/weather_api/main",
@@ -34,7 +36,11 @@
     "test:weather:integration": "jest --config apps/weather/tests/jest-integration.json",
     "test:subscription:unit": "jest --config apps/subscription/tests/jest-unit.json",
     "test:subscription:integration": "jest --config apps/subscription/tests/jest-integration.json",
-    "test:gateway:integration": "jest --config apps/gateway/tests/jest-integration.json"
+    "test:gateway:integration": "jest --config apps/gateway/tests/jest-integration.json",
+    "test:notification:unit": "jest --config apps/notification/tests/jest-unit.json",
+    "test:notification:architecture": "jest --config apps/notification/tests/jest-architecture.json",
+    "test:email:unit": "jest --config apps/email/tests/jest-unit.json",
+    "test:email:architecture": "jest --config apps/email/tests/jest-architecture.json"
   },
   "dependencies": {
     "@bufbuild/protobuf": "^2.6.0",

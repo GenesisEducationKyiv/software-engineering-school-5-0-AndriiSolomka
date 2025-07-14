@@ -132,7 +132,7 @@ services:
     container_name: email
     build:
       context: .
-      dockerfile: apps/email/Dockerfile
+      dockerfile: apps/email/Dockerfile.dev
     env_file:
       - apps/email/.env
     ports:

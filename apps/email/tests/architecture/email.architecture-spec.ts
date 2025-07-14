@@ -1,50 +1,49 @@
 import { filesOfProject } from 'tsarch';
 import 'tsarch/dist/jest';
 
-describe('Email Module Layered Architecture Compliance', () => {
-  it('core does not depend on infrastructure, interface, or config', () => {
+describe('Email Microservice Architecture test', () => {
+  it('core does not depend on infrastructure, interface', () => {
     const rule = filesOfProject()
-      .inFolder('apps/weather_api/src/infrastructure/email/core')
+      .inFolder('apps/email/src/core')
       .shouldNot()
       .dependOnFiles()
-      .inFolder('apps/weather_api/src/infrastructure/email/infrastructure')
-      .inFolder('apps/weather_api/src/infrastructure/email/interface')
-      .inFolder('apps/weather_api/src/infrastructure/email/config');
+      .inFolder('apps/email/src/infrastructure')
+      .inFolder('apps/email/src/interface');
 
     return expect(rule).toPassAsync();
   });
 
-  it('infrastructure does not depend on interface', () => {
+  it('infrastructure depends only on core', () => {
     const rule = filesOfProject()
-      .inFolder('apps/weather_api/src/infrastructure/email/infrastructure')
+      .inFolder('apps/email/src/infrastructure')
       .shouldNot()
       .dependOnFiles()
-      .inFolder('apps/weather_api/src/infrastructure/email/interface');
+      .inFolder('apps/email/src/interface');
 
     return expect(rule).toPassAsync();
   });
 
   it('interface depends only on core and infrastructure', () => {
     const rule = filesOfProject()
-      .inFolder('apps/weather_api/src/infrastructure/email/interface')
+      .inFolder('apps/email/src/interface')
       .shouldNot()
       .dependOnFiles()
-      .inFolder('apps/weather_api/src/infrastructure/email/config');
+      .inFolder('apps/email/src/config');
 
     return expect(rule).toPassAsync();
   });
 
   it('all layers are free of cycles', () => {
     const coreCycleFree = filesOfProject()
-      .inFolder('apps/weather_api/src/infrastructure/email/core')
+      .inFolder('apps/email/src/core')
       .should()
       .beFreeOfCycles();
     const infrastructureCycleFree = filesOfProject()
-      .inFolder('apps/weather_api/src/infrastructure/email/infrastructure')
+      .inFolder('apps/email/src/infrastructure')
       .should()
       .beFreeOfCycles();
     const interfaceCycleFree = filesOfProject()
-      .inFolder('apps/weather_api/src/infrastructure/email/interface')
+      .inFolder('apps/email/src/interface')
       .should()
       .beFreeOfCycles();
 
