@@ -63,6 +63,22 @@ describe('SubscriptionHandlersController (integration)', () => {
       );
     });
 
+    it('should return 404 if subscription already exists for this user', async () => {
+      mockServer.addHandlers([searchApi.ok()]);
+
+      const dto = makeDto();
+
+      await request(app.getHttpServer())
+        .post('/api/subscribe')
+        .send(dto)
+        .expect(201);
+
+      await request(app.getHttpServer())
+        .post('/api/subscribe')
+        .send(dto)
+        .expect(409);
+    });
+
     it('should return 404 for non-existent city (CityValidationPipe)', async () => {
       mockServer.addHandlers([searchApi.notFound()]);
 
