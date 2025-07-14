@@ -1,81 +1,66 @@
-volumes:
-  postgres-db-test:
-  redis-data-test:
-  logs-data-test:
-
 networks:
-  test-network:
+  dev-network-test:
+    driver: bridge
+  weather-api-test:
     driver: bridge
 
 services:
-  db-test:
-    image: postgres:17-alpine
-    restart: always
-    shm_size: 128mb
-    env_file:
-      - .env.example
-    volumes:
-      - postgres-db-test:/var/lib/postgresql/data
-    ports:
-      - 5433:5432
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -d test']
-      interval: 5s
-      timeout: 5s
-      retries: 10
-    networks:
-      - test-network
-
   redis-test:
+    container_name: redis-test
     image: redis:7-alpine
     restart: always
     ports:
       - 6380:6379
-    volumes:
-      - redis-data-test:/data
+    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
     networks:
-      - test-network
+      - weather-api-test
 
-  test-unit:
+  db-test:
+    container_name: db-test
+    image: postgres:17-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - apps/subscription/.env.test
+    ports:
+      - 5435:5432
+    user: postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -d postgres']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - weather-api-test
+
+  weather-test:
+    container_name: weather-test
     build:
       context: .
-      dockerfile: Dockerfile.test
+      dockerfile: apps/weather/Dockerfile.test
     env_file:
-      - .env.example
-    volumes:
-      - logs-data-test:/home/node/app/logs
-    command: npm run test:unit
-    networks:
-      - test-network
-
-  test-integration:
-    build:
-      context: .
-      dockerfile: Dockerfile.test
-    env_file:
-      - .env.example
+      - apps/weather/.env.test
+    ports:
+      - '50051:5051'
     depends_on:
-      db-test:
-        condition: service_healthy
       redis-test:
         condition: service_started
-    volumes:
-      - logs-data-test:/home/node/app/logs
-    command: sh -c "npx prisma migrate deploy --schema ./prisma/schema.prisma && npm run test:integration"
     networks:
-      - test-network
+      - weather-api-test
 
-  test-e2e:
-    build:
-      context: .
-      dockerfile: Dockerfile.playwright
+  test-runner:
+    image: node:22.13.0
+    container_name: test-runner
+    working_dir: /app
+    volumes:
+      - ./:/app
     env_file:
-      - .env.example
+      - apps/weather/.env.test
     depends_on:
-      db-test:
-        condition: service_healthy
       redis-test:
         condition: service_started
-    command: sh -c "npx prisma migrate deploy --schema ./prisma/schema.prisma && npm run test:e2e"
+      weather-test:
+        condition: service_started
+    command: sh ./scripts/run-tests.sh
     networks:
-      - test-network
+      - weather-api-test

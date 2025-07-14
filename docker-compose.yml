@@ -1,15 +1,20 @@
-volumes:
-  postgres-db:
-  redis-data:
-  weather-data:
-
 networks:
   dev-network:
     driver: bridge
-  weather-api-dev:
+  weather-api:
     driver: bridge
 
 services:
+  redis:
+    container_name: redis
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6379:6379
+    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
+    networks:
+      - weather-api
+
   db:
     container_name: db
     image: postgres:17-alpine
@@ -17,10 +22,8 @@ services:
     shm_size: 128mb
     env_file:
       - apps/subscription/.env
-    volumes:
-      - postgres-db:/var/lib/postgresql/data
     ports:
-      - 5434:5432
+      - 5433:5432
     user: postgres
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -d postgres']
@@ -28,34 +31,20 @@ services:
       timeout: 10s
       retries: 5
     networks:
-      - weather-api-dev
-
-  redis:
-    container_name: redis
-    image: redis:7-alpine
-    restart: always
-    ports:
-      - 6379:6379
-    volumes:
-      - redis-data:/data
-    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
-    networks:
-      - weather-api-dev
+      - weather-api
 
   weather:
     container_name: weather
     build:
       context: .
-      dockerfile: apps/weather/Dockerfile.dev
+      dockerfile: apps/weather/Dockerfile
     env_file:
       - apps/weather/.env
     ports:
       - '5051:5051'
-    volumes:
-      - .:/app
-      - weather-data:/app/node_modules
     depends_on:
       redis:
         condition: service_started
     networks:
-      - weather-api-dev
+      - weather-api
+
