@@ -7,6 +7,6 @@ export interface EmailPayload {
 export const EMAIL_PACKAGE = Symbol('EMAIL_PACKAGE');
 
 export interface EmailInterface {
-  sendConfirmationEmail(email: string, token: string): Promise<void>;
+  sendConfirmationEmail(data: { email: string; token: string }): Promise<void>;
   sendWeatherEmail(emailPayload: EmailPayload): Promise<void>;
 }

@@ -1,11 +1,18 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
-import { EMAIL_PACKAGE, EmailInterface } from '../core/email.interface';
+import {
+  EMAIL_PACKAGE,
+  EmailInterface,
+  EmailPayload,
+} from '../core/email.interface';
+
+import type { GrpcToObservable } from 'libs/common/types/observable';
 
 @Injectable()
 export class EmailClientService implements OnModuleInit {
-  private emailService: EmailInterface;
+  private emailService: GrpcToObservable<EmailInterface>;
 
   constructor(
     @Inject(EMAIL_PACKAGE)
@@ -13,10 +20,17 @@ export class EmailClientService implements OnModuleInit {
   ) {}
 
   onModuleInit() {
-    this.emailService = this.client.getService<EmailInterface>('EmailService');
+    this.emailService =
+      this.client.getService<GrpcToObservable<EmailInterface>>('EmailService');
   }
 
   async sendConfirmationEmail(email: string, token: string): Promise<void> {
-    return this.emailService.sendConfirmationEmail(email, token);
+    await firstValueFrom(
+      this.emailService.sendConfirmationEmail({ email, token }),
+    );
+  }
+
+  async sendWeatherEmail(payload: EmailPayload): Promise<void> {
+    await firstValueFrom(this.emailService.sendWeatherEmail(payload));
   }
 }
