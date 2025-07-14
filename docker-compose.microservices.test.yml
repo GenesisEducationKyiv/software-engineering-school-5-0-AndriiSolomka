@@ -93,3 +93,22 @@ services:
         condition: service_started
     networks:
       - weather-api-test
+
+  notification-test:
+    container_name: notification-test
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile.test
+    env_file:
+      - apps/notification/.env.test
+    ports:
+      - '50053:5055'
+    depends_on:
+      email-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+    networks:
+      - weather-api-test
