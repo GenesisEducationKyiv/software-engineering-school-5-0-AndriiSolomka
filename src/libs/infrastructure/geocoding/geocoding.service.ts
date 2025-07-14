@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { HttpClientService } from 'libs/infrastructure/http/http-client.service';
 import {
   City,
   Coordinates,
   GeocodingInterface,
 } from 'src/libs/core/geocoding/geocoding.interface';
+import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 
 type GeocodingResponse = {
   results: {

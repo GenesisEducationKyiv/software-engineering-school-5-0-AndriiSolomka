@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
-import { HttpClientService } from 'libs/infrastructure/http/http-client.service';
 import { GeocodingConfig } from 'src/libs/config/geocoding.config';
+import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.module';
+import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
 
 import { CacheCityModule } from './cache/cache-city.module';
 import { CacheCityService } from './cache/cache-city.service';

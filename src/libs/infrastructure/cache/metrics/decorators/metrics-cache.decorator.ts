@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CacheService } from 'libs/infrastructure/cache/cache.service';
-import { CacheMetricsService } from 'libs/infrastructure/cache/metrics/cache-metrics.service';
-import { CACHE_OPERATION_STATUS } from 'libs/infrastructure/cache/metrics/constants/metrics.constants';
+import { CacheService } from 'src/libs/infrastructure/cache/cache.service';
+import { CacheMetricsService } from 'src/libs/infrastructure/cache/metrics/cache-metrics.service';
+import { CACHE_OPERATION_STATUS } from 'src/libs/infrastructure/cache/metrics/constants/metrics.constants';
 
 @Injectable()
 export class MetricsCacheDecorator<T> {
