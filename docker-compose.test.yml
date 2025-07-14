@@ -75,6 +75,25 @@ services:
     networks:
       - weather-api-test
 
+  notification-test:
+    container_name: notification-test
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile.test
+    env_file:
+      - apps/notification/.env.test
+    ports:
+      - '50053:5055'
+    depends_on:
+      email-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+    networks:
+      - weather-api-test
+  
   test-runner:
     image: node:22.13.0
     container_name: test-runner
@@ -85,12 +104,16 @@ services:
       - apps/weather/.env.test
       - apps/subscription/.env.test
       - apps/email/.env.test
+      - apps/notification/.env.test
+
     depends_on:
       weather-test:
         condition: service_started
       subscription-test:
         condition: service_started
       email-test:
+        condition: service_started
+      notification-test:
         condition: service_started
     command: sh ./scripts/run-tests.sh
     networks:
