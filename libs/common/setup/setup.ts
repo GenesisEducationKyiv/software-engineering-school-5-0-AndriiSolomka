@@ -1,5 +1,7 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
+import { GrpcExceptionFilter } from '../filters/grpc.exception.filter';
+
 export function setupApp(app: INestApplication): void {
   app.useGlobalPipes(
     new ValidationPipe({
@@ -7,6 +9,8 @@ export function setupApp(app: INestApplication): void {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.useGlobalFilters(new GrpcExceptionFilter());
 
   app.setGlobalPrefix('api');
 
