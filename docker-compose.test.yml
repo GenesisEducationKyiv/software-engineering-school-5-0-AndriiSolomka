@@ -1,0 +1,48 @@
+networks:
+  dev-network-test:
+    driver: bridge
+  weather-api-test:
+    driver: bridge
+
+services:
+  redis-test:
+    container_name: redis-test
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6380:6379
+    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
+    networks:
+      - weather-api-test
+
+  weather-test:
+    container_name: weather-test
+    build:
+      context: .
+      dockerfile: apps/weather/Dockerfile.test
+    env_file:
+      - apps/weather/.env.test
+    ports:
+      - '50051:5051'
+    depends_on:
+      redis-test:
+        condition: service_started
+    networks:
+      - weather-api-test
+
+  test-runner:
+    image: node:22.13.0
+    container_name: test-runner
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file:
+      - apps/weather/.env.test
+    depends_on:
+      redis-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+    command: sh ./scripts/run-tests.sh
+    networks:
+      - weather-api-test
