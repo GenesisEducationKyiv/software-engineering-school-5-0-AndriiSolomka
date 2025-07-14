@@ -112,3 +112,34 @@ services:
         condition: service_started
     networks:
       - weather-api-test
+
+  test-runner:
+    image: node:22.13.0
+    container_name: test-runner
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file:
+      - apps/subscription/.env.test
+      - apps/weather/.env.test
+      - apps/email/.env.test
+      - apps/gateway/.env.test
+      - apps/notification/.env.test
+    depends_on:
+      db-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      email-test:
+        condition: service_started
+      gateway-test:
+        condition: service_started
+      notification-test:
+        condition: service_started
+    command: sh ./scripts/run-tests.sh
+    networks:
+      - weather-api-test

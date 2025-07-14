@@ -11,14 +11,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build and start services
-        run: docker compose -f docker-compose.test.yml up -d --build
-
-      - name: Run integration tests in weather-test
-        run: docker compose -f docker-compose.test.yml exec weather-test npm run test:integration
-
-      - name: Run integration tests in subscription-test
-        run: docker compose -f docker-compose.test.yml exec subscription-test npm run test:integration
-
-      - name: Run integration tests in gateway-test
-        run: docker compose -f docker-compose.test.yml exec gateway-test npm run test:integration
+      - name: Start Integration Tests
+        run: docker compose -f docker-compose.test.yml up  --build test-runner
