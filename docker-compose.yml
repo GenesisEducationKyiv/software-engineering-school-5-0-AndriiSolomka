@@ -15,24 +15,6 @@ services:
     networks:
       - weather-api
 
-  db:
-    container_name: db
-    image: postgres:17-alpine
-    restart: always
-    shm_size: 128mb
-    env_file:
-      - apps/subscription/.env
-    ports:
-      - 5433:5432
-    user: postgres
-    healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -d postgres']
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - weather-api
-
   weather:
     container_name: weather
     build:
