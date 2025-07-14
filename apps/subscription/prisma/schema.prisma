@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Subscription {
+  subscriptionId Int       @id @default(autoincrement()) @map("id")
+  email          String
+  city           String
+  frequency      Frequency
+  confirmed      Boolean   @default(false)
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  tokens         Token[]
+
+  @@unique([email, city])
+  @@map("subscription")
+}
+
+model Token {
+  tokenId        Int          @id @default(autoincrement()) @map("id")
+  token          String       @unique
+  subscriptionId Int
+  subscription   Subscription @relation(fields: [subscriptionId], references: [subscriptionId], onDelete: Cascade)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  expiresAt      DateTime?    @map("expires_at")
+
+  @@map("token")
+}
+
+enum Frequency {
+  hourly
+  daily
+}

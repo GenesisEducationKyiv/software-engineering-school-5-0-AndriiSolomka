@@ -1,0 +1,44 @@
+import { filesOfProject } from 'tsarch';
+import 'tsarch/dist/jest';
+
+describe('Subscription Microservice Architecture test', () => {
+  it('core does not depend on infrastructure or interfaces', () => {
+    const rule = filesOfProject()
+      .inFolder('apps/subscription/src/core')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('apps/subscription/src/infrastructure')
+      .inFolder('apps/subscription/src/interfaces');
+
+    return expect(rule).toPassAsync();
+  });
+
+  it('infrastructure does not depend on interfaces', () => {
+    const rule = filesOfProject()
+      .inFolder('apps/subscription/src/infrastructure')
+      .shouldNot()
+      .dependOnFiles()
+      .inFolder('apps/subscription/src/interfaces');
+
+    return expect(rule).toPassAsync();
+  });
+
+  it('all layers are free of cycles', () => {
+    const coreCycleFree = filesOfProject()
+      .inFolder('apps/subscription/src/core')
+      .should()
+      .beFreeOfCycles();
+    const infrastructureCycleFree = filesOfProject()
+      .inFolder('apps/subscription/src/infrastructure')
+      .should()
+      .beFreeOfCycles();
+    const interfacesCycleFree = filesOfProject()
+      .inFolder('apps/subscription/src/interfaces')
+      .should()
+      .beFreeOfCycles();
+
+    expect(coreCycleFree).toPassAsync();
+    expect(infrastructureCycleFree).toPassAsync();
+    expect(interfacesCycleFree).toPassAsync();
+  });
+});
