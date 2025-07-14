@@ -1,16 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { GrpcToObservable } from 'libs/common/types/observable';
+import { firstValueFrom } from 'rxjs';
 
 import {
   SUBSCRIPTION_PACKAGE,
   SubscribeParams,
   SubscriptionInterface,
 } from '../core/subscription.interface';
-
-import type { GrpcToObservable } from 'libs/common/types/observable';
 
 @Injectable()
 export class SubscriptionClientService implements OnModuleInit {
@@ -30,14 +27,16 @@ export class SubscriptionClientService implements OnModuleInit {
   async subscribe(
     data: SubscribeParams,
   ): Promise<{ email: string; token: string }> {
-    return await this.subscriptionService.subscribe(data).toPromise();
+    return await firstValueFrom(this.subscriptionService.subscribe(data));
   }
 
   async confirm(token: string): Promise<{ message: string }> {
-    return await this.subscriptionService.confirm(token).toPromise();
+    return await firstValueFrom(this.subscriptionService.confirm({ token }));
   }
 
   async unsubscribe(token: string): Promise<{ message: string }> {
-    return await this.subscriptionService.unsubscribe(token).toPromise();
+    return await firstValueFrom(
+      this.subscriptionService.unsubscribe({ token }),
+    );
   }
 }

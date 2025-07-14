@@ -13,6 +13,6 @@ export type SubscribeParams = {
 
 export interface SubscriptionInterface {
   subscribe(data: SubscribeParams): Promise<{ email: string; token: string }>;
-  confirm(token: string): Promise<{ message: string }>;
-  unsubscribe(token: string): Promise<{ message: string }>;
+  confirm(data: { token: string }): Promise<{ message: string }>;
+  unsubscribe(data: { token: string }): Promise<{ message: string }>;
 }
