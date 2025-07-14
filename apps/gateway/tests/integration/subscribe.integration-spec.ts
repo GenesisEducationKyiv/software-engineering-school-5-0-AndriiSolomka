@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'apps/gateway/src/app.module';
+import { EmailClientService } from 'apps/gateway/src/email/infrastructure/email.grcp.client';
 import { Frequency } from 'apps/gateway/src/subscription/core/subscription.interface';
 import { Server } from 'http';
 import { searchApi } from 'libs/common/setup/msw/handlers/geocoding';
@@ -19,11 +20,17 @@ const makeDto = (
 
 describe('SubscriptionHandlersController (integration)', () => {
   let app: INestApplication<Server>;
+  const emailClientMock = {
+    sendConfirmationEmail: jest.fn().mockResolvedValue(undefined),
+  };
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(EmailClientService)
+      .useValue(emailClientMock)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     setupApp(app);
@@ -32,6 +39,7 @@ describe('SubscriptionHandlersController (integration)', () => {
 
   beforeEach(() => {
     mockServer.clearHandlers();
+    jest.clearAllMocks();
   });
 
   afterAll(async () => {
@@ -49,6 +57,10 @@ describe('SubscriptionHandlersController (integration)', () => {
         .expect(201);
 
       expect(res.body).toHaveProperty('message');
+      expect(emailClientMock.sendConfirmationEmail).toHaveBeenCalledWith(
+        dto.email,
+        expect.any(String),
+      );
     });
 
     it('should return 404 for non-existent city (CityValidationPipe)', async () => {
