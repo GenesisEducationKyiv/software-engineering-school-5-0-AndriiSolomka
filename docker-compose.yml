@@ -48,7 +48,6 @@ services:
     networks:
       - weather-api
 
-
   subscription:
     container_name: subscription
     build:
@@ -85,6 +84,25 @@ services:
       - apps/notification/.env
     ports:
       - '5053:5055'
+    depends_on:
+      email:
+        condition: service_started
+      subscription:
+        condition: service_started
+      weather:
+        condition: service_started
+    networks:
+      - weather-api
+
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+    env_file:
+      - apps/gateway/.env
+    ports:
+      - '5055:5055'
     depends_on:
       email:
         condition: service_started
