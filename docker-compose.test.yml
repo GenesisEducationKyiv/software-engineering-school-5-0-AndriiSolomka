@@ -15,6 +15,24 @@ services:
     networks:
       - weather-api-test
 
+  db-test:
+    container_name: db-test
+    image: postgres:17-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - apps/subscription/.env.test
+    ports:
+      - 5435:5432
+    user: postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -d postgres']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - weather-api-test
+
   weather-test:
     container_name: weather-test
     build:
@@ -30,6 +48,21 @@ services:
     networks:
       - weather-api-test
 
+  subscription-test:
+    container_name: subscription-test
+    build:
+      context: .
+      dockerfile: apps/subscription/Dockerfile.test
+    env_file:
+      - apps/subscription/.env.test
+    ports:
+      - '50052:5052'
+    depends_on:
+      db-test:
+        condition: service_healthy
+    networks:
+      - weather-api-test
+
   test-runner:
     image: node:22.13.0
     container_name: test-runner
@@ -38,10 +71,11 @@ services:
       - ./:/app
     env_file:
       - apps/weather/.env.test
+      - apps/subscription/.env.test
     depends_on:
-      redis-test:
-        condition: service_started
       weather-test:
+        condition: service_started
+      subscription-test:
         condition: service_started
     command: sh ./scripts/run-tests.sh
     networks:
