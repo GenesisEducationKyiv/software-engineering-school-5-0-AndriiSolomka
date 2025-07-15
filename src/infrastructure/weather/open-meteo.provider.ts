@@ -5,7 +5,7 @@ import { WeatherProviderInterface } from 'src/core/abstracts/weather/weather-pro
 import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
 
 import { GeocodingService } from '../geocoding/geocoding.service';
-import { HttpClientService } from '../http/http-client.service';
+import { HttpClient } from '../http/http-client';
 import {
   OpenMeteoResponse,
   openMeteoWeatherCodeMap,
@@ -32,7 +32,7 @@ function parseWeatherData(response: OpenMeteoResponse): WeatherData {
 @Injectable()
 export class OpenMeteoProviderService implements WeatherProviderInterface {
   constructor(
-    private readonly httpService: HttpClientService,
+    private readonly httpService: HttpClient,
     private readonly config: ApiConfig,
     private readonly cityService: GeocodingService,
   ) {}

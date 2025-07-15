@@ -3,7 +3,7 @@ import { ApiConfig } from 'src/config/api.config';
 import { WeatherProviderInterface } from 'src/core/abstracts/weather/weather-provider.interface';
 import { WeatherData } from 'src/core/abstracts/weather/weather.interface';
 
-import { HttpClientService } from '../http/http-client.service';
+import { HttpClient } from '../http/http-client';
 import { WeatherApiResponse } from './types/weather.interface';
 
 function parseWeatherData(response: WeatherApiResponse): WeatherData {
@@ -17,7 +17,7 @@ function parseWeatherData(response: WeatherApiResponse): WeatherData {
 @Injectable()
 export class WeatherApiProviderService implements WeatherProviderInterface {
   constructor(
-    private readonly httpService: HttpClientService,
+    private readonly httpService: HttpClient,
     private readonly config: ApiConfig,
   ) {}
 
