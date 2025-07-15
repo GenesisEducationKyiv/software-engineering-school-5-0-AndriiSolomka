@@ -6,21 +6,23 @@ import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
 
 @Controller()
 export class SubscriptionHandlersController {
-  constructor(private readonly subscribeService: SubscriptionHandlersUseCase) {}
+  constructor(
+    private readonly subscriptionHandler: SubscriptionHandlersUseCase,
+  ) {}
 
   @UsePipes(CityValidationPipe)
   @Post('subscribe')
   async subscribe(@Body() dto: CreateSubscriptionDto) {
-    return this.subscribeService.subscribe(dto);
+    return this.subscriptionHandler.subscribe(dto);
   }
 
   @Get('confirm/:token')
   async confirm(@Param('token') token: string) {
-    return this.subscribeService.confirm(token);
+    return this.subscriptionHandler.confirm(token);
   }
 
   @Get('unsubscribe/:token')
   async unsubscribe(@Param('token') token: string) {
-    return this.subscribeService.unsubscribe(token);
+    return this.subscriptionHandler.unsubscribe(token);
   }
 }
