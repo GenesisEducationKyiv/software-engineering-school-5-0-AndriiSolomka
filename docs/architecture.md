@@ -1,40 +1,37 @@
 ```mermaid
 graph TB
-    %% Core Layer - innermost layer
+    subgraph BusinessLogic["Buisness rules"]
+        style BusinessLogic fill:#e0e7ff,stroke:#333,stroke-width:2px
+
+        subgraph UseCases["Use Cases"]
+            UC["Use Cases"]
+        end
+
+        subgraph Infrastructure["Infrastructure"]
+            Repos["Repositories"]
+            Services["Services"]
+            Proxies["Proxies"]
+        end
+
+        subgraph Application["Application"]
+            AppModules["Application Modules"]
+            Factories["Factories"]
+        end
+    end
+
     subgraph Core["Core Layer"]
         Entities["Entities"]
         Abstracts["Interfaces"]
     end
 
-    %% Use Cases Layer
-    subgraph UseCases["Use Cases Layer"]
-        UC["Use Cases"]
-    end
-
-    %% Interface Layer
     subgraph Interface["Interface Layer"]
         Controllers["Controllers"]
         DTOs["DTOs"]
         InterfaceModules["Interface Modules"]
     end
 
-    %% Infrastructure Layer
-    subgraph Infrastructure["Infrastructure Layer"]
-        Repos["Repositories"]
-        Services["Services"]
-        Proxies["Proxies"]
-    end
-
-    %% Application Layer
-    subgraph Application["Application Layer"]
-        AppModules["Application Modules"]
-        Factories["Factories"]
-    end
-
-    %% Dependencies - keeping original arrows between layers
-    Interface --> UseCases
     Interface --> Application
-    UseCases --> Core
-    Infrastructure --> Core
     Application --> UseCases
     Application --> Infrastructure
+    UseCases --> Core
+    Infrastructure --> Core
