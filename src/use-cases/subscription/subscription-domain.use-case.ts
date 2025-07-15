@@ -27,11 +27,11 @@ export class SubscriptionDomainUseCase implements SubscriptionInterface {
     return await this.subscriptionRepo.create({ email, city, frequency });
   }
 
-  async confirm(subscription_id: number): Promise<SubscriptionEntity> {
+  async confirm(subscription_id: string): Promise<SubscriptionEntity> {
     return await this.subscriptionRepo.confirm(subscription_id);
   }
 
-  async delete(subscription_id: number): Promise<SubscriptionEntity> {
+  async delete(subscription_id: string): Promise<SubscriptionEntity> {
     return await this.subscriptionRepo.delete(subscription_id);
   }
 

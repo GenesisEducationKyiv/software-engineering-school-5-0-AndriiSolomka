@@ -9,7 +9,7 @@ import { TokenMapper } from './mappers/token.mapper';
 export class PrismaTokenRepository implements TokenRepositoryInterface {
   constructor(private readonly prisma: PrismaService) {}
 
-  async create(token: string, subscriptionId: number): Promise<TokenEntity> {
+  async create(token: string, subscriptionId: string): Promise<TokenEntity> {
     const createdToken = await this.prisma.token.create({
       data: { token, subscriptionId },
     });

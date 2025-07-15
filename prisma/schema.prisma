@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Subscription {
-  subscriptionId Int       @id @default(autoincrement()) @map("id")
+  subscriptionId String    @id @default(uuid()) @map("id")
   email          String
   city           String
   frequency      Frequency
@@ -22,9 +22,9 @@ model Subscription {
 }
 
 model Token {
-  tokenId        Int          @id @default(autoincrement()) @map("id")
+  tokenId        String       @id @default(uuid()) @map("id")
   token          String       @unique
-  subscriptionId Int
+  subscriptionId String
   subscription   Subscription @relation(fields: [subscriptionId], references: [subscriptionId], onDelete: Cascade)
   createdAt      DateTime     @default(now()) @map("created_at")
   expiresAt      DateTime?    @map("expires_at")
