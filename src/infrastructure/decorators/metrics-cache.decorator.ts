@@ -41,7 +41,7 @@ export class MetricsCacheDecorator<T> {
     }
   }
 
-  async getOrSet(key: string, fetchFn: () => Promise<T>): Promise<T> {
+  async getOrCompute(key: string, fetchFn: () => Promise<T>): Promise<T> {
     const end = this.metrics.createCacheOperationStopper(
       this.cacheType,
       'getOrSet',
