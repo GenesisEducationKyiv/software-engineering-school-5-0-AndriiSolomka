@@ -12,6 +12,7 @@
     "start:weather": "nest start weather",
     "start:weather:dev": "nest start weather --watch",
     "start:dev": "nest start --watch",
+    "start:subscription:dev": "nest start subscription --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/apps/weather_api/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

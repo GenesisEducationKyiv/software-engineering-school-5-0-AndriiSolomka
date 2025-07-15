@@ -36,7 +36,7 @@ export class PrismaSubscriptionRepository
     return subscription ? SubscriptionMapper.toDomain(subscription) : null;
   }
 
-  async delete(subscriptionId: number): Promise<SubscriptionEntity> {
+  async delete(subscriptionId: string): Promise<SubscriptionEntity> {
     const subscription = await this.prisma.subscription.delete({
       where: { subscriptionId },
     });
@@ -44,7 +44,7 @@ export class PrismaSubscriptionRepository
     return SubscriptionMapper.toDomain(subscription);
   }
 
-  async confirm(subscriptionId: number): Promise<SubscriptionEntity> {
+  async confirm(subscriptionId: string): Promise<SubscriptionEntity> {
     const subscription = await this.prisma.subscription.update({
       where: { subscriptionId },
       data: { confirmed: true },

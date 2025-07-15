@@ -7,6 +7,7 @@ import {
 } from 'apps/subscription/src/core/token/token-repository.interface';
 import { TokenNotFoundException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
+import { randomUUID } from 'crypto';
 
 jest.mock('libs/utils/generator/random-generator', () => ({
   randomByteGenerator: () => 'mocked-token',
@@ -15,8 +16,8 @@ jest.mock('libs/utils/generator/random-generator', () => ({
 function makeToken(): TokenEntity {
   const now = new Date();
   return {
-    tokenId: 1,
-    subscriptionId: 123,
+    tokenId: randomUUID(),
+    subscriptionId: randomUUID(),
     token: 'mocked-token',
     createdAt: now,
     expiresAt: now,
@@ -51,11 +52,11 @@ describe('TokenService (unit)', () => {
   describe('create', () => {
     it('should generate token and save it', async () => {
       repoMock.create.mockResolvedValueOnce(makeToken());
-
-      const result = await service.create(123);
+      const id = randomUUID();
+      const result = await service.create(id);
 
       expect(result).toBe('mocked-token');
-      expect(repoMock.create).toHaveBeenCalledWith('mocked-token', 123);
+      expect(repoMock.create).toHaveBeenCalledWith('mocked-token', id);
     });
   });
 

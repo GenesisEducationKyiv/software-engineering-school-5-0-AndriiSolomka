@@ -10,11 +10,12 @@ import {
 import { SubscriptionInterface } from 'apps/subscription/src/core/subscription/subscription.interface';
 import { SubscriptionAlreadyExistsException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
+import { randomUUID } from 'crypto';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
   return {
-    subscriptionId: 1,
+    subscriptionId: randomUUID(),
     email: 'test@mail.com',
     city: 'Kyiv',
     frequency: Frequency.daily,
@@ -81,7 +82,7 @@ describe('SubscriptionService (unit)', () => {
     it('should create subscription if not exists', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
       const created = makeSubscription();
-      created.subscriptionId = 2;
+      created.subscriptionId = randomUUID();
 
       repoMock.create.mockResolvedValueOnce(created);
       const result = await service.create({
@@ -102,28 +103,30 @@ describe('SubscriptionService (unit)', () => {
 
   describe('confirm', () => {
     it('should confirm subscription', async () => {
+      const id = randomUUID();
       const confirmed = makeSubscription();
-      confirmed.subscriptionId = 4;
+      confirmed.subscriptionId = id;
 
       repoMock.confirm.mockResolvedValueOnce(confirmed);
       repoMock.confirm.mockResolvedValueOnce(confirmed);
 
-      const result = await service.confirm(4);
+      const result = await service.confirm(id);
 
-      expect(repoMock.confirm).toHaveBeenCalledWith(4);
+      expect(repoMock.confirm).toHaveBeenCalledWith(id);
       expect(result).toBe(confirmed);
     });
   });
 
   describe('delete', () => {
     it('should delete subscription', async () => {
+      const id = randomUUID();
       const deleted = makeSubscription();
-      deleted.subscriptionId = 5;
+      deleted.subscriptionId = id;
 
       repoMock.delete.mockResolvedValueOnce(deleted);
-      const result = await service.delete(5);
+      const result = await service.delete(id);
 
-      expect(repoMock.delete).toHaveBeenCalledWith(5);
+      expect(repoMock.delete).toHaveBeenCalledWith(id);
       expect(result).toBe(deleted);
     });
   });
