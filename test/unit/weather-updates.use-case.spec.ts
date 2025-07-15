@@ -1,4 +1,5 @@
 import { Test } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import { EmailConfig } from 'src/config/email.config';
 import {
   EmailInterface,
@@ -25,7 +26,7 @@ jest.mock('src/utils/notification/notification-builder', () => ({
 }));
 
 function makeSubscription(
-  id = 1,
+  id = randomUUID(),
   city = 'Kyiv',
   email = 'test@example.com',
 ): SubscriptionEntity {
@@ -119,8 +120,8 @@ describe('SendWeatherUpdatesUseCase', () => {
   describe('sendWeatherUpdates', () => {
     it('should send weather updates for all subscriptions with matching frequency', async () => {
       const subscriptions = [
-        makeSubscription(1, 'Kyiv', 'user1@example.com'),
-        makeSubscription(2, 'London', 'user2@example.com'),
+        makeSubscription(randomUUID(), 'Kyiv', 'user1@example.com'),
+        makeSubscription(randomUUID(), 'London', 'user2@example.com'),
       ];
       const weather = makeWeather();
 

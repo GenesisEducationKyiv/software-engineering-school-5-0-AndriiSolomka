@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import {
   TokenRepositoryInterface,
   TokenRepositoryToken,
@@ -14,8 +15,8 @@ jest.mock('src/utils/generator/random-generator', () => ({
 function makeToken(): TokenEntity {
   const now = new Date();
   return {
-    tokenId: 1,
-    subscriptionId: 123,
+    tokenId: randomUUID(),
+    subscriptionId: randomUUID(),
     token: 'mocked-token',
     createdAt: now,
     expiresAt: now,
@@ -49,12 +50,14 @@ describe('TokenUseCase', () => {
 
   describe('create', () => {
     it('should generate token and save it', async () => {
+      const id = randomUUID();
+
       repoMock.create.mockResolvedValueOnce(makeToken());
 
-      const result = await useCase.create(123);
+      const result = await useCase.create(id);
 
       expect(result).toBe('mocked-token');
-      expect(repoMock.create).toHaveBeenCalledWith('mocked-token', 123);
+      expect(repoMock.create).toHaveBeenCalledWith('mocked-token', id);
     });
   });
 

@@ -1,5 +1,6 @@
 import { ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import {
   SubscriptionRepositoryInterface,
   SubscriptionRepositoryToken,
@@ -13,7 +14,7 @@ import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscripti
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
   return {
-    subscriptionId: 1,
+    subscriptionId: randomUUID(),
     email: 'test@mail.com',
     city: 'Kyiv',
     frequency: Frequency.Daily,
@@ -80,7 +81,7 @@ describe('SubscriptionDomainUseCase', () => {
     it('should create subscription if not exists', async () => {
       repoMock.findOne.mockResolvedValueOnce(null);
       const created = makeSubscription();
-      created.subscriptionId = 2;
+      created.subscriptionId = randomUUID();
 
       repoMock.create.mockResolvedValueOnce(created);
       const result = await useCase.create({
@@ -101,28 +102,31 @@ describe('SubscriptionDomainUseCase', () => {
 
   describe('confirm', () => {
     it('should confirm subscription', async () => {
+      const id = randomUUID();
       const confirmed = makeSubscription();
-      confirmed.subscriptionId = 4;
+      confirmed.subscriptionId = id;
 
       repoMock.confirm.mockResolvedValueOnce(confirmed);
       repoMock.confirm.mockResolvedValueOnce(confirmed);
 
-      const result = await useCase.confirm(4);
+      const result = await useCase.confirm(id);
 
-      expect(repoMock.confirm).toHaveBeenCalledWith(4);
+      expect(repoMock.confirm).toHaveBeenCalledWith(id);
       expect(result).toBe(confirmed);
     });
   });
 
   describe('delete', () => {
     it('should delete subscription', async () => {
+      const id = randomUUID();
+
       const deleted = makeSubscription();
-      deleted.subscriptionId = 5;
+      deleted.subscriptionId = id;
 
       repoMock.delete.mockResolvedValueOnce(deleted);
-      const result = await useCase.delete(5);
+      const result = await useCase.delete(id);
 
-      expect(repoMock.delete).toHaveBeenCalledWith(5);
+      expect(repoMock.delete).toHaveBeenCalledWith(id);
       expect(result).toBe(deleted);
     });
   });

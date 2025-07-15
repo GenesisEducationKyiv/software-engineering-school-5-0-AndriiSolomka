@@ -1,4 +1,5 @@
 import { Test } from '@nestjs/testing';
+import { randomUUID } from 'crypto';
 import {
   EmailInterface,
   EmailToken,
@@ -9,7 +10,10 @@ import { SubscriptionDomainUseCase } from 'src/use-cases/subscription/subscripti
 import { SubscriptionHandlersUseCase } from 'src/use-cases/subscription/subscription-handler.use-case';
 import { TokenUseCase } from 'src/use-cases/token/token.use-case';
 
-function makeToken(id = 1, subscriptionId = 123): TokenEntity {
+function makeToken(
+  id = randomUUID(),
+  subscriptionId = randomUUID(),
+): TokenEntity {
   const now = new Date();
   return {
     tokenId: id,
@@ -82,7 +86,7 @@ describe('SubscriptionHandlersUseCase', () => {
       };
 
       const mockSubscription = {
-        subscriptionId: 123,
+        subscriptionId: randomUUID(),
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.Daily,
@@ -135,7 +139,7 @@ describe('SubscriptionHandlersUseCase', () => {
       tokenServiceMock.getEntity.mockResolvedValueOnce(tokenEntity);
 
       subServiceMock.confirm.mockResolvedValueOnce({
-        subscriptionId: 123,
+        subscriptionId: randomUUID(),
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.Daily,
@@ -174,7 +178,7 @@ describe('SubscriptionHandlersUseCase', () => {
 
       tokenServiceMock.getEntity.mockResolvedValueOnce(tokenEntity);
       subServiceMock.delete.mockResolvedValueOnce({
-        subscriptionId: 123,
+        subscriptionId: randomUUID(),
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.Daily,
