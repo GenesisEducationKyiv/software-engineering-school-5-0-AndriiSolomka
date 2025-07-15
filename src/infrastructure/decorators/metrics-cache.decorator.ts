@@ -47,7 +47,7 @@ export class MetricsCacheDecorator<T> {
       'getOrSet',
     );
     try {
-      const result = await this.decorated.getOrSet(key, fetchFn);
+      const result = await this.decorated.getOrCompute(key, fetchFn);
       end(CACHE_OPERATION_STATUS.SUCCESS);
       return result;
     } catch (error) {
