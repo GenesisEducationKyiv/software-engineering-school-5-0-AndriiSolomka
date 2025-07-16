@@ -16,3 +16,4 @@ jobs:
 
       - name: Run architecture tests
         run: npm run test:architecture
+        shell: bash
