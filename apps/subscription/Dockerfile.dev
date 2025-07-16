@@ -7,8 +7,6 @@ RUN npm ci
 
 COPY . .
 
-RUN npx prisma generate --schema ./apps/subscription/prisma/schema.prisma
-
 EXPOSE 5052
 
-CMD ["sh", "-c", "npx prisma migrate deploy --schema ./apps/subscription/prisma/schema.prisma && npm run start:subscription:dev"]
+CMD ["sh", "-c", "npm run subscription:migration && npm run start:subscription:dev"]

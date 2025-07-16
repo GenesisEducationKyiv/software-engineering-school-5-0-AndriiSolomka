@@ -25,4 +25,4 @@ RUN npm ci --only=production
 
 EXPOSE 5052
 
-CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma && node dist/apps/subscription/main.js"]
+CMD [ "node", "dist/apps/subscription/main.js"]

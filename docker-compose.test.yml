@@ -141,6 +141,7 @@ services:
         condition: service_started
       notification-test:
         condition: service_started
-    command: sh ./scripts/run-tests.sh
+    command:
+      ['sh', '-c', 'npm run subscription:migration', 'npm run test:integration']
     networks:
       - weather-api-test
