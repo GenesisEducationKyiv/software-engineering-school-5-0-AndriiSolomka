@@ -54,6 +54,7 @@ services:
     env_file:
       - apps/weather/.env
     ports:
+      - '3001:3001'
       - '5051:5051'
     volumes:
       - .:/app

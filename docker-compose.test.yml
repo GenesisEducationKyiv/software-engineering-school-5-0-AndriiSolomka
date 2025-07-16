@@ -41,6 +41,7 @@ services:
     env_file:
       - apps/weather/.env.test
     ports:
+      - '30001:3001'
       - '50051:5051'
     depends_on:
       redis-test:
