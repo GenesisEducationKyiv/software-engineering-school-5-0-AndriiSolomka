@@ -1,8 +1,7 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppModule } from 'apps/weather_api/src/app.module';
+import { AppModule } from 'apps/weather/src/app.module';
 import { Server } from 'http';
-import { setupApp } from 'libs/common/setup/setup';
 import { CacheMetricsService } from 'libs/infrastructure/cache/metrics/cache-metrics.service';
 import { CACHE_OPERATION_STATUS } from 'libs/infrastructure/cache/metrics/constants/metrics.constants';
 import * as request from 'supertest';
@@ -17,7 +16,6 @@ describe('MetricsService (integration)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    setupApp(app);
     await app.init();
 
     metricsService = app.get<CacheMetricsService>(CacheMetricsService);
@@ -37,7 +35,7 @@ describe('MetricsService (integration)', () => {
     metricsService.recordCacheHit('city', 'get');
 
     const response = await request(app.getHttpServer())
-      .get('/api/metrics')
+      .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(
@@ -53,7 +51,7 @@ describe('MetricsService (integration)', () => {
     metricsService.recordCacheMiss('city', 'getOrSet');
 
     const response = await request(app.getHttpServer())
-      .get('/api/metrics')
+      .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(
@@ -69,7 +67,7 @@ describe('MetricsService (integration)', () => {
     metricsService.setCacheSize('city', 5);
 
     const response = await request(app.getHttpServer())
-      .get('/api/metrics')
+      .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(
@@ -91,7 +89,7 @@ describe('MetricsService (integration)', () => {
     endTimer(CACHE_OPERATION_STATUS.SUCCESS);
 
     const response = await request(app.getHttpServer())
-      .get('/api/metrics')
+      .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(
@@ -121,7 +119,7 @@ describe('MetricsService (integration)', () => {
     errorTimer(CACHE_OPERATION_STATUS.ERROR);
 
     const response = await request(app.getHttpServer())
-      .get('/api/metrics')
+      .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(

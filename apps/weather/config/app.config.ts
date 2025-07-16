@@ -7,4 +7,10 @@ export class AppConfig {
     default: 5000,
   })
   port: number;
+
+  @Value('PORT_HTTP', {
+    parse: (val: string) => parseInt(val, 10),
+    default: 3001,
+  })
+  httpPort: number;
 }

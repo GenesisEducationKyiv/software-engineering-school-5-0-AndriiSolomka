@@ -8,23 +8,21 @@ import { AppConfig } from '../config/app.config';
 async function bootstrap() {
   ensureLogDirExists();
 
-  const appContext = await NestFactory.createApplicationContext(AppModule);
-  const config = appContext.get(AppConfig);
+  const app = await NestFactory.create(AppModule);
+  const config = app.get(AppConfig);
 
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'weather',
-        protoPath: 'libs/proto/weather.proto',
-        url: `0.0.0.0:${config.port}`,
-      },
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'weather',
+      protoPath: 'libs/proto/weather.proto',
+      url: `0.0.0.0:${config.port}`,
     },
-  );
+  });
 
-  await app.listen();
-  console.log(`Weather microservice is running on gRPC port ${config.port}`);
+  await app.startAllMicroservices();
+  await app.listen(config.httpPort);
+  console.log(`Weather app is running on port ${config.httpPort}`);
 }
 
 bootstrap().catch((error) => {
