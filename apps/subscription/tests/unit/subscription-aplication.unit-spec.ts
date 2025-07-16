@@ -7,8 +7,12 @@ import { SubscriptionParams } from 'apps/subscription/src/core/subscription/subs
 import { SubscriptionApplicationService } from 'apps/subscription/src/infrastructure/services/subscription-application.service';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
+import { randomUUID } from 'crypto';
 
-function makeToken(id = 1, subscriptionId = 123): TokenEntity {
+function makeToken(
+  id = randomUUID(),
+  subscriptionId = randomUUID(),
+): TokenEntity {
   const now = new Date();
   return {
     tokenId: id,
@@ -75,7 +79,7 @@ describe('SubscriptionApplicationService (unit)', () => {
       };
 
       const mockSubscription = {
-        subscriptionId: 123,
+        subscriptionId: randomUUID(),
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.daily,
@@ -121,7 +125,7 @@ describe('SubscriptionApplicationService (unit)', () => {
       tokenServiceMock.getEntity.mockResolvedValueOnce(tokenEntity);
 
       subServiceMock.confirm.mockResolvedValueOnce({
-        subscriptionId: 123,
+        subscriptionId: randomUUID(),
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.daily,
@@ -160,7 +164,7 @@ describe('SubscriptionApplicationService (unit)', () => {
 
       tokenServiceMock.getEntity.mockResolvedValueOnce(tokenEntity);
       subServiceMock.delete.mockResolvedValueOnce({
-        subscriptionId: 123,
+        subscriptionId: randomUUID(),
         email: 'test@example.com',
         city: 'Kyiv',
         frequency: Frequency.daily,
@@ -195,7 +199,7 @@ describe('SubscriptionApplicationService (unit)', () => {
       const frequency = Frequency.daily;
       const mockSubs = [
         {
-          subscriptionId: 1,
+          subscriptionId: randomUUID(),
           email: 'a@example.com',
           city: 'Kyiv',
           frequency,
@@ -205,7 +209,7 @@ describe('SubscriptionApplicationService (unit)', () => {
           tokens: [],
         },
         {
-          subscriptionId: 2,
+          subscriptionId: randomUUID(),
           email: 'b@example.com',
           city: 'Lviv',
           frequency,
