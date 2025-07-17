@@ -3,8 +3,8 @@ import {
   EmailInterface,
   EmailToken,
 } from 'src/infrastructure/email/core/email.interface';
-
-import { SendConfirmationEmailDto, SendWeatherEmailDto } from './dto/email.dto';
+import { SendConfirmationEmailDto } from './dto/send-confirmation-email.dto';
+import { SendWeatherEmailDto } from './dto/send-weather-email.dto';
 
 @Controller('/internal/email')
 export class EmailInternalController {
