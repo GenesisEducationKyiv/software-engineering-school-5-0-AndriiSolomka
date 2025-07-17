@@ -8,6 +8,8 @@ RUN npm ci
 
 COPY . .
 
+RUN npx prisma generate --schema ./apps/subscription/prisma/schema.prisma
+
 RUN npm run build subscription
 
 CMD ["sh", "-c", "npm run subscription:migration && npm run start:subscription"]

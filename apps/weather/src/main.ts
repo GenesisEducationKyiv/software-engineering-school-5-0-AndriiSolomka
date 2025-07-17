@@ -22,7 +22,6 @@ async function bootstrap() {
 
   await app.startAllMicroservices();
   await app.listen(config.httpPort);
-  console.log(`Weather app is running on port ${config.httpPort}`);
 }
 
 bootstrap().catch((error) => {
