@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmailConfig } from 'apps/notification/config/email.config';
 import { NotificationInterface } from 'apps/notification/src/core/notification.interface';
-import { Frequency } from 'apps/notification/src/core/subscription.interface';
+import { Frequency } from 'apps/notification/src/subscription/core/subscription.interface';
 import { EmailClientService } from 'apps/notification/src/infrastructure/clients/email.grpc.client';
 import { SubscriptionClientService } from 'apps/notification/src/infrastructure/clients/subscription.grpc.client';
 import { WeatherClientService } from 'apps/notification/src/infrastructure/clients/weather.grpc.client';
-import { NotificationService } from 'apps/notification/src/infrastructure/services/notification.service';
+import { NotificationService } from 'apps/notification/src/notification/infrastructure/services/notification.service';
 import * as notificationBuilder from 'libs/utils/notification/notification-builder';
 
 jest.mock('libs/utils/notification/notification-builder', () => ({

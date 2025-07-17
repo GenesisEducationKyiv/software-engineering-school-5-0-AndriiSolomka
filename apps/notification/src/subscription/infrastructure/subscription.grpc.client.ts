@@ -6,7 +6,7 @@ import {
   SUBSCRIPTION_PACKAGE,
   SubscriptionEntity,
   SubscriptionInterface,
-} from '../../core/subscription.interface';
+} from '../../subscription/core/subscription.interface';
 
 @Injectable()
 export class SubscriptionClientService

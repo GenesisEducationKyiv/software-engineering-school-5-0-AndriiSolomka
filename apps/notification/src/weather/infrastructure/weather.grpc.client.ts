@@ -5,7 +5,7 @@ import {
   WEATHER_PACKAGE,
   WeatherData,
   WeatherInterface,
-} from '../../core/weather.interface';
+} from '../../weather/core/weather.interface';
 
 @Injectable()
 export class WeatherClientService implements OnModuleInit {

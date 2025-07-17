@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { EmailConfig } from 'apps/notification/config/email.config';
+import { EmailClientService } from 'apps/notification/src/email/infrastructure/email.grpc.client';
+import { SubscriptionClientService } from 'apps/notification/src/subscription/infrastructure/subscription.grpc.client';
+import { WeatherClientService } from 'apps/notification/src/weather/infrastructure/weather.grpc.client';
 import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
 import { buildWeatherNotification } from 'libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
-import { EmailClientService } from '../clients/email.grpc.client';
-import { SubscriptionClientService } from '../clients/subscription.grpc.client';
-import { WeatherClientService } from '../clients/weather.grpc.client';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {

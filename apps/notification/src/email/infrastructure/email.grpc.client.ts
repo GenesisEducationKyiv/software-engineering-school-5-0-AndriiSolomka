@@ -5,7 +5,7 @@ import {
   EMAIL_PACKAGE,
   EmailInterface,
   EmailPayload,
-} from '../../core/email.interface';
+} from '../../email/core/email.interface';
 
 @Injectable()
 export class EmailClientService implements OnModuleInit {
