@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { EmailInterface } from 'src/infrastructure/email/core/email.interface';
 import { AppConfig } from 'src/libs/config/app.config';
 import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
+import { SendWeatherEmailDto } from './interface/controllers/dto/send-weather-email.dto';
 
-import { SendWeatherEmailDto } from './interface/controllers/dto/email.dto';
 
 @Injectable()
 export class EmailApiClient implements EmailInterface {

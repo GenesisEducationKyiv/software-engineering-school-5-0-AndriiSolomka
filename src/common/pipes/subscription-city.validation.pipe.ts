@@ -3,16 +3,6 @@ import { SubscriptionParams } from 'src/infrastructure/subscription-management/c
 import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
 
 @Injectable()
-export class WeatherCityValidationPipe implements PipeTransform {
-  constructor(private readonly geocodingService: GeocodingService) {}
-
-  async transform(value: string) {
-    await this.geocodingService.findCity(value);
-    return value;
-  }
-}
-
-@Injectable()
 export class SubscriptionCityValidationPipe implements PipeTransform {
   constructor(private readonly geocodingService: GeocodingService) {}
 
