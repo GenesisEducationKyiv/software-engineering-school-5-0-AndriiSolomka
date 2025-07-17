@@ -18,9 +18,11 @@ export const KAFKA_PUBLISHER = Symbol('KAFKA_PUBLISHER');
             },
           },
         }),
+
         inject: [KafkaConfig],
       },
     ]),
   ],
+  exports: [ClientsModule],
 })
 export class KafkaPublisherModule {}
