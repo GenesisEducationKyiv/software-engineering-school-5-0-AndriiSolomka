@@ -2,7 +2,7 @@ import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
-import { EmailModule } from './email/email.module';
+import { KafkaPublisherModule } from './kafka/kafka.module';
 import { NotificationModule } from './notification/notification.module';
 import { SubscriptionModule } from './subscription/subscription.module';
 import { WeatherModule } from './weather/weather.module';
@@ -13,8 +13,8 @@ import { WeatherModule } from './weather/weather.module';
     HttpClientModule,
     WeatherModule,
     SubscriptionModule,
-    EmailModule,
     NotificationModule,
+    KafkaPublisherModule,
   ],
 })
 export class AppModule {}

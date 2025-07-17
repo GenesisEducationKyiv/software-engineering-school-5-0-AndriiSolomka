@@ -12,7 +12,6 @@ export class KafkaConfig {
   port: number;
 
   @Value('KAFKA_CLIENT_ID', {
-    parse: (val: string) => parseInt(val, 10),
     default: 'notification-producer',
   })
   clientId: string;

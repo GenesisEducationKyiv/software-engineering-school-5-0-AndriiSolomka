@@ -94,3 +94,22 @@ services:
         condition: service_started
     networks:
       - weather-api
+
+  notification:
+    container_name: notification
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile
+    env_file:
+      - apps/notification/.env
+    ports:
+      - '5053:5053'
+    depends_on:
+      weather:
+        condition: service_started
+      subscription:
+        condition: service_started
+      email:
+        condition: service_started
+    networks:
+      - weather-api
