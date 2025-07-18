@@ -4,27 +4,12 @@ import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
 
 import { AppModule } from './app.module';
 import { AppConfig } from '../config/app.config';
-import { KafkaConfig } from '../config/kafka.config';
 
 async function bootstrap() {
   ensureLogDirExists();
 
   const app = await NestFactory.create(AppModule);
   const config = app.get(AppConfig);
-  const kafkaConfig = app.get(KafkaConfig);
-
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        clientId: kafkaConfig.clientId,
-        brokers: [`${kafkaConfig.host}:${kafkaConfig.port}`],
-      },
-      consumer: {
-        groupId: kafkaConfig.groupId,
-      },
-    },
-  });
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
