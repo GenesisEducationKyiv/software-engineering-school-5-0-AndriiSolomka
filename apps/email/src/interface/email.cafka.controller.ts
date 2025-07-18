@@ -14,6 +14,8 @@ export class EmailKafkaController {
 
   @EventPattern(EMAIL_EVENTS.SENDED)
   async handleEmailSend(@Payload() data: EmailPayload) {
+    console.log(`Received email payload: ${JSON.stringify(data)}`);
+
     await this.emailService.sendWeatherEmail(data);
   }
 }

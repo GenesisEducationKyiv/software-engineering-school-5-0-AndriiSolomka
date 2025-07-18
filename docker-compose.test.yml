@@ -73,6 +73,9 @@ services:
       - apps/email/.env.test
     ports:
       - '50054:5054'
+    depends_on:
+      notification-test:
+        condition: service_started
     networks:
       - weather-api-test
 
@@ -105,14 +108,35 @@ services:
     ports:
       - '50053:5055'
     depends_on:
-      email-test:
-        condition: service_started
+      kafka-test:
+        condition: service_healthy
       subscription-test:
         condition: service_started
       weather-test:
         condition: service_started
     networks:
       - weather-api-test
+
+  kafka-test:
+    image: bitnami/kafka:latest
+    networks:
+      - weather-api-test
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-test:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          '/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka-test:9092 --list',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   test-runner:
     image: node:22.13.0
@@ -141,6 +165,8 @@ services:
         condition: service_started
       notification-test:
         condition: service_started
+      kafka-test:
+        condition: service_healthy
     command: sh -c "npm ci && npm run subscription:migration && npm run test:integration"
     networks:
       - weather-api-test

@@ -44,6 +44,7 @@
     "test:notification:architecture": "jest --config apps/notification/tests/jest-architecture.json",
     "test:email:unit": "jest --config apps/email/tests/jest-unit.json",
     "test:email:architecture": "jest --config apps/email/tests/jest-architecture.json",
+    "test:email:integration": "jest --config apps/email/tests/jest-integration.json",
     "subscription:migration": "npx prisma generate --schema ./apps/subscription/prisma/schema.prisma && npx prisma migrate deploy --schema ./apps/subscription/prisma/schema.prisma"
   },
   "dependencies": {
