@@ -25,7 +25,7 @@ export class NotificationService implements NotificationInterface {
   }
 
   async sendWeatherUpdates(frequency: Frequency): Promise<void> {
-    const subscriptions = await this.subService.getByFrequency(frequency);
+    const { subscriptions } = await this.subService.getByFrequency(frequency);
 
     for (const sub of subscriptions) {
       const weather = await this.weatherService.getWeather(sub.city);

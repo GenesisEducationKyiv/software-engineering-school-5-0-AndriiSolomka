@@ -1,3 +1,5 @@
+import { SubsWithToken } from './subscription.entity';
+
 export const SUBSCRIPTION_PACKAGE = Symbol('SUBSCRIPTION_PACKAGE');
 
 export enum Frequency {
@@ -5,17 +7,17 @@ export enum Frequency {
   daily = 'daily',
 }
 
-export interface SubscriptionEntity {
+export type GetByFrequencyRequest = {
+  frequency: Frequency;
+};
+
+export type SubscriptionPayload = {
   email: string;
   city: string;
-  tokens: TokenEntity[];
-}
-
-export interface TokenEntity {
-  token: string;
-}
+  frequency: Frequency;
+};
 
 export interface SubscriptionInterface {
-  getByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]>;
+  getByFrequency(request: GetByFrequencyRequest): Promise<SubsWithToken>;
   deleteUnconfirmed(): Promise<{ count: number }>;
 }

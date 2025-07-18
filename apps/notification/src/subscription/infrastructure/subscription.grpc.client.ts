@@ -1,18 +1,18 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { GrpcToObservable } from 'libs/common/types/observable';
+import { firstValueFrom } from 'rxjs';
 
 import {
   Frequency,
   SUBSCRIPTION_PACKAGE,
-  SubscriptionEntity,
   SubscriptionInterface,
 } from '../../subscription/core/subscription.interface';
+import { SubsWithToken } from '../core/subscription.entity';
 
 @Injectable()
-export class SubscriptionClientService
-  implements OnModuleInit, SubscriptionInterface
-{
-  private subscriptionService: SubscriptionInterface;
+export class SubscriptionClientService implements OnModuleInit {
+  private subscriptionService: GrpcToObservable<SubscriptionInterface>;
 
   constructor(
     @Inject(SUBSCRIPTION_PACKAGE)
@@ -20,16 +20,18 @@ export class SubscriptionClientService
   ) {}
 
   onModuleInit() {
-    this.subscriptionService = this.client.getService<SubscriptionInterface>(
-      'SubscriptionService',
+    this.subscriptionService = this.client.getService<
+      GrpcToObservable<SubscriptionInterface>
+    >('SubscriptionService');
+  }
+
+  async getByFrequency(frequency: Frequency): Promise<SubsWithToken> {
+    return firstValueFrom(
+      this.subscriptionService.getByFrequency({ frequency }),
     );
   }
 
-  async getByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]> {
-    return this.subscriptionService.getByFrequency(frequency);
-  }
-
   async deleteUnconfirmed(): Promise<{ count: number }> {
-    return this.subscriptionService.deleteUnconfirmed();
+    return firstValueFrom(this.subscriptionService.deleteUnconfirmed());
   }
 }
