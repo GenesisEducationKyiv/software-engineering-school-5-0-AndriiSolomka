@@ -1,9 +1,6 @@
 import { Consumer, EachMessagePayload, Kafka } from 'kafkajs';
 import { KafkaConsumerConfig } from 'libs/config/kafka.config';
-import {
-  KAFKA_CONSUMER,
-  KafkaConsumerHandler,
-} from 'libs/core/kafka/kafka.interface';
+import { KAFKA_CONSUMER, KafkaConsumer } from 'libs/core/kafka/kafka.interface';
 
 export function createKafkaConsumerProvider<T>(
   topic: string,
@@ -13,7 +10,7 @@ export function createKafkaConsumerProvider<T>(
     provide: KAFKA_CONSUMER,
     useFactory: async (
       config: KafkaConsumerConfig,
-      handler: KafkaConsumerHandler<T>,
+      subscriber: KafkaConsumer<T>,
     ): Promise<Consumer> => {
       const kafka = new Kafka({
         clientId: config.clientId,
@@ -29,7 +26,7 @@ export function createKafkaConsumerProvider<T>(
           if (!message.value) return;
           try {
             const parsed = JSON.parse(message.value.toString()) as T;
-            await handler(parsed);
+            await subscriber.handleEvent(parsed);
           } catch (err) {
             console.error('Kafka consumer error:', err);
           }

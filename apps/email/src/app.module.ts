@@ -7,8 +7,11 @@ import { createKafkaConsumerProvider } from 'libs/infrastructure/kafka/kafka.con
 import { EmailTransportToken } from './core/email-transport.interface';
 import { EmailPayload, EmailToken } from './core/email.interface';
 import { NodemailerService } from './infrastructure/providers/nodemailer.provider';
+import { EmailKafkaConsumer } from './infrastructure/services/email.handler';
 import { EmailService } from './infrastructure/services/email.service';
 import { EmailController } from './interface/email.controller';
+
+export const EmailKafkaToken = Symbol('EmailKafkaHandler');
 
 @Module({
   imports: [ConfigifyModule.forRootAsync({}), HttpClientModule],
@@ -21,7 +24,16 @@ import { EmailController } from './interface/email.controller';
       provide: EmailToken,
       useClass: EmailService,
     },
-    createKafkaConsumerProvider<EmailPayload>(EMAIL_EVENTS.SENDED, EmailToken),
+
+    {
+      provide: EmailKafkaToken,
+      useClass: EmailKafkaConsumer,
+    },
+
+    createKafkaConsumerProvider<EmailPayload>(
+      EMAIL_EVENTS.SENDED,
+      EmailKafkaToken,
+    ),
   ],
   controllers: [EmailController],
 })
