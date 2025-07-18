@@ -3,8 +3,8 @@ import { EmailConfig } from 'apps/email/config/email.config';
 import {
   EmailTransportInterface,
   EmailTransportToken,
-} from 'apps/email/src/email/core/email-transport.interface';
-import { NodemailerService } from 'apps/email/src/email/infrastructure/providers/nodemailer.provider';
+} from 'apps/email/src/core/email-transport.interface';
+import { NodemailerService } from 'apps/email/src/infrastructure/providers/nodemailer.provider';
 import * as nodemailer from 'nodemailer';
 
 jest.mock('nodemailer');
