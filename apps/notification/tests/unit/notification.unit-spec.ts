@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmailConfig } from 'apps/notification/config/email.config';
 import { NotificationInterface } from 'apps/notification/src/notification/core/notification.interface';
-import { EmailPublisher } from 'apps/notification/src/notification/infrastructure/publisher/email.publisher';
 import { NotificationService } from 'apps/notification/src/notification/infrastructure/services/notification.service';
 import { SubscriptionClientService } from 'apps/notification/src/subscription/infrastructure/subscription.grpc.client';
 import { WeatherClientService } from 'apps/notification/src/weather/infrastructure/weather.grpc.client';
 import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
+import { EMAIL_EVENTS } from 'libs/common/events/email';
+import { KafkaPublisherService } from 'libs/infrastructure/kafka/kafka.publisher';
 import * as notificationBuilder from 'libs/utils/notification/notification-builder';
 
 jest.mock('libs/utils/notification/notification-builder', () => ({
@@ -24,7 +25,7 @@ describe('NotificationService (unit)', () => {
   let service: NotificationInterface;
   const mockSubService = { getByFrequency: jest.fn() };
   const mockWeatherService = { getWeather: jest.fn() };
-  const mockEmailPublisher = { publishEmail: jest.fn() };
+  const mockKafkaPublisher = { emit: jest.fn() };
   const mockEmailConfig = { unsubscribeLink: 'http://unsubscribe' };
 
   beforeEach(async () => {
@@ -46,8 +47,8 @@ describe('NotificationService (unit)', () => {
           useValue: mockWeatherService,
         },
         {
-          provide: EmailPublisher,
-          useValue: mockEmailPublisher,
+          provide: KafkaPublisherService,
+          useValue: mockKafkaPublisher,
         },
         {
           provide: EmailConfig,
@@ -97,17 +98,23 @@ describe('NotificationService (unit)', () => {
       mockEmailConfig.unsubscribeLink,
     );
 
-    expect(mockEmailPublisher.publishEmail).toHaveBeenNthCalledWith(
+    expect(mockKafkaPublisher.emit).toHaveBeenNthCalledWith(
       1,
-      'user1@mail.com',
-      'Weather Update for City',
-      'Weather details...',
+      EMAIL_EVENTS.SENDED,
+      {
+        email: 'user1@mail.com',
+        subject: 'Weather Update for City',
+        text: 'Weather details...',
+      },
     );
-    expect(mockEmailPublisher.publishEmail).toHaveBeenNthCalledWith(
+    expect(mockKafkaPublisher.emit).toHaveBeenNthCalledWith(
       2,
-      'user2@mail.com',
-      'Weather Update for City',
-      'Weather details...',
+      EMAIL_EVENTS.SENDED,
+      {
+        email: 'user2@mail.com',
+        subject: 'Weather Update for City',
+        text: 'Weather details...',
+      },
     );
   });
 
@@ -119,6 +126,6 @@ describe('NotificationService (unit)', () => {
     expect(mockSubService.getByFrequency).toHaveBeenCalledWith(Frequency.daily);
     expect(mockWeatherService.getWeather).not.toHaveBeenCalled();
     expect(notificationBuilder.buildWeatherNotification).not.toHaveBeenCalled();
-    expect(mockEmailPublisher.publishEmail).not.toHaveBeenCalled();
+    expect(mockKafkaPublisher.emit).not.toHaveBeenCalled();
   });
 });
