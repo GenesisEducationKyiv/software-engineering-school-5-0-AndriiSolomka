@@ -5,7 +5,7 @@ import { EmailToken } from 'apps/email/src/email/core/email.interface';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
 import { KafkaConsumerModule } from '../kafka/kafka.module';
-import { EmailKafkaConsumer } from './infrastructure/consumers/email.kafka.consumer';
+import { EmailConsumer } from './infrastructure/consumers/email.consumer';
 import { NodemailerService } from './infrastructure/providers/nodemailer.provider';
 import { EmailService } from './infrastructure/services/email.service';
 import { EmailController } from './interface/email.controller';
@@ -26,7 +26,7 @@ import { EmailController } from './interface/email.controller';
       provide: EmailToken,
       useClass: EmailService,
     },
-    EmailKafkaConsumer,
+    EmailConsumer,
   ],
 })
 export class EmailModule {}

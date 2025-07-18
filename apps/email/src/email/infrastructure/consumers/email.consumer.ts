@@ -7,7 +7,7 @@ import { EmailPayload, EmailToken } from '../../core/email.interface';
 import { EmailService } from '../services/email.service';
 
 @Injectable()
-export class EmailKafkaConsumer implements OnModuleInit {
+export class EmailConsumer implements OnModuleInit {
   constructor(
     @Inject(KAFKA_CONSUMER)
     private readonly kafkaConsumer: ClientKafka,
