@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmailConfig } from 'apps/email/config/email.config';
-import { EmailTransportToken } from 'apps/email/src/core/email-transport.interface';
+import { EmailTransportToken } from 'apps/email/src/email/core/email-transport.interface';
 import {
   EmailInterface,
   EmailToken,
-} from 'apps/email/src/core/email.interface';
-import { EmailService } from 'apps/email/src/infrastructure/services/email.service';
+} from 'apps/email/src/email/core/email.interface';
+import { EmailService } from 'apps/email/src/email/infrastructure/services/email.service';
 
 describe('EmailService', () => {
   let service: EmailInterface;

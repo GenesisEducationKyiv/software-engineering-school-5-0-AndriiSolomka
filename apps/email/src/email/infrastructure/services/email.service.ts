@@ -3,11 +3,11 @@ import { EmailConfig } from 'apps/email/config/email.config';
 import {
   EmailTransportInterface,
   EmailTransportToken,
-} from 'apps/email/src/core/email-transport.interface';
+} from 'apps/email/src/email/core/email-transport.interface';
 import {
   EmailInterface,
   EmailPayload,
-} from 'apps/email/src/core/email.interface';
+} from 'apps/email/src/email/core/email.interface';
 
 enum EMAIL {
   SUBJECT = 'Subscription Confirmation',

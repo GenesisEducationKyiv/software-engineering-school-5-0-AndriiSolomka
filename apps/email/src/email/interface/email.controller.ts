@@ -3,7 +3,7 @@ import { GrpcMethod, GrpcService } from '@nestjs/microservices';
 import {
   EmailInterface,
   EmailToken,
-} from 'apps/email/src/core/email.interface';
+} from 'apps/email/src/email/core/email.interface';
 import {
   SendConfirmationEmailRequest,
   SendWeatherEmailRequest,

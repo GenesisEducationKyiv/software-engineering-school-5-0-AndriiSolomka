@@ -6,7 +6,7 @@ import {
   Transport,
 } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
-import { EmailToken } from 'apps/email/src/core/email.interface';
+import { EmailToken } from 'apps/email/src/email/core/email.interface';
 import { EMAIL_EVENTS } from 'libs/common/events/email';
 
 describe('EmailConsumer Kafka Integration', () => {
