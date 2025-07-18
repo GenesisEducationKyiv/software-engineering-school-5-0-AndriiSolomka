@@ -1,7 +1,7 @@
 import { Configuration, Value } from '@itgorillaz/configify';
 
 @Configuration()
-export class KafkaConfig {
+export class KafkaPublisherConfig {
   @Value('KAFKA_HOST', { default: 'localhost' })
   host: string;
 
@@ -12,7 +12,12 @@ export class KafkaConfig {
   port: number;
 
   @Value('KAFKA_CLIENT_ID', {
-    default: 'notification-producer',
+    default: 'email-consumer',
   })
   clientId: string;
+
+  @Value('KAFKA_GROUP_ID', {
+    default: 'email-group',
+  })
+  groupId: string;
 }

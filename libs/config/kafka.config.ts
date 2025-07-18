@@ -1,7 +1,7 @@
 import { Configuration, Value } from '@itgorillaz/configify';
 
 @Configuration()
-export class KafkaConfig {
+export class KafkaConsumerConfig {
   @Value('KAFKA_HOST', { default: 'localhost' })
   host: string;
 

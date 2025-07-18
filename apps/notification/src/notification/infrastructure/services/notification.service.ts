@@ -3,17 +3,18 @@ import { EmailConfig } from 'apps/notification/config/email.config';
 import { SubscriptionClientService } from 'apps/notification/src/subscription/infrastructure/subscription.grpc.client';
 import { WeatherClientService } from 'apps/notification/src/weather/infrastructure/weather.grpc.client';
 import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
+import { EMAIL_EVENTS } from 'libs/common/events/email';
+import { KafkaPublisherService } from 'libs/infrastructure/kafka/kafka.publisher';
 import { buildWeatherNotification } from 'libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
-import { EmailPublisher } from '../publisher/email.publisher';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {
   constructor(
     private readonly subService: SubscriptionClientService,
     private readonly weatherService: WeatherClientService,
-    private readonly emailPublisher: EmailPublisher,
+    private readonly kafka: KafkaPublisherService,
     private readonly emailConfig: EmailConfig,
   ) {}
 
@@ -30,7 +31,11 @@ export class NotificationService implements NotificationInterface {
 
       console.log(`Sending weather update to ${sub.email}: ${subject}`);
 
-      await this.emailPublisher.publishEmail(sub.email, subject, text);
+      await this.kafka.emit(EMAIL_EVENTS.SENDED, {
+        email: sub.email,
+        subject,
+        text,
+      });
     }
   }
 }
