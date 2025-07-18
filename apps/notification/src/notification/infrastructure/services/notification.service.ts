@@ -6,14 +6,14 @@ import { Frequency } from 'apps/subscription/src/core/entities/subscription.enti
 import { buildWeatherNotification } from 'libs/utils/notification/notification-builder';
 
 import { NotificationInterface } from '../../core/notification.interface';
-import { EmailPublisherService } from '../publisher/email.publisher';
+import { EmailPublisher } from '../publisher/email.publisher';
 
 @Injectable()
 export class NotificationService implements NotificationInterface {
   constructor(
     private readonly subService: SubscriptionClientService,
     private readonly weatherService: WeatherClientService,
-    private readonly emailPublisher: EmailPublisherService,
+    private readonly emailPublisher: EmailPublisher,
     private readonly emailConfig: EmailConfig,
   ) {}
 
