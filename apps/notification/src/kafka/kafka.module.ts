@@ -16,6 +16,10 @@ export const KAFKA_PUBLISHER = Symbol('KAFKA_PUBLISHER');
               clientId: config.clientId,
               brokers: [`${config.host}:${config.port}`],
             },
+            producer: {
+              allowAutoTopicCreation: true,
+            },
+            producerOnlyMode: true,
           },
         }),
 
