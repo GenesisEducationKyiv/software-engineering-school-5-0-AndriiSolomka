@@ -1,20 +1,30 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
-import { ClientKafka } from '@nestjs/microservices';
-import { KAFKA_PUBLISHER } from 'apps/notification/src/kafka/kafka.module';
+import { Inject, Injectable, OnModuleDestroy } from '@nestjs/common';
+import { KAFKA_PUBLISHER } from 'apps/notification/src/kafka/kafka.producer';
+import { Producer } from 'kafkajs';
 import { EMAIL_EVENTS } from 'libs/common/events/email';
 
 @Injectable()
-export class EmailPublisher implements OnModuleInit {
+export class EmailPublisher implements OnModuleDestroy {
   constructor(
     @Inject(KAFKA_PUBLISHER)
-    private readonly kafkaClient: ClientKafka,
+    private readonly kafkaProducer: Producer,
   ) {}
 
-  async onModuleInit() {
-    await this.kafkaClient.connect();
+  async onModuleDestroy() {
+    await this.kafkaProducer.disconnect();
   }
 
-  publishEmail(email: string, subject: string, text: string) {
-    this.kafkaClient.emit(EMAIL_EVENTS.SENDED, { email, subject, text });
+  async publishEmail(email: string, subject: string, text: string) {
+    console.log(`Publishing email to Kafka: ${email}, subject: ${subject}`);
+
+    await this.kafkaProducer.send({
+      topic: EMAIL_EVENTS.SENDED,
+      messages: [
+        {
+          key: email,
+          value: JSON.stringify({ email, subject, text }),
+        },
+      ],
+    });
   }
 }

@@ -28,7 +28,9 @@ export class NotificationService implements NotificationInterface {
         this.emailConfig.unsubscribeLink,
       );
 
-      this.emailPublisher.publishEmail(sub.email, subject, text);
+      console.log(`Sending weather update to ${sub.email}: ${subject}`);
+
+      await this.emailPublisher.publishEmail(sub.email, subject, text);
     }
   }
 }

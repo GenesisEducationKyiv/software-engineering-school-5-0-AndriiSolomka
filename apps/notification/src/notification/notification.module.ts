@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 
-import { KafkaPublisherModule } from '../kafka/kafka.module';
+import { KafkaPublisherModule } from '../kafka/kafka.publisher.module';
 import { SubscriptionModule } from '../subscription/subscription.module';
 import { WeatherModule } from '../weather/weather.module';
 import { EmailPublisher } from './infrastructure/publisher/email.publisher';
