@@ -12,14 +12,12 @@ export class KafkaConfig {
   port: number;
 
   @Value('KAFKA_CLIENT_ID', {
-    parse: (val: string) => parseInt(val, 10),
-    default: 'notification-producer',
+    default: 'email-consumer',
   })
   clientId: string;
 
   @Value('KAFKA_GROUP_ID', {
-    parse: (val: string) => parseInt(val, 10),
-    default: 'notification-producer',
+    default: 'email-group',
   })
   groupId: string;
 }

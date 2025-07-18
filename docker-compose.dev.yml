@@ -99,7 +99,7 @@ services:
       - notification-data:/app/node_modules
     depends_on:
       kafka:
-        condition: service_started
+        condition: service_healthy
       weather:
         condition: service_started
       subscription:
@@ -141,6 +141,9 @@ services:
     volumes:
       - .:/app
       - email-data:/app/node_modules
+    depends_on:
+      kafka:
+        condition: service_healthy
     networks:
       - weather-api-dev
 
@@ -165,3 +168,24 @@ services:
       - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
       - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
       - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          '/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - '8080:8080'
+    networks:
+      - weather-api-dev
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - DYNAMIC_CONFIG_ENABLED=true

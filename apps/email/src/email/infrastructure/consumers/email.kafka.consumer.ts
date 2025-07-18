@@ -3,7 +3,7 @@ import { ClientKafka, EventPattern, Payload } from '@nestjs/microservices';
 import { KAFKA_CONSUMER } from 'apps/email/src/kafka/kafka.module';
 import { EMAIL_EVENTS } from 'libs/common/events/email';
 
-import { EmailPayload } from '../../core/email.interface';
+import { EmailPayload, EmailToken } from '../../core/email.interface';
 import { EmailService } from '../services/email.service';
 
 @Injectable()
@@ -11,6 +11,7 @@ export class EmailKafkaConsumer implements OnModuleInit {
   constructor(
     @Inject(KAFKA_CONSUMER)
     private readonly kafkaConsumer: ClientKafka,
+    @Inject(EmailToken)
     private readonly emailService: EmailService,
   ) {}
 

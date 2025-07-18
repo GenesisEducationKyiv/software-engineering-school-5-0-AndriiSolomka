@@ -40,6 +40,8 @@ export class NotificationService implements NotificationInterface {
         subject,
         text,
       });
+
+      console.log(`Weather update sent to ${sub.email} for city ${sub.city}`);
     }
   }
 }
