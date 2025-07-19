@@ -29,6 +29,7 @@ export function createKafkaConsumerProvider<T>(
             await subscriber.handleEvent(parsed);
           } catch (err) {
             console.error('Kafka consumer error:', err);
+            throw err;
           }
         },
       });
