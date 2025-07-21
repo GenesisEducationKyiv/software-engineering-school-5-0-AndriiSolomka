@@ -1,5 +1,5 @@
 export interface CacheInterface<T> {
   get(key: string): Promise<T | null>;
   set(key: string, value: T): Promise<void>;
-  getOrSet(key: string, fetchFn: () => Promise<T>): Promise<T>;
+  getOrCompute(key: string, fetchFn: () => Promise<T>): Promise<T>;
 }

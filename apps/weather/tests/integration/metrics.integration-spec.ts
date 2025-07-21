@@ -48,7 +48,7 @@ describe('MetricsService (integration)', () => {
 
   it('should record cache misses', async () => {
     metricsService.recordCacheMiss('weather', 'get');
-    metricsService.recordCacheMiss('city', 'getOrSet');
+    metricsService.recordCacheMiss('city', 'getOrCompute');
 
     const response = await request(app.getHttpServer())
       .get('/metrics')
@@ -58,7 +58,7 @@ describe('MetricsService (integration)', () => {
       'cache_miss_total{cache_type="weather",method="get",app="weather-api"}',
     );
     expect(response.text).toContain(
-      'cache_miss_total{cache_type="city",method="getOrSet",app="weather-api"}',
+      'cache_miss_total{cache_type="city",method="getOrCompute",app="weather-api"}',
     );
   });
 

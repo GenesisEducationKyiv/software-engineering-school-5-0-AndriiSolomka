@@ -13,7 +13,7 @@ export class WeatherCacheProxyService implements WeatherInterface {
   ) {}
 
   async getWeather(city: string): Promise<WeatherData> {
-    return this.cache.getOrSet(city, () =>
+    return this.cache.getOrCompute(city, () =>
       this.weatherProvider.getWeather(city),
     );
   }

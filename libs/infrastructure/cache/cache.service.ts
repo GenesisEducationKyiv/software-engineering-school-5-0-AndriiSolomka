@@ -33,7 +33,7 @@ export class CacheService<T> implements CacheInterface<T> {
     );
   }
 
-  async getOrSet(key: string, fetchFn: () => Promise<T>): Promise<T> {
+  async getOrCompute(key: string, fetchFn: () => Promise<T>): Promise<T> {
     const cached = await this.get(key);
     if (cached) return cached;
 

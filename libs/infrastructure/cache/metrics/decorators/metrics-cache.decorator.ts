@@ -41,13 +41,13 @@ export class MetricsCacheDecorator<T> {
     }
   }
 
-  async getOrSet(key: string, fetchFn: () => Promise<T>): Promise<T> {
+  async getOrCompute(key: string, fetchFn: () => Promise<T>): Promise<T> {
     const end = this.metrics.createCacheOperationStopper(
       this.cacheType,
-      'getOrSet',
+      'getOrCompute',
     );
     try {
-      const result = await this.decorated.getOrSet(key, fetchFn);
+      const result = await this.decorated.getOrCompute(key, fetchFn);
       end(CACHE_OPERATION_STATUS.SUCCESS);
       return result;
     } catch (error) {

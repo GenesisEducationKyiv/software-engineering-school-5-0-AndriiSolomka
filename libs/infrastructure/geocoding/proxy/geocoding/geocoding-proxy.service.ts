@@ -14,7 +14,7 @@ export class GeocodingCacheProxyService implements GeocodingInterface {
   ) {}
 
   async findCity(city: string): Promise<City> {
-    return this.cache.getOrSet(city, () => this.geocoding.findCity(city));
+    return this.cache.getOrCompute(city, () => this.geocoding.findCity(city));
   }
 
   async getCityCoordinates(city: string): Promise<Coordinates> {
