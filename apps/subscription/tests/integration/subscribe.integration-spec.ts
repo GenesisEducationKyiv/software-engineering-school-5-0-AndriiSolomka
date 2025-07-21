@@ -137,8 +137,7 @@ describe('SubscriptionService gRPC (integration)', () => {
   it('should returns subscriptions by frequency', async () => {
     const dto = makeDto();
 
-    const res1 = await service.subscribe(dto);
-    console.log(res1);
+    await service.subscribe(dto);
 
     const token = await prisma.token.findFirst({
       where: { subscription: { email: dto.email } },
