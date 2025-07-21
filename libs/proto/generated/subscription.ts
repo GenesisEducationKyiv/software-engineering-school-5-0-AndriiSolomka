@@ -18,6 +18,7 @@ import {
   type ServiceError,
   type UntypedServiceImplementation,
 } from "@grpc/grpc-js";
+import { Empty } from "./google/protobuf/empty";
 
 export const protobufPackage = "subscription";
 
@@ -84,9 +85,6 @@ export interface GetByFrequencyRequest {
 
 export interface GetByFrequencyResponse {
   subscriptions: SubscriptionEntity[];
-}
-
-export interface DeleteUnconfirmedRequest {
 }
 
 export interface DeleteUnconfirmedResponse {
@@ -580,49 +578,6 @@ export const GetByFrequencyResponse: MessageFns<GetByFrequencyResponse> = {
   },
 };
 
-function createBaseDeleteUnconfirmedRequest(): DeleteUnconfirmedRequest {
-  return {};
-}
-
-export const DeleteUnconfirmedRequest: MessageFns<DeleteUnconfirmedRequest> = {
-  encode(_: DeleteUnconfirmedRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): DeleteUnconfirmedRequest {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    const end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseDeleteUnconfirmedRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(_: any): DeleteUnconfirmedRequest {
-    return {};
-  },
-
-  toJSON(_: DeleteUnconfirmedRequest): unknown {
-    const obj: any = {};
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<DeleteUnconfirmedRequest>, I>>(base?: I): DeleteUnconfirmedRequest {
-    return DeleteUnconfirmedRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<DeleteUnconfirmedRequest>, I>>(_: I): DeleteUnconfirmedRequest {
-    const message = createBaseDeleteUnconfirmedRequest();
-    return message;
-  },
-};
-
 function createBaseDeleteUnconfirmedResponse(): DeleteUnconfirmedResponse {
   return { count: 0 };
 }
@@ -854,7 +809,7 @@ export const SubscriptionServiceDefinition = {
     },
     deleteUnconfirmed: {
       name: "DeleteUnconfirmed",
-      requestType: DeleteUnconfirmedRequest,
+      requestType: Empty,
       requestStream: false,
       responseType: DeleteUnconfirmedResponse,
       responseStream: false,
@@ -907,9 +862,8 @@ export const SubscriptionServiceService = {
     path: "/subscription.SubscriptionService/DeleteUnconfirmed",
     requestStream: false,
     responseStream: false,
-    requestSerialize: (value: DeleteUnconfirmedRequest): Buffer =>
-      Buffer.from(DeleteUnconfirmedRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): DeleteUnconfirmedRequest => DeleteUnconfirmedRequest.decode(value),
+    requestSerialize: (value: Empty): Buffer => Buffer.from(Empty.encode(value).finish()),
+    requestDeserialize: (value: Buffer): Empty => Empty.decode(value),
     responseSerialize: (value: DeleteUnconfirmedResponse): Buffer =>
       Buffer.from(DeleteUnconfirmedResponse.encode(value).finish()),
     responseDeserialize: (value: Buffer): DeleteUnconfirmedResponse => DeleteUnconfirmedResponse.decode(value),
@@ -921,7 +875,7 @@ export interface SubscriptionServiceServer extends UntypedServiceImplementation 
   confirm: handleUnaryCall<ConfirmRequest, ActionResponse>;
   unsubscribe: handleUnaryCall<UnsubscribeRequest, ActionResponse>;
   getByFrequency: handleUnaryCall<GetByFrequencyRequest, GetByFrequencyResponse>;
-  deleteUnconfirmed: handleUnaryCall<DeleteUnconfirmedRequest, DeleteUnconfirmedResponse>;
+  deleteUnconfirmed: handleUnaryCall<Empty, DeleteUnconfirmedResponse>;
 }
 
 export interface SubscriptionServiceClient extends Client {
@@ -986,16 +940,16 @@ export interface SubscriptionServiceClient extends Client {
     callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
   ): ClientUnaryCall;
   deleteUnconfirmed(
-    request: DeleteUnconfirmedRequest,
+    request: Empty,
     callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
   ): ClientUnaryCall;
   deleteUnconfirmed(
-    request: DeleteUnconfirmedRequest,
+    request: Empty,
     metadata: Metadata,
     callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
   ): ClientUnaryCall;
   deleteUnconfirmed(
-    request: DeleteUnconfirmedRequest,
+    request: Empty,
     metadata: Metadata,
     options: Partial<CallOptions>,
     callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,

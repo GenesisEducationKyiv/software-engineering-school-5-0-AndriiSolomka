@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package subscription;
 
+import "google/protobuf/empty.proto";
+
 enum Frequency {
   hourly = 0;
   daily = 1;
@@ -23,7 +25,7 @@ service SubscriptionService {
   rpc Unsubscribe (UnsubscribeRequest) returns (ActionResponse);
 
   rpc GetByFrequency (GetByFrequencyRequest) returns (GetByFrequencyResponse);
-  rpc DeleteUnconfirmed (DeleteUnconfirmedRequest) returns (DeleteUnconfirmedResponse);
+  rpc DeleteUnconfirmed (google.protobuf.Empty) returns (DeleteUnconfirmedResponse);
 }
 
 message SubscribeRequest {
@@ -47,8 +49,6 @@ message GetByFrequencyRequest {
 message GetByFrequencyResponse {
   repeated SubscriptionEntity subscriptions = 1;
 }
-
-message DeleteUnconfirmedRequest {}
 
 message DeleteUnconfirmedResponse {
   int32 count = 1;
