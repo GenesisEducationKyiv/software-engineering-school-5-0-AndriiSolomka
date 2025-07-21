@@ -1,7 +1,6 @@
 import { INestApplication } from '@nestjs/common';
 import { Transport } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
-import { AppConfig } from 'apps/weather/config/app.config';
 import { AppModule } from 'apps/weather/src/app.module';
 import { searchApi } from 'libs/common/setup/msw/handlers/geocoding';
 import { openMeteoApi } from 'libs/common/setup/msw/handlers/openmeteo';
@@ -44,21 +43,19 @@ describe('WeatherService gRPC (integration)', () => {
 
     app = moduleFixture.createNestApplication();
 
-    const config = app.get(AppConfig);
-
     app.connectMicroservice({
       transport: Transport.GRPC,
       options: {
         package: 'weather',
         protoPath: 'libs/proto/weather.proto',
-        url: `localhost:${config.port}`,
+        url: `localhost:50051`,
       },
     });
 
     await app.startAllMicroservices();
     await app.init();
 
-    const channel = createChannel(`localhost:${config.port}`);
+    const channel = createChannel(`localhost:50051`);
     weatherClient = createClient(WeatherServiceDefinition, channel);
 
     cacheRepository = app.get(CacheRepositoryToken);
