@@ -16,9 +16,9 @@ export class TokenService implements TokenInterface {
     private readonly tokenRepo: TokenRepositoryInterface,
   ) {}
 
-  async create(subscription_id: string): Promise<string> {
+  async create(subscriptionId: string): Promise<string> {
     const token = randomByteGenerator();
-    await this.tokenRepo.create(token, subscription_id);
+    await this.tokenRepo.create(token, subscriptionId);
     return token;
   }
 

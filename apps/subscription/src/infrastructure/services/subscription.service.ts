@@ -28,12 +28,12 @@ export class SubscriptionService implements SubscriptionInterface {
     return await this.subscriptionRepo.create({ email, city, frequency });
   }
 
-  async confirm(subscription_id: string): Promise<SubscriptionEntity> {
-    return await this.subscriptionRepo.confirm(subscription_id);
+  async confirm(subscriptionId: string): Promise<SubscriptionEntity> {
+    return await this.subscriptionRepo.confirm(subscriptionId);
   }
 
-  async delete(subscription_id: string): Promise<SubscriptionEntity> {
-    return await this.subscriptionRepo.delete(subscription_id);
+  async delete(subscriptionId: string): Promise<SubscriptionEntity> {
+    return await this.subscriptionRepo.delete(subscriptionId);
   }
 
   async getByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]> {
