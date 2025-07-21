@@ -1,6 +1,7 @@
 import { INestApplication } from '@nestjs/common';
-import { ClientGrpc, ClientsModule, Transport } from '@nestjs/microservices';
+import { Transport } from '@nestjs/microservices';
 import { Test, TestingModule } from '@nestjs/testing';
+import { AppConfig } from 'apps/weather/config/app.config';
 import { AppModule } from 'apps/weather/src/app.module';
 import { searchApi } from 'libs/common/setup/msw/handlers/geocoding';
 import { openMeteoApi } from 'libs/common/setup/msw/handlers/openmeteo';
@@ -10,17 +11,9 @@ import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'libs/core/cache/cache-repository.interface';
-import {
-  GetWeatherRequest,
-  GetWeatherResponse,
-} from 'libs/proto/generated/weather';
-import { Observable, firstValueFrom } from 'rxjs';
-
-const grpcOptions = {
-  package: 'weather',
-  protoPath: 'libs/proto/weather.proto',
-  url: 'localhost:50051',
-};
+import { WeatherServiceDefinition } from 'libs/proto/generated/weather';
+import { WeatherClient } from 'libs/types/clients.grpc.types';
+import { createChannel, createClient } from 'nice-grpc';
 
 function resetMockServerWeatherApi() {
   mockServer.clearHandlers();
@@ -36,14 +29,9 @@ async function clearCityCache(
   await cacheRepository.set('weather', key, '');
 }
 
-interface WeatherServiceClient {
-  GetWeather(request: GetWeatherRequest): Observable<GetWeatherResponse>;
-}
-
 describe('WeatherService gRPC (integration)', () => {
   let app: INestApplication;
-  let grpcClient: ClientGrpc;
-  let weatherService: WeatherServiceClient;
+  let weatherClient: WeatherClient;
   let cacheRepository: CacheRepositoryInterface;
 
   const validCity = 'Kyiv';
@@ -51,34 +39,30 @@ describe('WeatherService gRPC (integration)', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [
-        AppModule,
-        ClientsModule.register([
-          {
-            name: 'WEATHER_PACKAGE',
-            transport: Transport.GRPC,
-            options: grpcOptions,
-          },
-        ]),
-      ],
+      imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
 
+    const config = app.get(AppConfig);
+
     app.connectMicroservice({
       transport: Transport.GRPC,
-      options: grpcOptions,
+      options: {
+        package: 'weather',
+        protoPath: 'libs/proto/weather.proto',
+        url: `localhost:${config.port}`,
+      },
     });
 
     await app.startAllMicroservices();
     await app.init();
 
-    grpcClient = app.get('WEATHER_PACKAGE');
-    weatherService =
-      grpcClient.getService<WeatherServiceClient>('WeatherService');
+    const channel = createChannel(`localhost:${config.port}`);
+    weatherClient = createClient(WeatherServiceDefinition, channel);
+
     cacheRepository = app.get(CacheRepositoryToken);
   });
-
   beforeEach(() => {
     mockServer.clearHandlers();
   });
@@ -96,9 +80,7 @@ describe('WeatherService gRPC (integration)', () => {
     it('should return weather from WeatherApiProvider if available', async () => {
       mockServer.addHandlers([searchApi.ok(), weatherApi.ok()]);
 
-      const res = await firstValueFrom(
-        weatherService.GetWeather({ city: validCity }),
-      );
+      const res = await weatherClient.getWeather({ city: validCity });
 
       expect(res).toEqual({
         temperature: 20,
@@ -114,9 +96,7 @@ describe('WeatherService gRPC (integration)', () => {
         openMeteoApi.ok(),
       ]);
 
-      const res = await firstValueFrom(
-        weatherService.GetWeather({ city: validCity }),
-      );
+      const res = await weatherClient.getWeather({ city: validCity });
 
       expect(res).toEqual({
         temperature: 18,
@@ -133,7 +113,7 @@ describe('WeatherService gRPC (integration)', () => {
       ]);
 
       await expect(
-        firstValueFrom(weatherService.GetWeather({ city: invalidCity })),
+        weatherClient.getWeather({ city: invalidCity }),
       ).rejects.toThrow();
     });
 
@@ -142,15 +122,11 @@ describe('WeatherService gRPC (integration)', () => {
 
       const key = validCity.toLowerCase();
 
-      const res1 = await firstValueFrom(
-        weatherService.GetWeather({ city: validCity }),
-      );
+      const res1 = await weatherClient.getWeather({ city: validCity });
 
       resetMockServerWeatherApi();
 
-      const res2 = await firstValueFrom(
-        weatherService.GetWeather({ city: validCity }),
-      );
+      const res2 = await weatherClient.getWeather({ city: validCity });
 
       expect(res2).toEqual(res1);
 
@@ -168,15 +144,11 @@ describe('WeatherService gRPC (integration)', () => {
 
       const key = validCity.toLowerCase();
 
-      const res1 = await firstValueFrom(
-        weatherService.GetWeather({ city: validCity }),
-      );
+      const res1 = await weatherClient.getWeather({ city: validCity });
 
       resetMockServerWeatherApi();
 
-      const res2 = await firstValueFrom(
-        weatherService.GetWeather({ city: validCity }),
-      );
+      const res2 = await weatherClient.getWeather({ city: validCity });
 
       expect(res2).toEqual(res1);
 

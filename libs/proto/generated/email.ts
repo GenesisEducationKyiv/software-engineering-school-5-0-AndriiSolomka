@@ -6,18 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import {
-  type CallOptions,
-  type ChannelCredentials,
-  Client,
-  type ClientOptions,
-  type ClientUnaryCall,
-  type handleUnaryCall,
-  makeGenericClientConstructor,
-  type Metadata,
-  type ServiceError,
-  type UntypedServiceImplementation,
-} from "@grpc/grpc-js";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 
 export const protobufPackage = "email";
 
@@ -101,10 +90,10 @@ export const SendConfirmationEmailRequest: MessageFns<SendConfirmationEmailReque
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SendConfirmationEmailRequest>, I>>(base?: I): SendConfirmationEmailRequest {
-    return SendConfirmationEmailRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<SendConfirmationEmailRequest>): SendConfirmationEmailRequest {
+    return SendConfirmationEmailRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<SendConfirmationEmailRequest>, I>>(object: I): SendConfirmationEmailRequest {
+  fromPartial(object: DeepPartial<SendConfirmationEmailRequest>): SendConfirmationEmailRequest {
     const message = createBaseSendConfirmationEmailRequest();
     message.email = object.email ?? "";
     message.token = object.token ?? "";
@@ -192,10 +181,10 @@ export const SendWeatherEmailRequest: MessageFns<SendWeatherEmailRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SendWeatherEmailRequest>, I>>(base?: I): SendWeatherEmailRequest {
-    return SendWeatherEmailRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<SendWeatherEmailRequest>): SendWeatherEmailRequest {
+    return SendWeatherEmailRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<SendWeatherEmailRequest>, I>>(object: I): SendWeatherEmailRequest {
+  fromPartial(object: DeepPartial<SendWeatherEmailRequest>): SendWeatherEmailRequest {
     const message = createBaseSendWeatherEmailRequest();
     message.email = object.email ?? "";
     message.subject = object.subject ?? "";
@@ -252,10 +241,10 @@ export const SuccessResponse: MessageFns<SuccessResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SuccessResponse>, I>>(base?: I): SuccessResponse {
-    return SuccessResponse.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<SuccessResponse>): SuccessResponse {
+    return SuccessResponse.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<SuccessResponse>, I>>(object: I): SuccessResponse {
+  fromPartial(object: DeepPartial<SuccessResponse>): SuccessResponse {
     const message = createBaseSuccessResponse();
     message.success = object.success ?? false;
     return message;
@@ -286,76 +275,27 @@ export const EmailServiceDefinition = {
   },
 } as const;
 
-export type EmailServiceService = typeof EmailServiceService;
-export const EmailServiceService = {
-  sendConfirmationEmail: {
-    path: "/email.EmailService/SendConfirmationEmail",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: SendConfirmationEmailRequest): Buffer =>
-      Buffer.from(SendConfirmationEmailRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): SendConfirmationEmailRequest => SendConfirmationEmailRequest.decode(value),
-    responseSerialize: (value: SuccessResponse): Buffer => Buffer.from(SuccessResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): SuccessResponse => SuccessResponse.decode(value),
-  },
-  sendWeatherEmail: {
-    path: "/email.EmailService/SendWeatherEmail",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: SendWeatherEmailRequest): Buffer =>
-      Buffer.from(SendWeatherEmailRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): SendWeatherEmailRequest => SendWeatherEmailRequest.decode(value),
-    responseSerialize: (value: SuccessResponse): Buffer => Buffer.from(SuccessResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): SuccessResponse => SuccessResponse.decode(value),
-  },
-} as const;
-
-export interface EmailServiceServer extends UntypedServiceImplementation {
-  sendConfirmationEmail: handleUnaryCall<SendConfirmationEmailRequest, SuccessResponse>;
-  sendWeatherEmail: handleUnaryCall<SendWeatherEmailRequest, SuccessResponse>;
+export interface EmailServiceImplementation<CallContextExt = {}> {
+  sendConfirmationEmail(
+    request: SendConfirmationEmailRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<SuccessResponse>>;
+  sendWeatherEmail(
+    request: SendWeatherEmailRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<SuccessResponse>>;
 }
 
-export interface EmailServiceClient extends Client {
+export interface EmailServiceClient<CallOptionsExt = {}> {
   sendConfirmationEmail(
-    request: SendConfirmationEmailRequest,
-    callback: (error: ServiceError | null, response: SuccessResponse) => void,
-  ): ClientUnaryCall;
-  sendConfirmationEmail(
-    request: SendConfirmationEmailRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: SuccessResponse) => void,
-  ): ClientUnaryCall;
-  sendConfirmationEmail(
-    request: SendConfirmationEmailRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: SuccessResponse) => void,
-  ): ClientUnaryCall;
+    request: DeepPartial<SendConfirmationEmailRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<SuccessResponse>;
   sendWeatherEmail(
-    request: SendWeatherEmailRequest,
-    callback: (error: ServiceError | null, response: SuccessResponse) => void,
-  ): ClientUnaryCall;
-  sendWeatherEmail(
-    request: SendWeatherEmailRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: SuccessResponse) => void,
-  ): ClientUnaryCall;
-  sendWeatherEmail(
-    request: SendWeatherEmailRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: SuccessResponse) => void,
-  ): ClientUnaryCall;
+    request: DeepPartial<SendWeatherEmailRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<SuccessResponse>;
 }
-
-export const EmailServiceClient = makeGenericClientConstructor(
-  EmailServiceService,
-  "email.EmailService",
-) as unknown as {
-  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): EmailServiceClient;
-  service: typeof EmailServiceService;
-  serviceName: string;
-};
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -364,10 +304,6 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
@@ -378,6 +314,6 @@ export interface MessageFns<T> {
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
-  create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
-  fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
+  create(base?: DeepPartial<T>): T;
+  fromPartial(object: DeepPartial<T>): T;
 }

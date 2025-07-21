@@ -6,18 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import {
-  type CallOptions,
-  type ChannelCredentials,
-  Client,
-  type ClientOptions,
-  type ClientUnaryCall,
-  type handleUnaryCall,
-  makeGenericClientConstructor,
-  type Metadata,
-  type ServiceError,
-  type UntypedServiceImplementation,
-} from "@grpc/grpc-js";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 
 export const protobufPackage = "weather";
 
@@ -79,10 +68,10 @@ export const GetWeatherRequest: MessageFns<GetWeatherRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetWeatherRequest>, I>>(base?: I): GetWeatherRequest {
-    return GetWeatherRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<GetWeatherRequest>): GetWeatherRequest {
+    return GetWeatherRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<GetWeatherRequest>, I>>(object: I): GetWeatherRequest {
+  fromPartial(object: DeepPartial<GetWeatherRequest>): GetWeatherRequest {
     const message = createBaseGetWeatherRequest();
     message.city = object.city ?? "";
     return message;
@@ -169,10 +158,10 @@ export const GetWeatherResponse: MessageFns<GetWeatherResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetWeatherResponse>, I>>(base?: I): GetWeatherResponse {
-    return GetWeatherResponse.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<GetWeatherResponse>): GetWeatherResponse {
+    return GetWeatherResponse.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<GetWeatherResponse>, I>>(object: I): GetWeatherResponse {
+  fromPartial(object: DeepPartial<GetWeatherResponse>): GetWeatherResponse {
     const message = createBaseGetWeatherResponse();
     message.temperature = object.temperature ?? 0;
     message.humidity = object.humidity ?? 0;
@@ -197,49 +186,19 @@ export const WeatherServiceDefinition = {
   },
 } as const;
 
-export type WeatherServiceService = typeof WeatherServiceService;
-export const WeatherServiceService = {
-  getWeather: {
-    path: "/weather.WeatherService/GetWeather",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: GetWeatherRequest): Buffer => Buffer.from(GetWeatherRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): GetWeatherRequest => GetWeatherRequest.decode(value),
-    responseSerialize: (value: GetWeatherResponse): Buffer => Buffer.from(GetWeatherResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): GetWeatherResponse => GetWeatherResponse.decode(value),
-  },
-} as const;
-
-export interface WeatherServiceServer extends UntypedServiceImplementation {
-  getWeather: handleUnaryCall<GetWeatherRequest, GetWeatherResponse>;
+export interface WeatherServiceImplementation<CallContextExt = {}> {
+  getWeather(
+    request: GetWeatherRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<GetWeatherResponse>>;
 }
 
-export interface WeatherServiceClient extends Client {
+export interface WeatherServiceClient<CallOptionsExt = {}> {
   getWeather(
-    request: GetWeatherRequest,
-    callback: (error: ServiceError | null, response: GetWeatherResponse) => void,
-  ): ClientUnaryCall;
-  getWeather(
-    request: GetWeatherRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: GetWeatherResponse) => void,
-  ): ClientUnaryCall;
-  getWeather(
-    request: GetWeatherRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: GetWeatherResponse) => void,
-  ): ClientUnaryCall;
+    request: DeepPartial<GetWeatherRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<GetWeatherResponse>;
 }
-
-export const WeatherServiceClient = makeGenericClientConstructor(
-  WeatherServiceService,
-  "weather.WeatherService",
-) as unknown as {
-  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): WeatherServiceClient;
-  service: typeof WeatherServiceService;
-  serviceName: string;
-};
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -248,10 +207,6 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
@@ -262,6 +217,6 @@ export interface MessageFns<T> {
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
-  create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
-  fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
+  create(base?: DeepPartial<T>): T;
+  fromPartial(object: DeepPartial<T>): T;
 }

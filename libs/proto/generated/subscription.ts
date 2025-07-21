@@ -6,18 +6,7 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import {
-  type CallOptions,
-  type ChannelCredentials,
-  Client,
-  type ClientOptions,
-  type ClientUnaryCall,
-  type handleUnaryCall,
-  makeGenericClientConstructor,
-  type Metadata,
-  type ServiceError,
-  type UntypedServiceImplementation,
-} from "@grpc/grpc-js";
+import type { CallContext, CallOptions } from "nice-grpc-common";
 import { Empty } from "./google/protobuf/empty";
 
 export const protobufPackage = "subscription";
@@ -148,10 +137,10 @@ export const TokenEntity: MessageFns<TokenEntity> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TokenEntity>, I>>(base?: I): TokenEntity {
-    return TokenEntity.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<TokenEntity>): TokenEntity {
+    return TokenEntity.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<TokenEntity>, I>>(object: I): TokenEntity {
+  fromPartial(object: DeepPartial<TokenEntity>): TokenEntity {
     const message = createBaseTokenEntity();
     message.token = object.token ?? "";
     return message;
@@ -238,10 +227,10 @@ export const SubscriptionEntity: MessageFns<SubscriptionEntity> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(base?: I): SubscriptionEntity {
-    return SubscriptionEntity.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<SubscriptionEntity>): SubscriptionEntity {
+    return SubscriptionEntity.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<SubscriptionEntity>, I>>(object: I): SubscriptionEntity {
+  fromPartial(object: DeepPartial<SubscriptionEntity>): SubscriptionEntity {
     const message = createBaseSubscriptionEntity();
     message.email = object.email ?? "";
     message.city = object.city ?? "";
@@ -330,10 +319,10 @@ export const SubscribeRequest: MessageFns<SubscribeRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SubscribeRequest>, I>>(base?: I): SubscribeRequest {
-    return SubscribeRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<SubscribeRequest>): SubscribeRequest {
+    return SubscribeRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<SubscribeRequest>, I>>(object: I): SubscribeRequest {
+  fromPartial(object: DeepPartial<SubscribeRequest>): SubscribeRequest {
     const message = createBaseSubscribeRequest();
     message.email = object.email ?? "";
     message.city = object.city ?? "";
@@ -390,10 +379,10 @@ export const ConfirmRequest: MessageFns<ConfirmRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ConfirmRequest>, I>>(base?: I): ConfirmRequest {
-    return ConfirmRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<ConfirmRequest>): ConfirmRequest {
+    return ConfirmRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<ConfirmRequest>, I>>(object: I): ConfirmRequest {
+  fromPartial(object: DeepPartial<ConfirmRequest>): ConfirmRequest {
     const message = createBaseConfirmRequest();
     message.token = object.token ?? "";
     return message;
@@ -448,10 +437,10 @@ export const UnsubscribeRequest: MessageFns<UnsubscribeRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<UnsubscribeRequest>, I>>(base?: I): UnsubscribeRequest {
-    return UnsubscribeRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<UnsubscribeRequest>): UnsubscribeRequest {
+    return UnsubscribeRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<UnsubscribeRequest>, I>>(object: I): UnsubscribeRequest {
+  fromPartial(object: DeepPartial<UnsubscribeRequest>): UnsubscribeRequest {
     const message = createBaseUnsubscribeRequest();
     message.token = object.token ?? "";
     return message;
@@ -506,10 +495,10 @@ export const GetByFrequencyRequest: MessageFns<GetByFrequencyRequest> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetByFrequencyRequest>, I>>(base?: I): GetByFrequencyRequest {
-    return GetByFrequencyRequest.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<GetByFrequencyRequest>): GetByFrequencyRequest {
+    return GetByFrequencyRequest.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<GetByFrequencyRequest>, I>>(object: I): GetByFrequencyRequest {
+  fromPartial(object: DeepPartial<GetByFrequencyRequest>): GetByFrequencyRequest {
     const message = createBaseGetByFrequencyRequest();
     message.frequency = object.frequency ?? 0;
     return message;
@@ -568,10 +557,10 @@ export const GetByFrequencyResponse: MessageFns<GetByFrequencyResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<GetByFrequencyResponse>, I>>(base?: I): GetByFrequencyResponse {
-    return GetByFrequencyResponse.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<GetByFrequencyResponse>): GetByFrequencyResponse {
+    return GetByFrequencyResponse.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<GetByFrequencyResponse>, I>>(object: I): GetByFrequencyResponse {
+  fromPartial(object: DeepPartial<GetByFrequencyResponse>): GetByFrequencyResponse {
     const message = createBaseGetByFrequencyResponse();
     message.subscriptions = object.subscriptions?.map((e) => SubscriptionEntity.fromPartial(e)) || [];
     return message;
@@ -626,10 +615,10 @@ export const DeleteUnconfirmedResponse: MessageFns<DeleteUnconfirmedResponse> = 
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<DeleteUnconfirmedResponse>, I>>(base?: I): DeleteUnconfirmedResponse {
-    return DeleteUnconfirmedResponse.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<DeleteUnconfirmedResponse>): DeleteUnconfirmedResponse {
+    return DeleteUnconfirmedResponse.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<DeleteUnconfirmedResponse>, I>>(object: I): DeleteUnconfirmedResponse {
+  fromPartial(object: DeepPartial<DeleteUnconfirmedResponse>): DeleteUnconfirmedResponse {
     const message = createBaseDeleteUnconfirmedResponse();
     message.count = object.count ?? 0;
     return message;
@@ -684,10 +673,10 @@ export const ActionResponse: MessageFns<ActionResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<ActionResponse>, I>>(base?: I): ActionResponse {
-    return ActionResponse.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<ActionResponse>): ActionResponse {
+    return ActionResponse.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<ActionResponse>, I>>(object: I): ActionResponse {
+  fromPartial(object: DeepPartial<ActionResponse>): ActionResponse {
     const message = createBaseActionResponse();
     message.message = object.message ?? "";
     return message;
@@ -759,10 +748,10 @@ export const SubscribeResponse: MessageFns<SubscribeResponse> = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<SubscribeResponse>, I>>(base?: I): SubscribeResponse {
-    return SubscribeResponse.fromPartial(base ?? ({} as any));
+  create(base?: DeepPartial<SubscribeResponse>): SubscribeResponse {
+    return SubscribeResponse.fromPartial(base ?? {});
   },
-  fromPartial<I extends Exact<DeepPartial<SubscribeResponse>, I>>(object: I): SubscribeResponse {
+  fromPartial(object: DeepPartial<SubscribeResponse>): SubscribeResponse {
     const message = createBaseSubscribeResponse();
     message.email = object.email ?? "";
     message.token = object.token ?? "";
@@ -818,152 +807,36 @@ export const SubscriptionServiceDefinition = {
   },
 } as const;
 
-export type SubscriptionServiceService = typeof SubscriptionServiceService;
-export const SubscriptionServiceService = {
-  subscribe: {
-    path: "/subscription.SubscriptionService/Subscribe",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: SubscribeRequest): Buffer => Buffer.from(SubscribeRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): SubscribeRequest => SubscribeRequest.decode(value),
-    responseSerialize: (value: SubscribeResponse): Buffer => Buffer.from(SubscribeResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): SubscribeResponse => SubscribeResponse.decode(value),
-  },
-  confirm: {
-    path: "/subscription.SubscriptionService/Confirm",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: ConfirmRequest): Buffer => Buffer.from(ConfirmRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): ConfirmRequest => ConfirmRequest.decode(value),
-    responseSerialize: (value: ActionResponse): Buffer => Buffer.from(ActionResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): ActionResponse => ActionResponse.decode(value),
-  },
-  unsubscribe: {
-    path: "/subscription.SubscriptionService/Unsubscribe",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: UnsubscribeRequest): Buffer => Buffer.from(UnsubscribeRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): UnsubscribeRequest => UnsubscribeRequest.decode(value),
-    responseSerialize: (value: ActionResponse): Buffer => Buffer.from(ActionResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): ActionResponse => ActionResponse.decode(value),
-  },
-  getByFrequency: {
-    path: "/subscription.SubscriptionService/GetByFrequency",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: GetByFrequencyRequest): Buffer =>
-      Buffer.from(GetByFrequencyRequest.encode(value).finish()),
-    requestDeserialize: (value: Buffer): GetByFrequencyRequest => GetByFrequencyRequest.decode(value),
-    responseSerialize: (value: GetByFrequencyResponse): Buffer =>
-      Buffer.from(GetByFrequencyResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): GetByFrequencyResponse => GetByFrequencyResponse.decode(value),
-  },
-  deleteUnconfirmed: {
-    path: "/subscription.SubscriptionService/DeleteUnconfirmed",
-    requestStream: false,
-    responseStream: false,
-    requestSerialize: (value: Empty): Buffer => Buffer.from(Empty.encode(value).finish()),
-    requestDeserialize: (value: Buffer): Empty => Empty.decode(value),
-    responseSerialize: (value: DeleteUnconfirmedResponse): Buffer =>
-      Buffer.from(DeleteUnconfirmedResponse.encode(value).finish()),
-    responseDeserialize: (value: Buffer): DeleteUnconfirmedResponse => DeleteUnconfirmedResponse.decode(value),
-  },
-} as const;
-
-export interface SubscriptionServiceServer extends UntypedServiceImplementation {
-  subscribe: handleUnaryCall<SubscribeRequest, SubscribeResponse>;
-  confirm: handleUnaryCall<ConfirmRequest, ActionResponse>;
-  unsubscribe: handleUnaryCall<UnsubscribeRequest, ActionResponse>;
-  getByFrequency: handleUnaryCall<GetByFrequencyRequest, GetByFrequencyResponse>;
-  deleteUnconfirmed: handleUnaryCall<Empty, DeleteUnconfirmedResponse>;
+export interface SubscriptionServiceImplementation<CallContextExt = {}> {
+  subscribe(request: SubscribeRequest, context: CallContext & CallContextExt): Promise<DeepPartial<SubscribeResponse>>;
+  confirm(request: ConfirmRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ActionResponse>>;
+  unsubscribe(request: UnsubscribeRequest, context: CallContext & CallContextExt): Promise<DeepPartial<ActionResponse>>;
+  getByFrequency(
+    request: GetByFrequencyRequest,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<GetByFrequencyResponse>>;
+  deleteUnconfirmed(
+    request: Empty,
+    context: CallContext & CallContextExt,
+  ): Promise<DeepPartial<DeleteUnconfirmedResponse>>;
 }
 
-export interface SubscriptionServiceClient extends Client {
-  subscribe(
-    request: SubscribeRequest,
-    callback: (error: ServiceError | null, response: SubscribeResponse) => void,
-  ): ClientUnaryCall;
-  subscribe(
-    request: SubscribeRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: SubscribeResponse) => void,
-  ): ClientUnaryCall;
-  subscribe(
-    request: SubscribeRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: SubscribeResponse) => void,
-  ): ClientUnaryCall;
-  confirm(
-    request: ConfirmRequest,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
-  ): ClientUnaryCall;
-  confirm(
-    request: ConfirmRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
-  ): ClientUnaryCall;
-  confirm(
-    request: ConfirmRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
-  ): ClientUnaryCall;
+export interface SubscriptionServiceClient<CallOptionsExt = {}> {
+  subscribe(request: DeepPartial<SubscribeRequest>, options?: CallOptions & CallOptionsExt): Promise<SubscribeResponse>;
+  confirm(request: DeepPartial<ConfirmRequest>, options?: CallOptions & CallOptionsExt): Promise<ActionResponse>;
   unsubscribe(
-    request: UnsubscribeRequest,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
-  ): ClientUnaryCall;
-  unsubscribe(
-    request: UnsubscribeRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
-  ): ClientUnaryCall;
-  unsubscribe(
-    request: UnsubscribeRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: ActionResponse) => void,
-  ): ClientUnaryCall;
+    request: DeepPartial<UnsubscribeRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<ActionResponse>;
   getByFrequency(
-    request: GetByFrequencyRequest,
-    callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
-  ): ClientUnaryCall;
-  getByFrequency(
-    request: GetByFrequencyRequest,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
-  ): ClientUnaryCall;
-  getByFrequency(
-    request: GetByFrequencyRequest,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: GetByFrequencyResponse) => void,
-  ): ClientUnaryCall;
+    request: DeepPartial<GetByFrequencyRequest>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<GetByFrequencyResponse>;
   deleteUnconfirmed(
-    request: Empty,
-    callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
-  ): ClientUnaryCall;
-  deleteUnconfirmed(
-    request: Empty,
-    metadata: Metadata,
-    callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
-  ): ClientUnaryCall;
-  deleteUnconfirmed(
-    request: Empty,
-    metadata: Metadata,
-    options: Partial<CallOptions>,
-    callback: (error: ServiceError | null, response: DeleteUnconfirmedResponse) => void,
-  ): ClientUnaryCall;
+    request: DeepPartial<Empty>,
+    options?: CallOptions & CallOptionsExt,
+  ): Promise<DeleteUnconfirmedResponse>;
 }
-
-export const SubscriptionServiceClient = makeGenericClientConstructor(
-  SubscriptionServiceService,
-  "subscription.SubscriptionService",
-) as unknown as {
-  new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): SubscriptionServiceClient;
-  service: typeof SubscriptionServiceService;
-  serviceName: string;
-};
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
@@ -972,10 +845,6 @@ export type DeepPartial<T> = T extends Builtin ? T
   : T extends ReadonlyArray<infer U> ? ReadonlyArray<DeepPartial<U>>
   : T extends {} ? { [K in keyof T]?: DeepPartial<T[K]> }
   : Partial<T>;
-
-type KeysOfUnion<T> = T extends T ? keyof T : never;
-export type Exact<P, I extends P> = P extends Builtin ? P
-  : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
@@ -986,6 +855,6 @@ export interface MessageFns<T> {
   decode(input: BinaryReader | Uint8Array, length?: number): T;
   fromJSON(object: any): T;
   toJSON(message: T): unknown;
-  create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
-  fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
+  create(base?: DeepPartial<T>): T;
+  fromPartial(object: DeepPartial<T>): T;
 }
