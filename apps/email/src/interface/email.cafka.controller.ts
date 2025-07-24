@@ -2,20 +2,21 @@ import { Controller, Inject } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { EMAIL_EVENTS } from 'libs/common/events/email';
 
-import { EmailPayload, EmailToken } from '../core/email.interface';
-import { EmailService } from '../infrastructure/services/email.service';
+import {
+  EmailInterface,
+  EmailPayload,
+  EmailToken,
+} from '../core/email.interface';
 
 @Controller()
 export class EmailKafkaController {
   constructor(
     @Inject(EmailToken)
-    private readonly emailService: EmailService,
+    private readonly emailService: EmailInterface,
   ) {}
 
   @EventPattern(EMAIL_EVENTS.SENDED)
   async handleEmailSend(@Payload() data: EmailPayload) {
-    console.log(`Received email payload: ${JSON.stringify(data)}`);
-
     await this.emailService.sendWeatherEmail(data);
   }
 }
