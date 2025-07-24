@@ -4,7 +4,7 @@ import {
   Coordinates,
   GeocodingInterface,
 } from 'src/libs/core/geocoding/geocoding.interface';
-import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
+import { HttpClient } from 'src/libs/infrastructure/http/http-client.service';
 
 type GeocodingResponse = {
   results: {
@@ -30,7 +30,7 @@ type GeocodingResponse = {
 @Injectable()
 export class GeocodingService implements GeocodingInterface {
   constructor(
-    private readonly httpService: HttpClientService,
+    private readonly httpService: HttpClient,
     private readonly geocodingUrl: string,
   ) {}
 

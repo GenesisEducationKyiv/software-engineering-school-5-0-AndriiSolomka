@@ -4,12 +4,12 @@ import {
   WeatherInterface,
 } from 'src/infrastructure/weather/core/weather.interface';
 import { AppConfig } from 'src/libs/config/app.config';
-import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
+import { HttpClient } from 'src/libs/infrastructure/http/http-client.service';
 
 @Injectable()
 export class WeatherApiClient implements WeatherInterface {
   constructor(
-    private readonly httpClient: HttpClientService,
+    private readonly httpClient: HttpClient,
     private readonly config: AppConfig,
   ) {}
 

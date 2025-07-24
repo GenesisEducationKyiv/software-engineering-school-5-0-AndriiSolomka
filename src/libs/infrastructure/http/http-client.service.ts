@@ -2,7 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { HttpClientInterface } from 'src/libs/core/http/http-client.interface';
 
 @Injectable()
-export class HttpClientService implements HttpClientInterface {
+export class HttpClient implements HttpClientInterface {
   async get<T>(url: string): Promise<T> {
     const response = await fetch(url);
 

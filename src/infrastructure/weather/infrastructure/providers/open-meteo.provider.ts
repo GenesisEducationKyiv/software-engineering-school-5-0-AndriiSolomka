@@ -8,7 +8,7 @@ import {
 } from 'src/infrastructure/weather/types/weather.interface';
 import { Coordinates } from 'src/libs/core/geocoding/geocoding.interface';
 import { GeocodingService } from 'src/libs/infrastructure/geocoding/geocoding.service';
-import { HttpClientService } from 'src/libs/infrastructure/http/http-client.service';
+import { HttpClient } from 'src/libs/infrastructure/http/http-client.service';
 
 const OPEN_METEO_CURRENT_WEATHER_FIELDS = [
   'temperature_2m',
@@ -31,7 +31,7 @@ function parseWeatherData(response: OpenMeteoResponse): WeatherData {
 @Injectable()
 export class OpenMeteoProviderService implements WeatherProviderInterface {
   constructor(
-    private readonly httpService: HttpClientService,
+    private readonly httpService: HttpClient,
     private readonly config: ApiConfig,
     private readonly cityService: GeocodingService,
   ) {}
