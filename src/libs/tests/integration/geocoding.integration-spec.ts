@@ -51,11 +51,11 @@ describe('GeocodingService (integration)', () => {
   it('should return a valid city', async () => {
     mockServer.addHandlers([searchApi.ok()]);
 
-    const result = await geocodingService.findCity(validCity);
+    const city = await geocodingService.findCity(validCity);
 
-    expect(result.name).toBe(validCity);
-    expect(result.coordinates.latitude).toBe(50.45);
-    expect(result.coordinates.longitude).toBe(30.52);
+    expect(city.name).toBe(validCity);
+    expect(city.coordinates.latitude).toBe(50.45);
+    expect(city.coordinates.longitude).toBe(30.52);
   });
 
   it('should return cached value without hitting the API again', async () => {
