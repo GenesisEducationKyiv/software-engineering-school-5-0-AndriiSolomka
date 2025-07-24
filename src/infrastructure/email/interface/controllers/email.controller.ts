@@ -3,6 +3,7 @@ import {
   EmailInterface,
   EmailToken,
 } from 'src/infrastructure/email/core/email.interface';
+
 import { SendConfirmationEmailDto } from './dto/send-confirmation-email.dto';
 import { SendWeatherEmailDto } from './dto/send-weather-email.dto';
 

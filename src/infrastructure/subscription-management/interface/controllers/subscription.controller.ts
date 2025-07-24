@@ -1,9 +1,10 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
+import { SubscriptionCityValidationPipe } from 'src/common/pipes/subscription-city.validation.pipe';
 import {
   Frequency,
   SubscriptionEntity,
 } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
-import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription-application.service';
+import { SubscriptionApplicationService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription-application.service';
 import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
 
 import {
@@ -11,12 +12,11 @@ import {
   SuccessResponseDto,
   TokenParamDto,
 } from './dto/handlers.dto';
-import { SubscriptionCityValidationPipe } from 'src/common/pipes/subscription-city.validation.pipe';
 
 @Controller('internal/subscription')
 export class SubscriptionController {
   constructor(
-    private readonly subscriptionHandlers: SubscriptionHandlersService,
+    private readonly subscriptionHandlers: SubscriptionApplicationService,
     private readonly subscriptionService: SubscriptionService,
   ) {}
 

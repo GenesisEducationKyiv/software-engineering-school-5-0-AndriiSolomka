@@ -6,7 +6,7 @@ import {
   TokenEntity,
 } from 'src/infrastructure/subscription-management/core/entities/subscription.entity';
 import { SubscriptionParams } from 'src/infrastructure/subscription-management/core/subscription/subscription-repository.interface';
-import { SubscriptionHandlersService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription-application.service';
+import { SubscriptionApplicationService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription-application.service';
 import { SubscriptionService } from 'src/infrastructure/subscription-management/infrastructure/services/subscription.service';
 import { TokenService } from 'src/infrastructure/subscription-management/infrastructure/services/token.service';
 
@@ -22,7 +22,7 @@ function makeToken(id = 1, subscriptionId = 123): TokenEntity {
 }
 
 describe('SubscriptionApplicationService', () => {
-  let service: SubscriptionHandlersService;
+  let service: SubscriptionApplicationService;
   let subServiceMock: jest.Mocked<
     Pick<SubscriptionService, 'create' | 'confirm' | 'delete'>
   >;
@@ -49,7 +49,7 @@ describe('SubscriptionApplicationService', () => {
 
     const module = await Test.createTestingModule({
       providers: [
-        SubscriptionHandlersService,
+        SubscriptionApplicationService,
         {
           provide: SubscriptionService,
           useValue: subServiceMock,
@@ -65,8 +65,8 @@ describe('SubscriptionApplicationService', () => {
       ],
     }).compile();
 
-    service = module.get<SubscriptionHandlersService>(
-      SubscriptionHandlersService,
+    service = module.get<SubscriptionApplicationService>(
+      SubscriptionApplicationService,
     );
   });
 

@@ -6,7 +6,7 @@ import { HttpClientModule } from 'src/libs/infrastructure/http/http-client.modul
 import { SubscriptionApiClient } from './application.client';
 import { InternalSubscriptionModule } from './infrastructure/modules/subscription.module';
 import { InternalTokenModule } from './infrastructure/modules/token.module';
-import { SubscriptionHandlersService } from './infrastructure/services/subscription-application.service';
+import { SubscriptionApplicationService } from './infrastructure/services/subscription-application.service';
 import { SubscriptionController } from './interface/controllers/subscription.controller';
 
 @Module({
@@ -18,7 +18,7 @@ import { SubscriptionController } from './interface/controllers/subscription.con
     GeocodingModule,
   ],
   controllers: [SubscriptionController],
-  providers: [SubscriptionHandlersService, SubscriptionApiClient],
+  providers: [SubscriptionApplicationService, SubscriptionApiClient],
   exports: [SubscriptionApiClient],
 })
 export class SubscriptionManagementModule {}

@@ -6,7 +6,7 @@ import { SubscriptionService } from './subscription.service';
 import { TokenService } from './token.service';
 
 @Injectable()
-export class SubscriptionHandlersService {
+export class SubscriptionApplicationService {
   constructor(
     private readonly tokenService: TokenService,
     private readonly subClient: SubscriptionService,
