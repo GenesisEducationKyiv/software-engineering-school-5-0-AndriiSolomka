@@ -1,14 +1,13 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
-import { CityValidationPipe } from 'src/common/pipes/city-validation.pipe';
-import { SubscriptionHandlersUseCase } from 'src/use-cases/subscription/subscription-handler.use-case';
-
-import { CreateSubscriptionDto } from '../dto/subscription/subscription.dto';
+import { WeatherCityValidationPipe } from 'src/common/pipes/weather-city.validation.pipe';
+import { SubscriptionApiClient } from 'src/infrastructure/subscription-management/application.client';
+import { CreateSubscriptionDto } from 'src/interface/dto/subscription/subscription.dto';
 
 @Controller()
 export class SubscriptionHandlersController {
-  constructor(private readonly subscribeService: SubscriptionHandlersUseCase) {}
+  constructor(private readonly subscribeService: SubscriptionApiClient) {}
 
-  @UsePipes(CityValidationPipe)
+  @UsePipes(WeatherCityValidationPipe)
   @Post('subscribe')
   async subscribe(@Body() dto: CreateSubscriptionDto) {
     return this.subscribeService.subscribe(dto);

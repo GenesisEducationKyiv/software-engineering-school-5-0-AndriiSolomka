@@ -3,6 +3,7 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
+import noRelativeImportPaths from 'eslint-plugin-no-relative-import-paths';
 
 export default tseslint.config(
   {
@@ -14,6 +15,7 @@ export default tseslint.config(
   {
     plugins: {
       import: importPlugin,
+      'no-relative-import-paths': noRelativeImportPaths,
     },
   },
   {
@@ -66,6 +68,10 @@ export default tseslint.config(
       ],
 
       'import/no-unresolved': 'off',
+      'no-relative-import-paths/no-relative-import-paths': [
+        'error',
+        { allowSameFolder: true, rootDir: 'src', prefix: '' },
+      ],
     },
   },
 );
