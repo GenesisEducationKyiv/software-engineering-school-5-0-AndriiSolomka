@@ -1,18 +1,12 @@
-import { Test } from '@nestjs/testing';
 import {
   Frequency,
   SubscriptionEntity,
 } from 'apps/subscription/src/core/entities/subscription.entity';
-import {
-  SubscriptionRepositoryInterface,
-  SubscriptionRepositoryToken,
-} from 'apps/subscription/src/core/subscription/subscription-repository.interface';
+import { SubscriptionRepositoryInterface } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from 'apps/subscription/src/core/subscription/subscription.interface';
 import { SubscriptionAlreadyExistsException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
-import { SubscriptionFactory } from 'apps/subscription/src/infrastructure/modules/subscription.factory';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
 import { randomUUID } from 'crypto';
-import { LoggerToken } from 'libs/core/logger/logger.interface';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
@@ -42,7 +36,7 @@ describe('SubscriptionService (unit)', () => {
     >
   >;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     repoMock = {
       create: jest.fn(),
       findOne: jest.fn(),
@@ -52,31 +46,7 @@ describe('SubscriptionService (unit)', () => {
       deleteUnconfirmed: jest.fn(),
     };
 
-    const loggerMock = {
-      info: jest.fn(),
-      error: jest.fn(),
-    };
-
-    const module = await Test.createTestingModule({
-      providers: [
-        SubscriptionFactory,
-        {
-          provide: SubscriptionRepositoryToken,
-          useValue: repoMock,
-        },
-        {
-          provide: LoggerToken,
-          useValue: loggerMock,
-        },
-        {
-          provide: SubscriptionService,
-          useFactory: (factory: SubscriptionFactory) => factory.create(),
-          inject: [SubscriptionFactory],
-        },
-      ],
-    }).compile();
-
-    service = module.get<SubscriptionInterface>(SubscriptionService);
+    service = new SubscriptionService(repoMock);
   });
 
   describe('create', () => {
