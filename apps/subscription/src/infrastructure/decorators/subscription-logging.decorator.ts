@@ -1,5 +1,6 @@
 import { LoggerInterface } from 'libs/core/logger/logger.interface';
 
+import { LoggingDecoratorBase } from './logger.abstract';
 import {
   Frequency,
   SubscriptionEntity,
@@ -7,143 +8,41 @@ import {
 import { SubscriptionParams } from '../../core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from '../../core/subscription/subscription.interface';
 
-export class LoggingSubscriptionServiceDecorator {
-  constructor(
-    private readonly wrapped: SubscriptionInterface,
-    private readonly logger: LoggerInterface,
-    private readonly context: string = 'SubscriptionService',
-  ) {}
-
-  async create(data: SubscriptionParams): Promise<SubscriptionEntity> {
-    this.logger.info({
-      context: this.context,
-      method: 'create',
-      data,
-      event: 'called',
-    });
-    try {
-      const result = await this.wrapped.create(data);
-      this.logger.info({
-        context: this.context,
-        method: 'create',
-        event: 'success',
-        email: result.email,
-        city: result.city,
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: this.context,
-        method: 'create',
-        event: 'error',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+export class LoggingSubscriptionServiceDecorator
+  extends LoggingDecoratorBase<SubscriptionInterface>
+  implements SubscriptionInterface
+{
+  constructor(wrapped: SubscriptionInterface, logger: LoggerInterface) {
+    super(wrapped, logger, 'SubscriptionService');
   }
 
-  async confirm(subscriptionId: string): Promise<SubscriptionEntity> {
-    this.logger.info({
-      context: this.context,
-      method: 'confirm',
-      subscriptionId,
-      event: 'called',
-    });
-    try {
-      const result = await this.wrapped.confirm(subscriptionId);
-      this.logger.info({
-        context: this.context,
-        method: 'confirm',
-        event: 'success',
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: this.context,
-        method: 'confirm',
-        event: 'error',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+  create(data: SubscriptionParams): Promise<SubscriptionEntity> {
+    return this.logAndExecute('create', { data }, () =>
+      this.wrapped.create(data),
+    );
   }
 
-  async delete(subscriptionId: string): Promise<SubscriptionEntity> {
-    this.logger.info({
-      context: this.context,
-      method: 'delete',
-      subscriptionId,
-      event: 'called',
-    });
-    try {
-      const result = await this.wrapped.delete(subscriptionId);
-      this.logger.info({
-        context: this.context,
-        method: 'delete',
-        event: 'success',
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: this.context,
-        method: 'delete',
-        event: 'error',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+  confirm(subscriptionId: string): Promise<SubscriptionEntity> {
+    return this.logAndExecute('confirm', { subscriptionId }, () =>
+      this.wrapped.confirm(subscriptionId),
+    );
   }
 
-  async getByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]> {
-    this.logger.info({
-      context: this.context,
-      method: 'getByFrequency',
-      frequency,
-      event: 'called',
-    });
-    try {
-      const result = await this.wrapped.getByFrequency(frequency);
-      this.logger.info({
-        context: this.context,
-        method: 'getByFrequency',
-        event: 'success',
-        count: result.length,
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: this.context,
-        method: 'getByFrequency',
-        event: 'error',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+  delete(subscriptionId: string): Promise<SubscriptionEntity> {
+    return this.logAndExecute('delete', { subscriptionId }, () =>
+      this.wrapped.delete(subscriptionId),
+    );
   }
 
-  async deleteUnconfirmed(): Promise<{ count: number }> {
-    this.logger.info({
-      context: this.context,
-      method: 'deleteUnconfirmed',
-      event: 'called',
-    });
-    try {
-      const result = await this.wrapped.deleteUnconfirmed();
-      this.logger.info({
-        context: this.context,
-        method: 'deleteUnconfirmed',
-        event: 'success',
-        count: result.count,
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: this.context,
-        method: 'deleteUnconfirmed',
-        event: 'error',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+  getByFrequency(frequency: Frequency): Promise<SubscriptionEntity[]> {
+    return this.logAndExecute('getByFrequency', { frequency }, () =>
+      this.wrapped.getByFrequency(frequency),
+    );
+  }
+
+  deleteUnconfirmed(): Promise<{ count: number }> {
+    return this.logAndExecute('deleteUnconfirmed', {}, () =>
+      this.wrapped.deleteUnconfirmed(),
+    );
   }
 }
