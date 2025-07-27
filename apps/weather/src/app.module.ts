@@ -8,6 +8,7 @@ import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
 import { CacheWeatherModule } from './infrastructure/cache/cache-weather.module';
+import { MetricsModule } from './infrastructure/metrics/metrics.module';
 import { WeatherProviderModule } from './infrastructure/providers/weather-provider.module';
 import { WeatherController } from './interfaces/weather.controller';
 import { WeatherFactory } from './weather.factory';
@@ -22,6 +23,7 @@ import { WeatherFactory } from './weather.factory';
     GeocodingModule,
     HttpClientModule,
     LoggerModule,
+    MetricsModule,
   ],
   controllers: [WeatherController],
   providers: [

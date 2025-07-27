@@ -1,14 +1,14 @@
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'apps/weather/src/app.module';
+import { CacheMetrics } from 'apps/weather/src/infrastructure/metrics/cache-metrics';
+import { CACHE_OPERATION_STATUS } from 'apps/weather/src/infrastructure/metrics/constants/metrics.constants';
 import { Server } from 'http';
-import { CacheMetricsService } from 'libs/infrastructure/cache/metrics/cache-metrics.service';
-import { CACHE_OPERATION_STATUS } from 'libs/infrastructure/cache/metrics/constants/metrics.constants';
 import * as request from 'supertest';
 
 describe('MetricsService (integration)', () => {
   let app: INestApplication<Server>;
-  let metricsService: CacheMetricsService;
+  let metricsService: CacheMetrics;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -18,7 +18,7 @@ describe('MetricsService (integration)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    metricsService = app.get<CacheMetricsService>(CacheMetricsService);
+    metricsService = app.get<CacheMetrics>(CacheMetrics);
   });
 
   beforeEach(() => {

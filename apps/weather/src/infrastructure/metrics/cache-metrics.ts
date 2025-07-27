@@ -8,7 +8,7 @@ import {
 } from './constants/metrics.constants';
 
 @Injectable()
-export class CacheMetricsService {
+export class CacheMetrics {
   constructor(
     @InjectMetric(CACHE_METRIC_NAMES.HIT_TOTAL)
     private readonly cacheHitCounter: Counter<string>,
