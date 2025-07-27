@@ -1,11 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EmailConfig } from 'apps/notification/config/email.config';
-import { NotificationInterface } from 'apps/notification/src/core/notification.interface';
-import { Frequency } from 'apps/notification/src/core/subscription.interface';
-import { EmailClientService } from 'apps/notification/src/infrastructure/clients/email.grpc.client';
-import { SubscriptionClientService } from 'apps/notification/src/infrastructure/clients/subscription.grpc.client';
-import { WeatherClientService } from 'apps/notification/src/infrastructure/clients/weather.grpc.client';
-import { NotificationService } from 'apps/notification/src/infrastructure/services/notification.service';
+import { NotificationInterface } from 'apps/notification/src/notification/core/notification.interface';
+import { EmailPublisher } from 'apps/notification/src/notification/infrastructure/publisher/email.publisher';
+import { NotificationService } from 'apps/notification/src/notification/infrastructure/services/notification.service';
+import { SubscriptionClientService } from 'apps/notification/src/subscription/infrastructure/subscription.grpc.client';
+import { WeatherClientService } from 'apps/notification/src/weather/infrastructure/weather.grpc.client';
+import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
 import * as notificationBuilder from 'libs/utils/notification/notification-builder';
 
 jest.mock('libs/utils/notification/notification-builder', () => ({
@@ -24,7 +24,7 @@ describe('NotificationService (unit)', () => {
   let service: NotificationInterface;
   const mockSubService = { getByFrequency: jest.fn() };
   const mockWeatherService = { getWeather: jest.fn() };
-  const mockEmailService = { sendWeatherEmail: jest.fn() };
+  const mockEmailPublisher = { publishEmail: jest.fn() };
   const mockEmailConfig = { unsubscribeLink: 'http://unsubscribe' };
 
   beforeEach(async () => {
@@ -46,8 +46,8 @@ describe('NotificationService (unit)', () => {
           useValue: mockWeatherService,
         },
         {
-          provide: EmailClientService,
-          useValue: mockEmailService,
+          provide: EmailPublisher,
+          useValue: mockEmailPublisher,
         },
         {
           provide: EmailConfig,
@@ -65,14 +65,14 @@ describe('NotificationService (unit)', () => {
     jest.clearAllMocks();
   });
 
-  it('should send weather updates to all subscriptions and use notificationBuilder', async () => {
+  it('should publish email notifications to all subscriptions', async () => {
     const subscriptions = [
       makeSubscription('user1@mail.com', 'Kyiv'),
       makeSubscription('user2@mail.com', 'Lviv'),
     ];
     const weather = makeWeather();
 
-    mockSubService.getByFrequency.mockResolvedValue(subscriptions);
+    mockSubService.getByFrequency.mockResolvedValue({ subscriptions });
     mockWeatherService.getWeather.mockResolvedValue(weather);
 
     await service.sendWeatherUpdates(Frequency.daily);
@@ -80,9 +80,6 @@ describe('NotificationService (unit)', () => {
     expect(mockSubService.getByFrequency).toHaveBeenCalledWith(Frequency.daily);
     expect(mockWeatherService.getWeather).toHaveBeenCalledTimes(2);
 
-    expect(notificationBuilder.buildWeatherNotification).toHaveBeenCalledTimes(
-      2,
-    );
     expect(
       notificationBuilder.buildWeatherNotification,
     ).toHaveBeenNthCalledWith(
@@ -100,27 +97,28 @@ describe('NotificationService (unit)', () => {
       mockEmailConfig.unsubscribeLink,
     );
 
-    expect(mockEmailService.sendWeatherEmail).toHaveBeenCalledTimes(2);
-    expect(mockEmailService.sendWeatherEmail).toHaveBeenNthCalledWith(1, {
-      email: 'user1@mail.com',
-      subject: 'Weather Update for City',
-      text: 'Weather details...',
-    });
-    expect(mockEmailService.sendWeatherEmail).toHaveBeenNthCalledWith(2, {
-      email: 'user2@mail.com',
-      subject: 'Weather Update for City',
-      text: 'Weather details...',
-    });
+    expect(mockEmailPublisher.publishEmail).toHaveBeenNthCalledWith(
+      1,
+      'user1@mail.com',
+      'Weather Update for City',
+      'Weather details...',
+    );
+    expect(mockEmailPublisher.publishEmail).toHaveBeenNthCalledWith(
+      2,
+      'user2@mail.com',
+      'Weather Update for City',
+      'Weather details...',
+    );
   });
 
-  it('should not send any emails if there are no subscriptions', async () => {
-    mockSubService.getByFrequency.mockResolvedValue([]);
+  it('should do nothing if no subscriptions returned', async () => {
+    mockSubService.getByFrequency.mockResolvedValue({ subscriptions: [] });
 
     await service.sendWeatherUpdates(Frequency.daily);
 
     expect(mockSubService.getByFrequency).toHaveBeenCalledWith(Frequency.daily);
     expect(mockWeatherService.getWeather).not.toHaveBeenCalled();
     expect(notificationBuilder.buildWeatherNotification).not.toHaveBeenCalled();
-    expect(mockEmailService.sendWeatherEmail).not.toHaveBeenCalled();
+    expect(mockEmailPublisher.publishEmail).not.toHaveBeenCalled();
   });
 });

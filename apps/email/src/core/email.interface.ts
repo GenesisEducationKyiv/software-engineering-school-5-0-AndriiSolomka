@@ -1,8 +1,8 @@
-export interface EmailPayload {
+export type EmailPayload = {
   email: string;
   subject: string;
   text: string;
-}
+};
 
 export const EmailToken = Symbol('EmailToken');
 

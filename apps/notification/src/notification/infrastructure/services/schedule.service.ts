@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
+import { Frequency } from 'apps/notification/src/subscription/core/subscription.interface';
+import { SubscriptionClientService } from 'apps/notification/src/subscription/infrastructure/subscription.grpc.client';
 
 import { NOTIFICATION } from './constants/notification.enum';
 import { SCHEDULE } from './constants/unconfirmed.enum';
 import { NotificationService } from './notification.service';
-import { Frequency } from '../../core/subscription.interface';
-import { SubscriptionClientService } from '../clients/subscription.grpc.client';
 
 @Injectable()
 export class ScheduleService {

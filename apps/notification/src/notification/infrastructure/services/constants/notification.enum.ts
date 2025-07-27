@@ -1,5 +1,5 @@
 export enum NOTIFICATION {
-  HOURLY = '0 0 * * * *',
+  HOURLY = '* * * * *',
   DAILY = '0 0 0 * * *',
 }
 

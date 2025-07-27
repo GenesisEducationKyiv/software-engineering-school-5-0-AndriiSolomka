@@ -4,27 +4,40 @@ import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
 
 import { AppModule } from './app.module';
 import { AppConfig } from '../config/app.config';
+import { KafkaConfig } from '../config/kafka.config';
 
 async function bootstrap() {
   ensureLogDirExists();
 
-  const appContext = await NestFactory.createApplicationContext(AppModule);
-  const config = appContext.get(AppConfig);
+  const app = await NestFactory.create(AppModule);
+  const config = app.get(AppConfig);
+  const kafkaConfig = app.get(KafkaConfig);
 
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    AppModule,
-    {
-      transport: Transport.GRPC,
-      options: {
-        package: 'email',
-        protoPath: 'libs/proto/email.proto',
-        url: `0.0.0.0:${config.port}`,
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        clientId: kafkaConfig.clientId,
+        brokers: [`${kafkaConfig.host}:${kafkaConfig.port}`],
+      },
+      consumer: {
+        groupId: kafkaConfig.groupId,
       },
     },
-  );
+  });
 
-  await app.listen();
-  console.log(`Email microservice is running on gRPC port ${config.port}`);
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.GRPC,
+    options: {
+      package: 'email',
+      protoPath: 'libs/proto/email.proto',
+      url: `0.0.0.0:${config.port}`,
+    },
+  });
+
+  await app.startAllMicroservices();
+
+  console.log(`Email microservice is running on port ${config.port}`);
 }
 
 bootstrap().catch((error) => {

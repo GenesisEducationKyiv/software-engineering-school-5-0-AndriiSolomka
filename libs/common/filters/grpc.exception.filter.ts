@@ -21,14 +21,17 @@ export class GrpcExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       this.handleHttpException(exception, res);
+      return;
     }
 
     if (this.isGrpcError(exception)) {
       this.handleGrpcError(exception, res);
+      return;
     }
 
     if (exception instanceof RpcException) {
       this.handleRpcException(exception, res);
+      return;
     }
 
     this.handleUnknownError(res);
