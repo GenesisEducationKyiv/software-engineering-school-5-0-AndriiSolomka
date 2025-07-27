@@ -1,6 +1,6 @@
 import { LoggerInterface } from 'libs/core/logger/logger.interface';
 
-import { LoggingDecoratorBase } from './logger.abstract';
+import { LoggingDecoratorBase } from '../../../../../libs/infrastructure/logger/logger.abstract';
 import {
   Frequency,
   SubscriptionEntity,

@@ -1,41 +1,24 @@
-import { Inject } from '@nestjs/common';
-import {
-  LoggerInterface,
-  LoggerToken,
-} from 'libs/core/logger/logger.interface';
+import { LoggerInterface } from 'libs/core/logger/logger.interface';
+import { LoggingDecoratorBase } from 'libs/infrastructure/logger/logger.abstract';
 
 import { WeatherProviderInterface } from '../../core/weather-provider.interface';
 import { WeatherData } from '../../core/weather.interface';
 
 export class LoggingWeatherProviderDecorator
+  extends LoggingDecoratorBase<WeatherProviderInterface>
   implements WeatherProviderInterface
 {
   constructor(
-    private readonly wrapped: WeatherProviderInterface,
-    @Inject(LoggerToken)
-    private readonly logger: LoggerInterface,
-    private readonly context: string,
-  ) {}
+    wrapped: WeatherProviderInterface,
+    logger: LoggerInterface,
+    context: string,
+  ) {
+    super(wrapped, logger, context);
+  }
 
-  async getWeather(city: string): Promise<WeatherData> {
-    try {
-      const result = await this.wrapped.getWeather(city);
-      this.logger.info({
-        context: this.context,
-        operation: 'provider_getWeather',
-        city,
-        status: 'success',
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: this.context,
-        operation: 'provider_getWeather',
-        city,
-        status: 'fail',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+  getWeather(city: string): Promise<WeatherData> {
+    return this.logAndExecute('getWeather', { city }, () =>
+      this.wrapped.getWeather(city),
+    );
   }
 }

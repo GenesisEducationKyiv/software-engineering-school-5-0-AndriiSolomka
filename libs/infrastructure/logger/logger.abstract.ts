@@ -15,7 +15,7 @@ export abstract class LoggingDecoratorBase<TWrapped> {
     this.logger.info({
       context: this.context,
       method,
-      event: 'success',
+      status: 'success',
       durationMs,
       params,
     });
@@ -30,7 +30,7 @@ export abstract class LoggingDecoratorBase<TWrapped> {
     this.logger.error({
       context: this.context,
       method,
-      event: 'error',
+      status: 'error',
       durationMs,
       params,
       error: error instanceof Error ? error.message : String(error),
