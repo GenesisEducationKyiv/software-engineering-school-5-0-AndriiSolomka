@@ -9,8 +9,10 @@ import {
 } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from 'apps/subscription/src/core/subscription/subscription.interface';
 import { SubscriptionAlreadyExistsException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
+import { SubscriptionFactory } from 'apps/subscription/src/infrastructure/modules/subscription.factory';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
 import { randomUUID } from 'crypto';
+import { LoggerToken } from 'libs/core/logger/logger.interface';
 
 function makeSubscription(): SubscriptionEntity {
   const now = new Date();
@@ -50,12 +52,26 @@ describe('SubscriptionService (unit)', () => {
       deleteUnconfirmed: jest.fn(),
     };
 
+    const loggerMock = {
+      info: jest.fn(),
+      error: jest.fn(),
+    };
+
     const module = await Test.createTestingModule({
       providers: [
-        SubscriptionService,
+        SubscriptionFactory,
         {
           provide: SubscriptionRepositoryToken,
           useValue: repoMock,
+        },
+        {
+          provide: LoggerToken,
+          useValue: loggerMock,
+        },
+        {
+          provide: SubscriptionService,
+          useFactory: (factory: SubscriptionFactory) => factory.create(),
+          inject: [SubscriptionFactory],
         },
       ],
     }).compile();
