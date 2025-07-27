@@ -1,37 +1,19 @@
 import { Module } from '@nestjs/common';
-import { CacheConfig } from 'apps/weather/config/cache.config';
-import {
-  CacheRepositoryInterface,
-  CacheRepositoryToken,
-} from 'libs/core/cache/cache-repository.interface';
-import {
-  LoggerInterface,
-  LoggerToken,
-} from 'libs/core/logger/logger.interface';
 import { CacheModule } from 'libs/infrastructure/cache/cache.module';
-import { LoggingCacheDecorator } from 'libs/infrastructure/cache/decorators/cache-logger.decorator';
 import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
+import { CacheWeatherFactory } from './cache-weather.factory';
 import { CacheWeatherService } from './cache-weather.service';
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Module({
-  imports: [CacheModule, LoggerModule],
+  imports: [CacheModule, LoggerModule, MetricsModule],
   providers: [
+    CacheWeatherFactory,
     {
       provide: CacheWeatherService,
-      useFactory: (
-        cache: CacheRepositoryInterface,
-        logger: LoggerInterface,
-        config: CacheConfig,
-      ) => {
-        const original = new CacheWeatherService(cache, config);
-        return new LoggingCacheDecorator(
-          original,
-          logger,
-          'CacheWeatherService',
-        );
-      },
-      inject: [CacheRepositoryToken, LoggerToken, CacheConfig],
+      useFactory: (factory: CacheWeatherFactory) => factory.create(),
+      inject: [CacheWeatherFactory],
     },
   ],
   exports: [CacheWeatherService],
