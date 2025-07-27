@@ -31,10 +31,11 @@ export class LoggerService implements LoggerInterface {
   }
 
   debug(data: Record<string, unknown>): void {
+    if (!this.config.enableDebugLogging) return;
     this.logIfEnabled(this.logger.debug, data);
   }
 
-  verbose(data: Record<string, unknown>): void {
+  trace(data: Record<string, unknown>): void {
     this.logIfEnabled(this.logger.trace, data);
   }
 }

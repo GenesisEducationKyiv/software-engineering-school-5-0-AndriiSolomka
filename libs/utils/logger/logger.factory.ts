@@ -6,8 +6,8 @@ export function createPinoLogger(
   pretty: boolean = false,
   options: LoggerOptions = {},
 ): Logger {
-  const streams: Array<{ stream: NodeJS.WritableStream }> = [
-    { stream: fs.createWriteStream(filePath, { flags: 'a' }) },
+  const streams: Array<{ stream: NodeJS.WritableStream; level?: string }> = [
+    { stream: fs.createWriteStream(filePath, { flags: 'a' }), level: 'trace' },
   ];
 
   if (pretty) {
@@ -15,13 +15,14 @@ export function createPinoLogger(
       stream: pino.transport({
         target: 'pino-pretty',
         options: { colorize: true, singleLine: true },
-      }) as unknown as NodeJS.WritableStream,
+      }) as NodeJS.WritableStream,
+      level: 'trace',
     });
   }
 
   return pino(
     {
-      level: 'info',
+      level: 'trace',
       timestamp: pino.stdTimeFunctions.isoTime,
       ...options,
     },

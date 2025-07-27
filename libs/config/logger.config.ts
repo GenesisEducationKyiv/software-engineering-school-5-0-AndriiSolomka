@@ -10,4 +10,12 @@ export class LoggerConfig {
     default: false,
   })
   enableLogging: boolean;
+
+  @IsBoolean()
+  @IsOptional()
+  @Value('ENABLE_DEBUG_LOGGING', {
+    parse: (val) => val === 'true',
+    default: false,
+  })
+  enableDebugLogging: boolean;
 }

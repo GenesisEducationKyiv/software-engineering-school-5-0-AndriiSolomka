@@ -3,5 +3,5 @@ export interface LoggerInterface {
   error(data: Record<string, unknown>): void;
   warn(data: Record<string, unknown>): void;
   debug(data: Record<string, unknown>): void;
-  verbose(data: Record<string, unknown>): void;
+  trace(data: Record<string, unknown>): void;
 }
