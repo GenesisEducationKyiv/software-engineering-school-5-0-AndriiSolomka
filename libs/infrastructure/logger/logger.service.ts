@@ -7,19 +7,23 @@ import { createPinoLogger } from 'libs/utils/logger/logger.factory';
 export class LoggerService implements LoggerInterface {
   private readonly logger = createPinoLogger(APP_LOG_FILE_PATH, true);
 
-  log(message: string, ...args: unknown[]): void {
-    this.logger.info(message, ...args);
+  log(data: Record<string, unknown>): void {
+    this.logger.info(data);
   }
-  error(message: string, ...args: unknown[]): void {
-    this.logger.error(message, ...args);
+
+  error(data: Record<string, unknown>): void {
+    this.logger.error(data);
   }
-  warn(message: string, ...args: unknown[]): void {
-    this.logger.warn(message, ...args);
+
+  warn(data: Record<string, unknown>): void {
+    this.logger.warn(data);
   }
-  debug(message: string, ...args: unknown[]): void {
-    this.logger.debug(message, ...args);
+
+  debug(data: Record<string, unknown>): void {
+    this.logger.debug(data);
   }
-  verbose(message: string, ...args: unknown[]): void {
-    this.logger.trace(message, ...args);
+
+  verbose(data: Record<string, unknown>): void {
+    this.logger.trace(data);
   }
 }
