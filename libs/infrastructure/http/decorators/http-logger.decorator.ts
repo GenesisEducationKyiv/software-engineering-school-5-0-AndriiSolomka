@@ -1,10 +1,15 @@
+import { Inject } from '@nestjs/common';
 import { HttpClientInterface } from 'libs/core/http/http-client.interface';
-import { LoggerService } from 'libs/infrastructure/logger/logger.service';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
 export class LoggingHttpClient implements HttpClientInterface {
   constructor(
     private readonly wrapped: HttpClientInterface,
-    private readonly logger: LoggerService,
+    @Inject(LoggerToken)
+    private readonly logger: LoggerInterface,
   ) {}
 
   async get<T>(url: string): Promise<T> {

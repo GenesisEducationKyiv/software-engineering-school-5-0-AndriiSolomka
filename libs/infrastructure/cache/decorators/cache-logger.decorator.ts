@@ -1,10 +1,15 @@
+import { Inject } from '@nestjs/common';
 import { CacheInterface } from 'libs/core/cache/cache.interface';
-import { LoggerService } from 'libs/infrastructure/logger/logger.service';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
 export class LoggingCacheDecorator<T> implements CacheInterface<T> {
   constructor(
     private readonly wrapped: CacheInterface<T>,
-    private readonly logger: LoggerService,
+    @Inject(LoggerToken)
+    private readonly logger: LoggerInterface,
     private readonly context: string,
   ) {}
 

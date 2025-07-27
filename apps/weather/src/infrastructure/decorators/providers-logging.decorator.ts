@@ -1,4 +1,8 @@
-import { LoggerService } from 'libs/infrastructure/logger/logger.service';
+import { Inject } from '@nestjs/common';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
 import { WeatherProviderInterface } from '../../core/weather-provider.interface';
 import { WeatherData } from '../../core/weather.interface';
@@ -8,7 +12,8 @@ export class LoggingWeatherProviderDecorator
 {
   constructor(
     private readonly wrapped: WeatherProviderInterface,
-    private readonly logger: LoggerService,
+    @Inject(LoggerToken)
+    private readonly logger: LoggerInterface,
     private readonly context: string,
   ) {}
 

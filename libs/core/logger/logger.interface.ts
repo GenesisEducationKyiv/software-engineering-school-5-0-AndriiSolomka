@@ -1,3 +1,5 @@
+export const LoggerToken = Symbol('LOGGER_TOKEN');
+
 export interface LoggerInterface {
   info(data: Record<string, unknown>): void;
   error(data: Record<string, unknown>): void;

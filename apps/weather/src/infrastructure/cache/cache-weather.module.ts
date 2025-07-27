@@ -4,10 +4,13 @@ import {
   CacheRepositoryInterface,
   CacheRepositoryToken,
 } from 'libs/core/cache/cache-repository.interface';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 import { CacheModule } from 'libs/infrastructure/cache/cache.module';
 import { LoggingCacheDecorator } from 'libs/infrastructure/cache/decorators/cache-logger.decorator';
 import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
-import { LoggerService } from 'libs/infrastructure/logger/logger.service';
 
 import { CacheWeatherService } from './cache-weather.service';
 
@@ -18,7 +21,7 @@ import { CacheWeatherService } from './cache-weather.service';
       provide: CacheWeatherService,
       useFactory: (
         cache: CacheRepositoryInterface,
-        logger: LoggerService,
+        logger: LoggerInterface,
         config: CacheConfig,
       ) => {
         const original = new CacheWeatherService(cache, config);
@@ -28,7 +31,7 @@ import { CacheWeatherService } from './cache-weather.service';
           'CacheWeatherService',
         );
       },
-      inject: [CacheRepositoryToken, LoggerService, CacheConfig],
+      inject: [CacheRepositoryToken, LoggerToken, CacheConfig],
     },
   ],
   exports: [CacheWeatherService],

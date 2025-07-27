@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { LoggerService } from 'libs/infrastructure/logger/logger.service';
+import { Inject, Injectable } from '@nestjs/common';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
 import { CacheWeatherService } from './infrastructure/cache/cache-weather.service';
 import { LoggingWeatherProviderDecorator } from './infrastructure/decorators/providers-logging.decorator';
@@ -14,7 +17,8 @@ export class WeatherFactory {
     private readonly apiProvider: WeatherApiProviderService,
     private readonly openMeteo: OpenMeteoProviderService,
     private readonly cache: CacheWeatherService,
-    private readonly logger: LoggerService,
+    @Inject(LoggerToken)
+    private readonly logger: LoggerInterface,
   ) {}
 
   create() {
