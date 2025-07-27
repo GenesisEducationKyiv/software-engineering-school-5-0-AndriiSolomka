@@ -1,3 +1,3 @@
 export const EMAIL_EVENTS = {
-  SENDED: 'email.sended',
+  SENT: 'email.sent',
 };

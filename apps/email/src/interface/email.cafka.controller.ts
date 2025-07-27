@@ -15,7 +15,7 @@ export class EmailKafkaController {
     private readonly emailService: EmailInterface,
   ) {}
 
-  @EventPattern(EMAIL_EVENTS.SENDED)
+  @EventPattern(EMAIL_EVENTS.SENT)
   async handleEmailSend(@Payload() data: EmailPayload) {
     await this.emailService.sendWeatherEmail(data);
   }

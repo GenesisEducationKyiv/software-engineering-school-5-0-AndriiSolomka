@@ -15,6 +15,6 @@ export class EmailPublisher implements OnModuleInit {
   }
 
   publishEmail(email: string, subject: string, text: string) {
-    this.kafkaClient.emit(EMAIL_EVENTS.SENDED, { email, subject, text });
+    this.kafkaClient.emit(EMAIL_EVENTS.SENT, { email, subject, text });
   }
 }
