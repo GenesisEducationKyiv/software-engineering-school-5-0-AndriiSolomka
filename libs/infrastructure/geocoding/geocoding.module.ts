@@ -5,7 +5,7 @@ import { CacheCityModule } from './cache/cache-city.module';
 import { CacheCityService } from './cache/cache-city.service';
 import { GeocodingService } from './geocoding.service';
 import { HttpClientModule } from '../http/http-client.module';
-import { HttpClientService } from '../http/http-client.service';
+import { HttpClient } from '../http/http-client.service';
 import { GeocodingCacheProxyService } from './proxy/geocoding/geocoding-proxy.service';
 
 @Module({
@@ -14,7 +14,7 @@ import { GeocodingCacheProxyService } from './proxy/geocoding/geocoding-proxy.se
     {
       provide: GeocodingService,
       useFactory: (
-        httpClientService: HttpClientService,
+        httpClientService: HttpClient,
         config: GeocodingConfig,
         cacheCityService: CacheCityService,
       ) => {
@@ -24,7 +24,7 @@ import { GeocodingCacheProxyService } from './proxy/geocoding/geocoding-proxy.se
         );
         return new GeocodingCacheProxyService(geocoding, cacheCityService);
       },
-      inject: [HttpClientService, GeocodingConfig, CacheCityService],
+      inject: [HttpClient, GeocodingConfig, CacheCityService],
     },
   ],
   exports: [GeocodingService],
