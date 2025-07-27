@@ -37,6 +37,19 @@ export abstract class LoggingDecoratorBase<TWrapped> {
     });
   }
 
+  protected logDebug(
+    method: string,
+    params: Record<string, unknown> = {},
+    status: string = 'debug',
+  ) {
+    this.logger.debug({
+      context: this.context,
+      method,
+      status,
+      params,
+    });
+  }
+
   protected async logAndExecute<T>(
     methodName: string,
     params: Record<string, unknown>,

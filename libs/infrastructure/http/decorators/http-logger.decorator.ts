@@ -1,58 +1,27 @@
-import { Inject } from '@nestjs/common';
 import { HttpClientInterface } from 'libs/core/http/http-client.interface';
-import {
-  LoggerInterface,
-  LoggerToken,
-} from 'libs/core/logger/logger.interface';
+import { LoggerInterface } from 'libs/core/logger/logger.interface';
+import { LoggingDecoratorBase } from 'libs/infrastructure/logger/logger.abstract';
 
-export class LoggingHttpClient implements HttpClientInterface {
+export class LoggingHttpClient
+  extends LoggingDecoratorBase<HttpClientInterface>
+  implements HttpClientInterface
+{
   constructor(
-    private readonly wrapped: HttpClientInterface,
-    @Inject(LoggerToken)
-    private readonly logger: LoggerInterface,
-  ) {}
+    protected readonly wrapped: HttpClientInterface,
+    protected readonly logger: LoggerInterface,
+  ) {
+    super(wrapped, logger, 'HttpClient');
+  }
 
   async get<T>(url: string): Promise<T> {
-    try {
-      const result = await this.wrapped.get<T>(url);
-      this.logger.info({
-        context: 'HttpClient',
-        operation: 'http_get',
-        url,
-        status: 'success',
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: 'HttpClient',
-        operation: 'http_get',
-        url,
-        status: 'fail',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+    return this.logAndExecute('http_get', { url }, () =>
+      this.wrapped.get<T>(url),
+    );
   }
 
   async post<T>(url: string, data: unknown): Promise<T> {
-    try {
-      const result = await this.wrapped.post<T>(url, data);
-      this.logger.info({
-        context: 'HttpClient',
-        operation: 'http_post',
-        url,
-        status: 'success',
-      });
-      return result;
-    } catch (error) {
-      this.logger.error({
-        context: 'HttpClient',
-        operation: 'http_post',
-        url,
-        status: 'fail',
-        error: error instanceof Error ? error.message : String(error),
-      });
-      throw error;
-    }
+    return this.logAndExecute('http_post', { url, data }, () =>
+      this.wrapped.post<T>(url, data),
+    );
   }
 }
