@@ -1,6 +1,7 @@
 import { ConfigifyModule } from '@itgorillaz/configify';
 import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
 import { SubscriptionModule } from './infrastructure/modules/subscription.module';
 import { TokenModule } from './infrastructure/modules/token.module';
@@ -13,6 +14,7 @@ import { SubscriptionGrpcController } from './interface/subscription.controller'
     SubscriptionModule,
     TokenModule,
     HttpClientModule,
+    LoggerModule,
   ],
   controllers: [SubscriptionGrpcController],
   providers: [SubscriptionApplicationService],
