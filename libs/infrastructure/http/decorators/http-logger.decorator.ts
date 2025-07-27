@@ -23,7 +23,7 @@ export class LoggingHttpClient implements HttpClientInterface {
         operation: 'http_get',
         url,
         status: 'fail',
-        error,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }
@@ -45,7 +45,7 @@ export class LoggingHttpClient implements HttpClientInterface {
         operation: 'http_post',
         url,
         status: 'fail',
-        error,
+        error: error instanceof Error ? error.message : String(error),
       });
       throw error;
     }

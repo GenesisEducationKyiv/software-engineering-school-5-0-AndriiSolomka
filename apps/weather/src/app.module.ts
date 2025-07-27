@@ -5,6 +5,7 @@ import { GeocodingConfig } from 'libs/config/geocoding.config';
 import { RedisModule } from 'libs/infrastructure/cache/providers/redis.module';
 import { GeocodingModule } from 'libs/infrastructure/geocoding/geocoding.module';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
 import { CacheWeatherModule } from './infrastructure/cache/cache-weather.module';
 import { WeatherProviderModule } from './infrastructure/providers/weather-provider.module';
@@ -20,6 +21,7 @@ import { WeatherFactory } from './weather.factory';
     GeocodingConfig,
     GeocodingModule,
     HttpClientModule,
+    LoggerModule,
   ],
   controllers: [WeatherController],
   providers: [
