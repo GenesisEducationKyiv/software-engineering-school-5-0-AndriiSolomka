@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common';
 import { HttpClientModule } from 'libs/infrastructure/http/http-client.module';
 import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
+import { MetricsModule } from './infrastructure/metrics/metrics.module';
 import { SubscriptionModule } from './infrastructure/modules/subscription.module';
 import { TokenModule } from './infrastructure/modules/token.module';
 import { SubscriptionApplicationService } from './infrastructure/services/subscription-application.service';
@@ -15,6 +16,7 @@ import { SubscriptionGrpcController } from './interface/subscription.controller'
     TokenModule,
     HttpClientModule,
     LoggerModule,
+    MetricsModule,
   ],
   controllers: [SubscriptionGrpcController],
   providers: [SubscriptionApplicationService],

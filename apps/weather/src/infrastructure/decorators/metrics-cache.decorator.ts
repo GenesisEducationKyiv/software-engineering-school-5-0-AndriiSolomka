@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CacheService } from 'libs/infrastructure/cache/cache.service';
+import { CacheInterface } from 'libs/core/cache/cache.interface';
 
 import { CacheMetrics } from '../metrics/cache-metrics';
 import { CACHE_OPERATION_STATUS } from '../metrics/constants/metrics.constants';
@@ -7,7 +7,7 @@ import { CACHE_OPERATION_STATUS } from '../metrics/constants/metrics.constants';
 @Injectable()
 export class MetricsCacheDecorator<T> {
   constructor(
-    private readonly decorated: CacheService<T>,
+    private readonly decorated: CacheInterface<T>,
     private readonly metrics: CacheMetrics,
     private readonly cacheType: string,
   ) {}
