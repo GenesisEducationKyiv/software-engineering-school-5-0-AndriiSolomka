@@ -1,5 +1,5 @@
 import { Configuration, Value } from '@itgorillaz/configify';
-import { IsBoolean, IsOptional } from 'class-validator';
+import { IsBoolean, IsOptional, IsString } from 'class-validator';
 
 @Configuration()
 export class LoggerConfig {
@@ -7,7 +7,6 @@ export class LoggerConfig {
   @IsOptional()
   @Value('ENABLE_FILE_LOGGING', {
     parse: (val) => val === 'true',
-    default: false,
   })
   enableLogging: boolean;
 
@@ -15,7 +14,11 @@ export class LoggerConfig {
   @IsOptional()
   @Value('ENABLE_DEBUG_LOGGING', {
     parse: (val) => val === 'true',
-    default: false,
   })
   enableDebugLogging: boolean;
+
+  @IsString()
+  @IsOptional()
+  @Value('LOG_FILE_PATH')
+  filePath: string;
 }
