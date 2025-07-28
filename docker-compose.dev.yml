@@ -138,6 +138,7 @@ services:
     env_file:
       - apps/email/.env
     ports:
+      - '3004:3004'
       - '5054:5054'
     volumes:
       - .:/app

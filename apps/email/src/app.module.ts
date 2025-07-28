@@ -6,12 +6,18 @@ import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 import { EmailTransportToken } from './core/email-transport.interface';
 import { EmailToken } from './core/email.interface';
 import { EmailFactory } from './email.factory';
+import { MetricsModule } from './infrastructure/metrics/metrics.module';
 import { NodemailerService } from './infrastructure/providers/nodemailer.provider';
 import { EmailKafkaController } from './interface/email.cafka.controller';
 import { EmailController } from './interface/email.controller';
 
 @Module({
-  imports: [ConfigifyModule.forRootAsync({}), HttpClientModule, LoggerModule],
+  imports: [
+    ConfigifyModule.forRootAsync({}),
+    HttpClientModule,
+    LoggerModule,
+    MetricsModule,
+  ],
   providers: [
     {
       provide: EmailTransportToken,

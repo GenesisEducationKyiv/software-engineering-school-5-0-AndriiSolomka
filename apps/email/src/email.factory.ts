@@ -10,6 +10,8 @@ import {
   EmailTransportToken,
 } from './core/email-transport.interface';
 import { LoggingEmailServiceDecorator } from './infrastructure/decorators/email-logging.decorator';
+import { MetricsEmailServiceDecorator } from './infrastructure/decorators/metrics-email.decorator';
+import { EmailMetrics } from './infrastructure/metrics/email-metrics';
 import { EmailService } from './infrastructure/services/email.service';
 
 @Injectable()
@@ -20,10 +22,15 @@ export class EmailFactory {
     @Inject(LoggerToken)
     private readonly logger: LoggerInterface,
     private readonly config: EmailConfig,
+    private readonly metrics: EmailMetrics,
   ) {}
 
   create() {
-    const original = new EmailService(this.transport, this.config);
-    return new LoggingEmailServiceDecorator(original, this.logger);
+    const service = new EmailService(this.transport, this.config);
+    const serviceWithMetrics = new MetricsEmailServiceDecorator(
+      service,
+      this.metrics,
+    );
+    return new LoggingEmailServiceDecorator(serviceWithMetrics, this.logger);
   }
 }

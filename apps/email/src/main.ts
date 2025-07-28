@@ -33,6 +33,7 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+  await app.listen(config.httpPort);
 
   console.log(`Email microservice is running on port ${config.port}`);
 }
