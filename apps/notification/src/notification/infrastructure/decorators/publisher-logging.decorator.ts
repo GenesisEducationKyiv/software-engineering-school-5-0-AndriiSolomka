@@ -1,11 +1,11 @@
 import { LoggerInterface } from 'libs/core/logger/logger.interface';
 import { LoggingDecoratorBase } from 'libs/infrastructure/logger/logger.abstract';
 
-import { EmailPublisher } from '../publisher/email.publisher';
+import { EmailPublisherInterface } from '../../core/publisher.interface';
 
-export class LoggingEmailPublisherDecorator extends LoggingDecoratorBase<EmailPublisher> {
+export class LoggingEmailPublisherDecorator extends LoggingDecoratorBase<EmailPublisherInterface> {
   constructor(
-    protected readonly wrapped: EmailPublisher,
+    protected readonly wrapped: EmailPublisherInterface,
     protected readonly logger: LoggerInterface,
     protected readonly context = 'EmailPublisher',
   ) {

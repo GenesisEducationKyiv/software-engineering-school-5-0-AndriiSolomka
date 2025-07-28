@@ -6,7 +6,9 @@ import {
 } from 'libs/core/logger/logger.interface';
 
 import { KAFKA_PUBLISHER } from '../kafka/kafka.module';
+import { MetricsPublisherDecorator } from './infrastructure/decorators/metrics-publisher.decorator';
 import { LoggingEmailPublisherDecorator } from './infrastructure/decorators/publisher-logging.decorator';
+import { NotificationMetrics } from './infrastructure/metrics/notification-metrics';
 import { EmailPublisher } from './infrastructure/publisher/email.publisher';
 
 @Injectable()
@@ -16,10 +18,12 @@ export class EmailPublisherFactory {
     private readonly logger: LoggerInterface,
     @Inject(KAFKA_PUBLISHER)
     private readonly kafkaPublisher: ClientKafka,
+    private readonly metrics: NotificationMetrics,
   ) {}
 
   create() {
     const original = new EmailPublisher(this.kafkaPublisher);
-    return new LoggingEmailPublisherDecorator(original, this.logger);
+    const withMetrics = new MetricsPublisherDecorator(original, this.metrics);
+    return new LoggingEmailPublisherDecorator(withMetrics, this.logger);
   }
 }

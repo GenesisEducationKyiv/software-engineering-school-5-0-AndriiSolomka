@@ -6,6 +6,7 @@ import { EmailPublisherFactory } from './email.factory';
 import { KafkaPublisherModule } from '../kafka/kafka.module';
 import { SubscriptionModule } from '../subscription/subscription.module';
 import { WeatherModule } from '../weather/weather.module';
+import { MetricsModule } from './infrastructure/metrics/metrics.module';
 import { EmailPublisher } from './infrastructure/publisher/email.publisher';
 import { NotificationService } from './infrastructure/services/notification.service';
 import { ScheduleService } from './infrastructure/services/schedule.service';
@@ -17,6 +18,7 @@ import { ScheduleService } from './infrastructure/services/schedule.service';
     SubscriptionModule,
     KafkaPublisherModule,
     LoggerModule,
+    MetricsModule,
   ],
   providers: [
     NotificationService,
