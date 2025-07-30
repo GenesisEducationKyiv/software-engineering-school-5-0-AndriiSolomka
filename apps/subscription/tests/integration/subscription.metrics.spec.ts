@@ -66,13 +66,18 @@ describe('SubscriptionMetrics (integration)', () => {
 
   it('should track operation durations for all statuses', async () => {
     for (const method of methods) {
-      const successTimer = metricsService.createOperationStopper(method);
-      await new Promise((resolve) => setTimeout(resolve, 2));
-      successTimer(SUBSCRIPTION_OPERATION_STATUS.SUCCESS);
+      await metricsService.withDuration(method, async () => {
+        await new Promise((resolve) => setTimeout(resolve, 2));
+      });
 
-      const errorTimer = metricsService.createOperationStopper(method);
-      await new Promise((resolve) => setTimeout(resolve, 2));
-      errorTimer(SUBSCRIPTION_OPERATION_STATUS.ERROR);
+      try {
+        await metricsService.withDuration(method, async () => {
+          await new Promise((resolve) => setTimeout(resolve, 2));
+          throw new Error('Simulated error');
+        });
+      } catch {
+        continue;
+      }
     }
 
     const response = await request(app.getHttpServer())
