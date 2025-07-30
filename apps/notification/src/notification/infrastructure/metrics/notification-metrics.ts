@@ -18,19 +18,26 @@ export class NotificationMetrics {
     private readonly publishErrors: Counter<string>,
   ) {}
 
-  recordPublished(status: NOTIFICATION_EMAIL_STATUS) {
-    this.publishedCounter.inc({ status });
+  recordPublished(method: string, status: NOTIFICATION_EMAIL_STATUS) {
+    this.publishedCounter.inc({ method, status });
   }
 
-  recordPublishError(error_code: string) {
-    this.publishErrors.inc({ error_code });
+  recordPublishError(method: string, error_code: string) {
+    this.publishErrors.inc({ method, error_code });
   }
 
-  createPublishDurationStopper(status: NOTIFICATION_EMAIL_STATUS) {
-    const stopTimer = this.publishDuration.startTimer({ status });
-    return (status: string) => {
-      stopTimer({ status });
-    };
+  async withDuration<T>(method: string, fn: () => Promise<T> | T): Promise<T> {
+    const stopTimer = this.publishDuration.startTimer({ method });
+    try {
+      const result = await fn();
+      this.recordPublished(method, NOTIFICATION_EMAIL_STATUS.SUCCESS);
+      stopTimer({ status: NOTIFICATION_EMAIL_STATUS.SUCCESS, method });
+      return result;
+    } catch (error) {
+      this.recordPublished(method, NOTIFICATION_EMAIL_STATUS.ERROR);
+      stopTimer({ status: NOTIFICATION_EMAIL_STATUS.ERROR, method });
+      throw error;
+    }
   }
 
   clearAllMetrics(): void {

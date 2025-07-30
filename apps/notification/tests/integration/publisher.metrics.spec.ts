@@ -11,6 +11,8 @@ describe('NotificationMetrics (integration)', () => {
   let app: INestApplication<Server>;
   let metricsService: NotificationMetrics;
 
+  const testMethod = 'testMethod';
+
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -32,82 +34,83 @@ describe('NotificationMetrics (integration)', () => {
   });
 
   it('should record published emails', async () => {
-    metricsService.recordPublished(NOTIFICATION_EMAIL_STATUS.SUCCESS);
-    metricsService.recordPublished(NOTIFICATION_EMAIL_STATUS.SUCCESS);
-    metricsService.recordPublished(NOTIFICATION_EMAIL_STATUS.ERROR);
+    metricsService.recordPublished(
+      testMethod,
+      NOTIFICATION_EMAIL_STATUS.SUCCESS,
+    );
+    metricsService.recordPublished(
+      testMethod,
+      NOTIFICATION_EMAIL_STATUS.SUCCESS,
+    );
+    metricsService.recordPublished(testMethod, NOTIFICATION_EMAIL_STATUS.ERROR);
 
     const response = await request(app.getHttpServer())
       .get('/api/metrics')
       .expect(200);
 
     expect(response.text).toContain(
-      'notification_email_published_total{status="success",app="notification-api"} 2',
+      `notification_email_published_total{method="${testMethod}",status="success",app="notification-api"} 2`,
     );
     expect(response.text).toContain(
-      'notification_email_published_total{status="error",app="notification-api"} 1',
+      `notification_email_published_total{method="${testMethod}",status="error",app="notification-api"} 1`,
     );
   });
 
   it('should record publish errors', async () => {
-    metricsService.recordPublishError('ECONNREFUSED');
-    metricsService.recordPublishError('ETIMEOUT');
+    metricsService.recordPublishError(testMethod, 'ECONNREFUSED');
+    metricsService.recordPublishError(testMethod, 'ETIMEOUT');
 
     const response = await request(app.getHttpServer())
       .get('/api/metrics')
       .expect(200);
 
     expect(response.text).toContain(
-      'notification_email_publish_errors_total{error_code="ECONNREFUSED",app="notification-api"} 1',
+      `notification_email_publish_errors_total{method="${testMethod}",error_code="ECONNREFUSED",app="notification-api"} 1`,
     );
     expect(response.text).toContain(
-      'notification_email_publish_errors_total{error_code="ETIMEOUT",app="notification-api"} 1',
+      `notification_email_publish_errors_total{method="${testMethod}",error_code="ETIMEOUT",app="notification-api"} 1`,
     );
   });
 
-  it('should record publish durations', async () => {
-    const endTimer = metricsService.createPublishDurationStopper(
-      NOTIFICATION_EMAIL_STATUS.SUCCESS,
-    );
-    await new Promise((resolve) => setTimeout(resolve, 10));
-    endTimer(NOTIFICATION_EMAIL_STATUS.SUCCESS);
+  it('should record success publish durations', async () => {
+    await metricsService.withDuration(testMethod, async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    });
 
     const response = await request(app.getHttpServer())
       .get('/api/metrics')
       .expect(200);
 
     expect(response.text).toContain(
-      'notification_email_publish_duration_seconds_bucket{le="0.5",app="notification-api",status="success"}',
+      `notification_email_publish_duration_seconds_bucket{le="0.5",app="notification-api",method="${testMethod}",status="success"}`,
     );
     expect(response.text).toContain(
-      'notification_email_publish_duration_seconds_count{app="notification-api",status="success"}',
+      `notification_email_publish_duration_seconds_count{app="notification-api",method="${testMethod}",status="success"} 1`,
     );
     expect(response.text).toContain(
-      'notification_email_publish_duration_seconds_sum{app="notification-api",status="success"}',
+      `notification_email_publish_duration_seconds_sum{app="notification-api",method="${testMethod}",status="success"}`,
     );
   });
 
-  it('should record different statuses for durations', async () => {
-    const successTimer = metricsService.createPublishDurationStopper(
-      NOTIFICATION_EMAIL_STATUS.SUCCESS,
-    );
-    await new Promise((resolve) => setTimeout(resolve, 5));
-    successTimer(NOTIFICATION_EMAIL_STATUS.SUCCESS);
-
-    const errorTimer = metricsService.createPublishDurationStopper(
-      NOTIFICATION_EMAIL_STATUS.ERROR,
-    );
-    await new Promise((resolve) => setTimeout(resolve, 5));
-    errorTimer(NOTIFICATION_EMAIL_STATUS.ERROR);
+  it('should record error publish durations', async () => {
+    await expect(
+      metricsService.withDuration(testMethod, () => {
+        throw new Error('Test error');
+      }),
+    ).rejects.toThrow('Test error');
 
     const response = await request(app.getHttpServer())
       .get('/api/metrics')
       .expect(200);
 
     expect(response.text).toContain(
-      'notification_email_publish_duration_seconds_count{app="notification-api",status="success"}',
+      `notification_email_publish_duration_seconds_bucket{le="0.5",app="notification-api",method="${testMethod}",status="error"}`,
     );
     expect(response.text).toContain(
-      'notification_email_publish_duration_seconds_count{app="notification-api",status="error"}',
+      `notification_email_publish_duration_seconds_count{app="notification-api",method="${testMethod}",status="error"} 1`,
+    );
+    expect(response.text).toContain(
+      `notification_email_publish_duration_seconds_sum{app="notification-api",method="${testMethod}",status="error"}`,
     );
   });
 });

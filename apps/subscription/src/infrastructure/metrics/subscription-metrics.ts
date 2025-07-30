@@ -24,9 +24,11 @@ export class SubscriptionMetrics {
     const stopTimer = this.operationDuration.startTimer({ method });
     try {
       const result = await fn();
+      this.recordOperation(method, SUBSCRIPTION_OPERATION_STATUS.SUCCESS);
       stopTimer({ status: SUBSCRIPTION_OPERATION_STATUS.SUCCESS });
       return result;
     } catch (err) {
+      this.recordOperation(method, SUBSCRIPTION_OPERATION_STATUS.ERROR);
       stopTimer({ status: SUBSCRIPTION_OPERATION_STATUS.ERROR });
       throw err;
     }
