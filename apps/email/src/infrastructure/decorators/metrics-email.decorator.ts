@@ -4,7 +4,6 @@ import {
   EmailPayload,
 } from 'apps/email/src/core/email.interface';
 
-import { EMAIL_SEND_STATUS } from '../metrics/constants/metrics.constants';
 import { EmailMetrics } from '../metrics/email-metrics';
 
 @Injectable()
@@ -14,36 +13,14 @@ export class MetricsEmailServiceDecorator implements EmailInterface {
     private readonly metrics: EmailMetrics,
   ) {}
 
-  private async wrapWithMetrics<T>(
-    type: string,
-    fn: () => Promise<T>,
-  ): Promise<T> {
-    const end = this.metrics.createSendDurationStopper(
-      type,
-      EMAIL_SEND_STATUS.SUCCESS,
-    );
-    try {
-      const result = await fn();
-      this.metrics.recordSent(type, EMAIL_SEND_STATUS.SUCCESS);
-      end(EMAIL_SEND_STATUS.SUCCESS);
-
-      return result;
-    } catch (error) {
-      this.metrics.recordSent(type, EMAIL_SEND_STATUS.ERROR);
-      end(EMAIL_SEND_STATUS.ERROR);
-
-      throw error;
-    }
-  }
-
-  sendConfirmationEmail(email: string, token: string): Promise<void> {
-    return this.wrapWithMetrics('confirmation', () =>
+  async sendConfirmationEmail(email: string, token: string): Promise<void> {
+    return this.metrics.withDuration('confirmation', () =>
       this.decorated.sendConfirmationEmail(email, token),
     );
   }
 
-  sendWeatherEmail(emailPayload: EmailPayload): Promise<void> {
-    return this.wrapWithMetrics('weather', () =>
+  async sendWeatherEmail(emailPayload: EmailPayload): Promise<void> {
+    return this.metrics.withDuration('weather', () =>
       this.decorated.sendWeatherEmail(emailPayload),
     );
   }

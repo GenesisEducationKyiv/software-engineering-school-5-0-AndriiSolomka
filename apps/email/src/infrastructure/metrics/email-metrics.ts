@@ -18,19 +18,26 @@ export class EmailMetrics {
     private readonly sendErrors: Counter<string>,
   ) {}
 
-  recordSent(type: string, status: EMAIL_SEND_STATUS) {
-    this.sentCounter.inc({ type, status });
+  recordSent(method: string, status: EMAIL_SEND_STATUS) {
+    this.sentCounter.inc({ method, status });
   }
 
-  recordSendError(type: string, error_code: string) {
-    this.sendErrors.inc({ type, error_code });
+  recordSendError(method: string, error_code: string) {
+    this.sendErrors.inc({ method, error_code });
   }
 
-  createSendDurationStopper(type: string, status: EMAIL_SEND_STATUS) {
-    const stopTimer = this.sendDuration.startTimer({ type, status });
-    return (status: string) => {
-      stopTimer({ status });
-    };
+  async withDuration<T>(method: string, fn: () => Promise<T> | T): Promise<T> {
+    const stopTimer = this.sendDuration.startTimer({ method });
+    try {
+      const result = await fn();
+      this.recordSent(method, EMAIL_SEND_STATUS.SUCCESS);
+      stopTimer({ status: EMAIL_SEND_STATUS.SUCCESS, method });
+      return result;
+    } catch (error) {
+      this.recordSent(method, EMAIL_SEND_STATUS.ERROR);
+      stopTimer({ status: EMAIL_SEND_STATUS.ERROR, method });
+      throw error;
+    }
   }
 
   clearAllMetrics(): void {
