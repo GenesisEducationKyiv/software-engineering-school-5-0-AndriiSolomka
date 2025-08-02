@@ -5,6 +5,8 @@ import {
 import { LoggerInterface } from 'libs/core/logger/logger.interface';
 import { LoggingDecoratorBase } from 'libs/infrastructure/logger/logger.abstract';
 
+import { EmailService } from '../services/email.service';
+
 export class LoggingEmailServiceDecorator
   extends LoggingDecoratorBase<EmailInterface>
   implements EmailInterface
@@ -12,7 +14,7 @@ export class LoggingEmailServiceDecorator
   constructor(
     protected readonly wrapped: EmailInterface,
     protected readonly logger: LoggerInterface,
-    protected readonly context: string = 'EmailService',
+    protected readonly context: string = EmailService.name,
   ) {
     super(wrapped, logger, context);
   }

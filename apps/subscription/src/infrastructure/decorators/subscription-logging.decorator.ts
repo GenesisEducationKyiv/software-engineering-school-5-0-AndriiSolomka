@@ -7,13 +7,14 @@ import {
 } from '../../core/entities/subscription.entity';
 import { SubscriptionParams } from '../../core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from '../../core/subscription/subscription.interface';
+import { SubscriptionService } from '../services/subscription.service';
 
 export class LoggingSubscriptionServiceDecorator
   extends LoggingDecoratorBase<SubscriptionInterface>
   implements SubscriptionInterface
 {
   constructor(wrapped: SubscriptionInterface, logger: LoggerInterface) {
-    super(wrapped, logger, 'SubscriptionService');
+    super(wrapped, logger, SubscriptionService.name);
   }
 
   create(data: SubscriptionParams): Promise<SubscriptionEntity> {
