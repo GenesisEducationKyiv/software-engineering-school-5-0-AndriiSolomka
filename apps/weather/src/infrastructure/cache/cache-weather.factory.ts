@@ -8,7 +8,6 @@ import {
   LoggerInterface,
   LoggerToken,
 } from 'libs/core/logger/logger.interface';
-import { LoggingCacheDecorator } from 'libs/infrastructure/cache/decorators/cache-logger.decorator';
 
 import { CacheWeatherService } from './cache-weather.service';
 import { MetricsCacheDecorator } from '../decorators/metrics-cache.decorator';
@@ -26,17 +25,11 @@ export class CacheWeatherFactory {
   ) {}
 
   create() {
-    const service = new CacheWeatherService(this.cache, this.config);
-    const serviceWithMetrics = new MetricsCacheDecorator(
-      service,
-      this.metrics,
-      'weather',
-    );
-
-    return new LoggingCacheDecorator(
-      serviceWithMetrics,
+    const service = new CacheWeatherService(
       this.logger,
-      'CacheWeatherService',
+      this.cache,
+      this.config,
     );
+    return new MetricsCacheDecorator(service, this.metrics, 'weather');
   }
 }
