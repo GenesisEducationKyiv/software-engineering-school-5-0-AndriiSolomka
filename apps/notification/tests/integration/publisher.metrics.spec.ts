@@ -25,7 +25,7 @@ describe('NotificationMetrics (integration)', () => {
     metricsService = app.get<NotificationMetrics>(NotificationMetrics);
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     metricsService.clearAllMetrics();
   });
 

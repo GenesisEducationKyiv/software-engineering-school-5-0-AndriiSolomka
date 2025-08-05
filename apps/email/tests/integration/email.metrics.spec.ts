@@ -23,7 +23,7 @@ describe('EmailMetrics (integration)', () => {
     metricsService = app.get<EmailMetrics>(EmailMetrics);
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     metricsService.clearAllMetrics();
   });
 

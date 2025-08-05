@@ -30,7 +30,7 @@ describe('SubscriptionMetrics (integration)', () => {
     metricsService = app.get<SubscriptionMetrics>(SubscriptionMetrics);
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     metricsService.clearAllMetrics();
   });
 
