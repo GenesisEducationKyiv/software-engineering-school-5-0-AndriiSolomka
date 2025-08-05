@@ -1,11 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { measureDuration } from 'libs/utils/prom/prom.duration';
 import { Counter, Gauge, Histogram } from 'prom-client';
 
-import {
-  CACHE_METRIC_NAMES,
-  CACHE_OPERATION_STATUS,
-} from './constants/metrics.constants';
+import { CACHE_METRIC_NAMES } from './constants/metrics.constants';
 
 @Injectable()
 export class CacheMetrics {
@@ -20,7 +18,7 @@ export class CacheMetrics {
     private readonly cacheSize: Gauge<string>,
 
     @InjectMetric(CACHE_METRIC_NAMES.OPERATION_DURATION_SECONDS)
-    private readonly cacheOperationDuration: Histogram<string>,
+    private readonly operationDuration: Histogram<string>,
   ) {}
 
   recordCacheHit(cacheType: string, method: string): void {
@@ -35,17 +33,22 @@ export class CacheMetrics {
     this.cacheSize.set({ cache_type: cacheType }, size);
   }
 
-  createCacheOperationStopper(cacheType: string, operation: string) {
-    const stopTimer = this.cacheOperationDuration.startTimer();
-    return (status: CACHE_OPERATION_STATUS) => {
-      stopTimer({ cache_type: cacheType, operation, status });
-    };
+  async withDuration<T>(
+    cacheType: string,
+    method: string,
+    fn: () => Promise<T> | T,
+  ): Promise<T> {
+    return measureDuration(
+      this.operationDuration,
+      { cache_type: cacheType, method },
+      fn,
+    );
   }
 
   clearAllMetrics(): void {
     this.cacheHitCounter.reset();
     this.cacheMissCounter.reset();
     this.cacheSize.reset();
-    this.cacheOperationDuration.reset();
+    this.operationDuration.reset();
   }
 }

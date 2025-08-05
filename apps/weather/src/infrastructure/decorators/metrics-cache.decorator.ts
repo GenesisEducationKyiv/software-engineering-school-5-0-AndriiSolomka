@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CacheInterface } from 'libs/core/cache/cache.interface';
 
 import { CacheMetrics } from '../metrics/cache-metrics';
-import { CACHE_OPERATION_STATUS } from '../metrics/constants/metrics.constants';
 
 @Injectable()
-export class MetricsCacheDecorator<T> {
+export class MetricsCacheDecorator<T> implements CacheInterface<T> {
   constructor(
     private readonly decorated: CacheInterface<T>,
     private readonly metrics: CacheMetrics,
@@ -13,46 +12,20 @@ export class MetricsCacheDecorator<T> {
   ) {}
 
   async get(key: string): Promise<T | null> {
-    const end = this.metrics.createCacheOperationStopper(this.cacheType, 'get');
-    try {
-      const result = await this.decorated.get(key);
-      if (result !== null && result !== undefined) {
-        this.metrics.recordCacheHit(this.cacheType, 'get');
-      } else {
-        this.metrics.recordCacheMiss(this.cacheType, 'get');
-      }
-
-      end(CACHE_OPERATION_STATUS.SUCCESS);
-      return result;
-    } catch (error) {
-      end(CACHE_OPERATION_STATUS.ERROR);
-      throw error;
-    }
+    return this.metrics.withDuration(this.cacheType, 'get', () =>
+      this.decorated.get(key),
+    );
   }
 
   async set(key: string, value: T): Promise<void> {
-    const end = this.metrics.createCacheOperationStopper(this.cacheType, 'set');
-    try {
-      await this.decorated.set(key, value);
-      end(CACHE_OPERATION_STATUS.SUCCESS);
-    } catch (error) {
-      end(CACHE_OPERATION_STATUS.ERROR);
-      throw error;
-    }
+    return this.metrics.withDuration(this.cacheType, 'set', () =>
+      this.decorated.set(key, value),
+    );
   }
 
   async getOrCompute(key: string, fetchFn: () => Promise<T>): Promise<T> {
-    const end = this.metrics.createCacheOperationStopper(
-      this.cacheType,
-      'getOrCompute',
+    return this.metrics.withDuration(this.cacheType, 'getOrCompute', () =>
+      this.decorated.getOrCompute(key, fetchFn),
     );
-    try {
-      const result = await this.decorated.getOrCompute(key, fetchFn);
-      end(CACHE_OPERATION_STATUS.SUCCESS);
-      return result;
-    } catch (error) {
-      end(CACHE_OPERATION_STATUS.ERROR);
-      throw error;
-    }
   }
 }

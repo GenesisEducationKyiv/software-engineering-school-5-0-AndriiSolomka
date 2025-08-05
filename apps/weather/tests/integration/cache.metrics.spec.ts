@@ -2,7 +2,6 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppModule } from 'apps/weather/src/app.module';
 import { CacheMetrics } from 'apps/weather/src/infrastructure/metrics/cache-metrics';
-import { CACHE_OPERATION_STATUS } from 'apps/weather/src/infrastructure/metrics/constants/metrics.constants';
 import { Server } from 'http';
 import * as request from 'supertest';
 
@@ -79,54 +78,46 @@ describe('MetricsService (integration)', () => {
   });
 
   it('should record cache operation durations', async () => {
-    const endTimer = metricsService.createCacheOperationStopper(
-      'weather',
-      'set',
-    );
-
-    await new Promise((resolve) => setTimeout(resolve, 10));
-
-    endTimer(CACHE_OPERATION_STATUS.SUCCESS);
+    await metricsService.withDuration('weather', 'set', async () => {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    });
 
     const response = await request(app.getHttpServer())
       .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(
-      'cache_operation_duration_seconds_bucket{le="0.5",app="weather-api",cache_type="weather",operation="set",status="success"}',
+      'cache_operation_duration_seconds_bucket{le="0.5",app="weather-api",cache_type="weather",method="set",status="success"}',
     );
     expect(response.text).toContain(
-      'cache_operation_duration_seconds_count{app="weather-api",cache_type="weather",operation="set",status="success"}',
+      'cache_operation_duration_seconds_count{app="weather-api",cache_type="weather",method="set",status="success"}',
     );
     expect(response.text).toContain(
-      'cache_operation_duration_seconds_sum{app="weather-api",cache_type="weather",operation="set",status="success"}',
+      'cache_operation_duration_seconds_sum{app="weather-api",cache_type="weather",method="set",status="success"}',
     );
   });
 
   it('should record different operation statuses', async () => {
-    const successTimer = metricsService.createCacheOperationStopper(
-      'city',
-      'get',
-    );
-    await new Promise((resolve) => setTimeout(resolve, 5));
-    successTimer(CACHE_OPERATION_STATUS.SUCCESS);
+    await metricsService.withDuration('city', 'get', async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5));
+    });
 
-    const errorTimer = metricsService.createCacheOperationStopper(
-      'city',
-      'get',
-    );
-    await new Promise((resolve) => setTimeout(resolve, 5));
-    errorTimer(CACHE_OPERATION_STATUS.ERROR);
+    await expect(
+      metricsService.withDuration('city', 'get', async () => {
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        throw new Error('fail');
+      }),
+    ).rejects.toThrow('fail');
 
     const response = await request(app.getHttpServer())
       .get('/metrics')
       .expect(200);
 
     expect(response.text).toContain(
-      'cache_operation_duration_seconds_count{app="weather-api",cache_type="city",operation="get",status="success"}',
+      'cache_operation_duration_seconds_count{app="weather-api",cache_type="city",method="get",status="success"}',
     );
     expect(response.text).toContain(
-      'cache_operation_duration_seconds_count{app="weather-api",cache_type="city",operation="get",status="error"}',
+      'cache_operation_duration_seconds_count{app="weather-api",cache_type="city",method="get",status="error"}',
     );
   });
 });

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
+import { measureDuration } from 'libs/utils/prom/prom.duration';
 import { Counter, Histogram } from 'prom-client';
 
 import {
@@ -13,7 +14,7 @@ export class EmailMetrics {
     @InjectMetric(EMAIL_METRIC_NAMES.SENT_TOTAL)
     private readonly sentCounter: Counter<string>,
     @InjectMetric(EMAIL_METRIC_NAMES.SEND_DURATION)
-    private readonly sendDuration: Histogram<string>,
+    private readonly operationDuration: Histogram<string>,
     @InjectMetric(EMAIL_METRIC_NAMES.SEND_ERRORS_TOTAL)
     private readonly sendErrors: Counter<string>,
   ) {}
@@ -27,22 +28,12 @@ export class EmailMetrics {
   }
 
   async withDuration<T>(method: string, fn: () => Promise<T> | T): Promise<T> {
-    const stopTimer = this.sendDuration.startTimer({ method });
-    try {
-      const result = await fn();
-      this.recordSent(method, EMAIL_SEND_STATUS.SUCCESS);
-      stopTimer({ status: EMAIL_SEND_STATUS.SUCCESS, method });
-      return result;
-    } catch (error) {
-      this.recordSent(method, EMAIL_SEND_STATUS.ERROR);
-      stopTimer({ status: EMAIL_SEND_STATUS.ERROR, method });
-      throw error;
-    }
+    return measureDuration(this.operationDuration, { method }, fn);
   }
 
   clearAllMetrics(): void {
     this.sentCounter.reset();
-    this.sendDuration.reset();
+    this.operationDuration.reset();
     this.sendErrors.reset();
   }
 }
