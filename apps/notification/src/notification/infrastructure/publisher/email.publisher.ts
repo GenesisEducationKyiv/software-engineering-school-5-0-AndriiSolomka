@@ -1,12 +1,14 @@
-import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
-import { KAFKA_PUBLISHER } from 'apps/notification/src/kafka/kafka.module';
 import { EMAIL_EVENTS } from 'libs/common/events/email';
+import { LoggerInterface } from 'libs/core/logger/logger.interface';
+
+import { EmailPublisherInterface } from '../../core/publisher.interface';
 
 @Injectable()
-export class EmailPublisher implements OnModuleInit {
+export class EmailPublisher implements OnModuleInit, EmailPublisherInterface {
   constructor(
-    @Inject(KAFKA_PUBLISHER)
+    private readonly logger: LoggerInterface,
     private readonly kafkaClient: ClientKafka,
   ) {}
 
@@ -15,6 +17,26 @@ export class EmailPublisher implements OnModuleInit {
   }
 
   publishEmail(email: string, subject: string, text: string) {
-    this.kafkaClient.emit(EMAIL_EVENTS.SENT, { email, subject, text });
+    try {
+      this.kafkaClient.emit(EMAIL_EVENTS.SENT, { email, subject, text });
+
+      this.logger.info({
+        context: EmailPublisher.name,
+        method: 'publishEmail',
+        status: 'emitted',
+        to: email,
+        subject,
+      });
+    } catch (error) {
+      this.logger.error({
+        context: EmailPublisher.name,
+        method: 'publishEmail',
+        status: 'failed',
+        to: email,
+        subject,
+        error,
+      });
+      throw error;
+    }
   }
 }

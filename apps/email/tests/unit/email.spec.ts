@@ -6,6 +6,8 @@ import {
   EmailToken,
 } from 'apps/email/src/core/email.interface';
 import { EmailService } from 'apps/email/src/infrastructure/services/email.service';
+import { LoggerToken } from 'libs/core/logger/logger.interface';
+import { mockLogger } from 'libs/utils/logger/mock.logger';
 
 describe('EmailService', () => {
   let service: EmailInterface;
@@ -36,6 +38,10 @@ describe('EmailService', () => {
         {
           provide: EmailToken,
           useClass: EmailService,
+        },
+        {
+          provide: LoggerToken,
+          useValue: mockLogger,
         },
       ],
     }).compile();

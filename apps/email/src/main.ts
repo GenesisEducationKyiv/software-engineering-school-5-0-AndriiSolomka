@@ -1,14 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { ensureLogDirExists } from 'libs/utils/logger/logger.config';
 
 import { AppModule } from './app.module';
 import { AppConfig } from '../config/app.config';
 import { KafkaConfig } from '../config/kafka.config';
 
 async function bootstrap() {
-  ensureLogDirExists();
-
   const app = await NestFactory.create(AppModule);
   const config = app.get(AppConfig);
   const kafkaConfig = app.get(KafkaConfig);
@@ -36,6 +33,7 @@ async function bootstrap() {
   });
 
   await app.startAllMicroservices();
+  await app.listen(config.httpPort);
 
   console.log(`Email microservice is running on port ${config.port}`);
 }

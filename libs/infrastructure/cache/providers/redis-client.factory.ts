@@ -2,29 +2,25 @@ import { FactoryProvider } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { RedisConfig } from 'libs/config/redis.config';
 
-import { LoggerService } from '../../logger/logger.service';
-
 export const REDIS_CLIENT = Symbol('RedisClient');
 
 export const redisClientFactory: FactoryProvider<Redis> = {
   provide: REDIS_CLIENT,
-  useFactory: (config: RedisConfig, logger: LoggerService) => {
+  useFactory: (config: RedisConfig) => {
     try {
       const redis = new Redis({
         host: config.host,
         port: config.port,
       });
 
-      redis.on('error', (e) => {
-        logger.error(`Redis connection failed: ${e}`);
+      redis.on('error', () => {
         process.exit(1);
       });
 
       return redis;
-    } catch (error) {
-      logger.error('Failed to initialize Redis client', error);
+    } catch {
       process.exit(1);
     }
   },
-  inject: [RedisConfig, LoggerService],
+  inject: [RedisConfig],
 };

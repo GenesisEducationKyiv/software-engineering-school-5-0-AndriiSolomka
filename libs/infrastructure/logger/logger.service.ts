@@ -1,25 +1,39 @@
 import { Injectable } from '@nestjs/common';
+import { LoggerConfig } from 'libs/config/logger.config';
 import { LoggerInterface } from 'libs/core/logger/logger.interface';
-import { APP_LOG_FILE_PATH } from 'libs/utils/logger/logger.config';
 import { createPinoLogger } from 'libs/utils/logger/logger.factory';
+import { Logger } from 'pino';
 
 @Injectable()
 export class LoggerService implements LoggerInterface {
-  private readonly logger = createPinoLogger(APP_LOG_FILE_PATH, true);
+  private readonly logger: Logger | null;
 
-  log(message: string, ...args: unknown[]): void {
-    this.logger.info(message, ...args);
+  constructor(private readonly config: LoggerConfig) {
+    if (this.config.enableLogging) {
+      this.logger = createPinoLogger(this.config.filePath, true);
+    } else {
+      this.logger = null;
+    }
   }
-  error(message: string, ...args: unknown[]): void {
-    this.logger.error(message, ...args);
+
+  info(data: Record<string, unknown>): void {
+    this.logger?.info(data);
   }
-  warn(message: string, ...args: unknown[]): void {
-    this.logger.warn(message, ...args);
+
+  error(data: Record<string, unknown>): void {
+    this.logger?.error(data);
   }
-  debug(message: string, ...args: unknown[]): void {
-    this.logger.debug(message, ...args);
+
+  warn(data: Record<string, unknown>): void {
+    this.logger?.warn(data);
   }
-  verbose(message: string, ...args: unknown[]): void {
-    this.logger.trace(message, ...args);
+
+  debug(data: Record<string, unknown>): void {
+    if (!this.config.enableDebugLogging) return;
+    this.logger?.debug(data);
+  }
+
+  trace(data: Record<string, unknown>): void {
+    this.logger?.trace(data);
   }
 }

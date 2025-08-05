@@ -1,7 +1,9 @@
+export const LoggerToken = Symbol('LOGGER_TOKEN');
+
 export interface LoggerInterface {
-  log(message: string, ...args: unknown[]): void;
-  error(message: string, ...args: unknown[]): void;
-  warn(message: string, ...args: unknown[]): void;
-  debug(message: string, ...args: unknown[]): void;
-  verbose(message: string, ...args: unknown[]): void;
+  info(data: Record<string, unknown>): void;
+  error(data: Record<string, unknown>): void;
+  warn(data: Record<string, unknown>): void;
+  debug(data: Record<string, unknown>): void;
+  trace(data: Record<string, unknown>): void;
 }

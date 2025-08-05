@@ -57,6 +57,7 @@ services:
     env_file:
       - apps/subscription/.env.test
     ports:
+      - '30002:3002'
       - '50052:5052'
     depends_on:
       db-test:
@@ -72,6 +73,7 @@ services:
     env_file:
       - apps/email/.env.test
     ports:
+      - '3004:3004'
       - '50054:5054'
     depends_on:
       notification-test:

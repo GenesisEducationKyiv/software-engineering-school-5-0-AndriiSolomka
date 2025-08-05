@@ -1,26 +1,19 @@
 import { Module } from '@nestjs/common';
-import { CacheCityConfig } from 'libs/config/cache.config';
 import { CacheModule } from 'libs/infrastructure/cache/cache.module';
-import { CacheMetricsService } from 'libs/infrastructure/cache/metrics/cache-metrics.service';
-import { MetricsCacheDecorator } from 'libs/infrastructure/cache/metrics/decorators/metrics-cache.decorator';
+import { LoggerModule } from 'libs/infrastructure/logger/logger.module';
 
+import { CacheWeatherFactory } from './cache-weather.factory';
 import { CacheWeatherService } from './cache-weather.service';
-
-export const RawCacheWeatherService = Symbol('RawCacheWeatherService');
+import { MetricsModule } from '../metrics/metrics.module';
 
 @Module({
-  imports: [CacheModule],
+  imports: [CacheModule, LoggerModule, MetricsModule],
   providers: [
-    CacheCityConfig,
-    {
-      provide: RawCacheWeatherService,
-      useClass: CacheWeatherService,
-    },
+    CacheWeatherFactory,
     {
       provide: CacheWeatherService,
-      useFactory: (raw: CacheWeatherService, metrics: CacheMetricsService) =>
-        new MetricsCacheDecorator(raw, metrics, 'weather'),
-      inject: [RawCacheWeatherService, CacheMetricsService],
+      useFactory: (factory: CacheWeatherFactory) => factory.create(),
+      inject: [CacheWeatherFactory],
     },
   ],
   exports: [CacheWeatherService],

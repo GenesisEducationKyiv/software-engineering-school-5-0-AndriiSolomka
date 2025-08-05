@@ -8,6 +8,8 @@ import { SubscriptionApplicationService } from 'apps/subscription/src/infrastruc
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
 import { randomUUID } from 'crypto';
+import { LoggerToken } from 'libs/core/logger/logger.interface';
+import { mockLogger } from 'libs/utils/logger/mock.logger';
 
 function makeToken(
   id = randomUUID(),
@@ -57,6 +59,10 @@ describe('SubscriptionApplicationService (unit)', () => {
         {
           provide: TokenService,
           useValue: tokenServiceMock,
+        },
+        {
+          provide: LoggerToken,
+          useValue: mockLogger,
         },
       ],
     }).compile();

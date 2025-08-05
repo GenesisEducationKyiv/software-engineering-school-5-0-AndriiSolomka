@@ -41,6 +41,7 @@
     "test:gateway:integration": "jest --config apps/gateway/tests/jest-integration.json",
     "test:gateway:architecture": "jest --config apps/gateway/tests/jest-architecture.json",
     "test:notification:unit": "jest --config apps/notification/tests/jest-unit.json",
+    "test:notification:integration": "jest --config apps/notification/tests/jest-integration.json",
     "test:notification:architecture": "jest --config apps/notification/tests/jest-architecture.json",
     "test:email:unit": "jest --config apps/email/tests/jest-unit.json",
     "test:email:architecture": "jest --config apps/email/tests/jest-architecture.json",

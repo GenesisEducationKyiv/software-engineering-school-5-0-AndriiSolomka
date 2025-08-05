@@ -73,6 +73,7 @@ services:
     env_file:
       - apps/subscription/.env
     ports:
+      - '3002:3002'
       - '5052:5052'
     volumes:
       - .:/app
@@ -137,6 +138,7 @@ services:
     env_file:
       - apps/email/.env
     ports:
+      - '3004:3004'
       - '5054:5054'
     volumes:
       - .:/app

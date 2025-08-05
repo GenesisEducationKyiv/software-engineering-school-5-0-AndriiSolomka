@@ -1,12 +1,8 @@
-import { Test } from '@nestjs/testing';
 import {
   Frequency,
   SubscriptionEntity,
 } from 'apps/subscription/src/core/entities/subscription.entity';
-import {
-  SubscriptionRepositoryInterface,
-  SubscriptionRepositoryToken,
-} from 'apps/subscription/src/core/subscription/subscription-repository.interface';
+import { SubscriptionRepositoryInterface } from 'apps/subscription/src/core/subscription/subscription-repository.interface';
 import { SubscriptionInterface } from 'apps/subscription/src/core/subscription/subscription.interface';
 import { SubscriptionAlreadyExistsException } from 'apps/subscription/src/infrastructure/errors/custom.errors';
 import { SubscriptionService } from 'apps/subscription/src/infrastructure/services/subscription.service';
@@ -40,7 +36,7 @@ describe('SubscriptionService (unit)', () => {
     >
   >;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     repoMock = {
       create: jest.fn(),
       findOne: jest.fn(),
@@ -50,17 +46,7 @@ describe('SubscriptionService (unit)', () => {
       deleteUnconfirmed: jest.fn(),
     };
 
-    const module = await Test.createTestingModule({
-      providers: [
-        SubscriptionService,
-        {
-          provide: SubscriptionRepositoryToken,
-          useValue: repoMock,
-        },
-      ],
-    }).compile();
-
-    service = module.get<SubscriptionInterface>(SubscriptionService);
+    service = new SubscriptionService(repoMock);
   });
 
   describe('create', () => {

@@ -1,4 +1,8 @@
 import { Inject, Injectable } from '@nestjs/common';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
 import {
   CacheRepositoryInterface,
@@ -9,6 +13,8 @@ import { CacheInterface } from '../../core/cache/cache.interface';
 @Injectable()
 export class CacheService<T> implements CacheInterface<T> {
   constructor(
+    @Inject(LoggerToken)
+    private readonly logger: LoggerInterface,
     @Inject(CacheRepositoryToken)
     private readonly cache: CacheRepositoryInterface,
     private readonly prefix: string,
@@ -33,12 +39,30 @@ export class CacheService<T> implements CacheInterface<T> {
     );
   }
 
-  async getOrCompute(key: string, fetchFn: () => Promise<T>): Promise<T> {
+  async getOrCompute(key: string, computeFn: () => Promise<T>): Promise<T> {
     const cached = await this.get(key);
-    if (cached) return cached;
 
-    const data = await fetchFn();
+    if (cached) {
+      this.logger.debug({
+        context: CacheService.name,
+        method: 'get',
+        status: 'success',
+        params: { key },
+      });
+
+      return cached;
+    }
+
+    const data = await computeFn();
     await this.set(key, data);
+
+    this.logger.debug({
+      context: CacheService.name,
+      method: 'set',
+      status: 'success',
+      params: { key },
+    });
+
     return data;
   }
 }

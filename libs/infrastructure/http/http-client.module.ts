@@ -1,26 +1,25 @@
 import { Module } from '@nestjs/common';
-import { LoggingConfig } from 'libs/config/logging.config';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
-import { LoggingHttpClientService } from './decorators/weather-logger.decorator';
-import { HttpClientService } from './http-client.service';
+import { LoggingHttpClient } from './decorators/http-logger.decorator';
+import { HttpClient } from './http-client.service';
 import { LoggerModule } from '../logger/logger.module';
 
 @Module({
   imports: [LoggerModule],
   providers: [
     {
-      provide: HttpClientService,
-      useFactory: ({ enableFileLogging, logFileName }: LoggingConfig) => {
-        const original = new HttpClientService();
-        return new LoggingHttpClientService(
-          original,
-          enableFileLogging,
-          logFileName,
-        );
+      provide: HttpClient,
+      useFactory: (logger: LoggerInterface) => {
+        const original = new HttpClient();
+        return new LoggingHttpClient(original, logger);
       },
-      inject: [LoggingConfig],
+      inject: [LoggerToken],
     },
   ],
-  exports: [HttpClientService],
+  exports: [HttpClient],
 })
 export class HttpClientModule {}

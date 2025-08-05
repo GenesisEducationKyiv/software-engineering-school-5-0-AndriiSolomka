@@ -2,7 +2,7 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "../../..",
   "testEnvironment": "node",
-  "testRegex": "apps/email/tests/integration/.*\\.integration-spec\\.ts$",
+  "testRegex": "apps/email/tests/integration/.*\\.spec\\.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
