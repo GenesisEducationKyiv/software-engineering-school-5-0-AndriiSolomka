@@ -22,8 +22,7 @@ export class EmailPublisherFactory {
   ) {}
 
   create() {
-    const original = new EmailPublisher(this.kafkaPublisher);
-    const withMetrics = new MetricsPublisherDecorator(original, this.metrics);
-    return new LoggingEmailPublisherDecorator(withMetrics, this.logger);
+    const original = new EmailPublisher(this.logger, this.kafkaPublisher);
+    return new MetricsPublisherDecorator(original, this.metrics);
   }
 }

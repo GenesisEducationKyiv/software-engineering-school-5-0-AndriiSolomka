@@ -8,6 +8,10 @@ import {
   EmailInterface,
   EmailPayload,
 } from 'apps/email/src/core/email.interface';
+import {
+  LoggerInterface,
+  LoggerToken,
+} from 'libs/core/logger/logger.interface';
 
 enum EMAIL {
   SUBJECT = 'Subscription Confirmation',
@@ -17,6 +21,8 @@ enum EMAIL {
 @Injectable()
 export class EmailService implements EmailInterface {
   constructor(
+    @Inject(LoggerToken)
+    private readonly logger: LoggerInterface,
     @Inject(EmailTransportToken)
     private readonly transport: EmailTransportInterface,
     private readonly config: EmailConfig,
@@ -24,15 +30,52 @@ export class EmailService implements EmailInterface {
 
   async sendConfirmationEmail(email: string, token: string): Promise<void> {
     const { subject, text } = this.buildConfirmationEmail(token);
-    await this.transport.send({ to: email, subject, text });
+
+    try {
+      await this.transport.send({ to: email, subject, text });
+
+      this.logger.info({
+        context: EmailService.name,
+        method: 'sendConfirmationEmail',
+        status: 'success',
+        to: email,
+      });
+    } catch (error) {
+      this.logger.error({
+        context: EmailService.name,
+        method: 'sendConfirmationEmail',
+        status: 'failed',
+        to: email,
+        error,
+      });
+      throw error;
+    }
   }
 
   async sendWeatherEmail(emailPayload: EmailPayload): Promise<void> {
-    await this.transport.send({
-      to: emailPayload.email,
-      subject: emailPayload.subject,
-      text: emailPayload.text,
-    });
+    try {
+      await this.transport.send({
+        to: emailPayload.email,
+        subject: emailPayload.subject,
+        text: emailPayload.text,
+      });
+
+      this.logger.info({
+        context: EmailService.name,
+        method: 'sendWeatherEmail',
+        status: 'success',
+        to: emailPayload.email,
+      });
+    } catch (error) {
+      this.logger.error({
+        context: EmailService.name,
+        method: 'sendWeatherEmail',
+        status: 'failed',
+        to: emailPayload.email,
+        error,
+      });
+      throw error;
+    }
   }
 
   private buildConfirmationEmail(token: string) {

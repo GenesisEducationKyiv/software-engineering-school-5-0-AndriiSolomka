@@ -9,7 +9,6 @@ import {
   EmailTransportInterface,
   EmailTransportToken,
 } from './core/email-transport.interface';
-import { LoggingEmailServiceDecorator } from './infrastructure/decorators/email-logging.decorator';
 import { MetricsEmailServiceDecorator } from './infrastructure/decorators/metrics-email.decorator';
 import { EmailMetrics } from './infrastructure/metrics/email-metrics';
 import { EmailService } from './infrastructure/services/email.service';
@@ -26,11 +25,7 @@ export class EmailFactory {
   ) {}
 
   create() {
-    const service = new EmailService(this.transport, this.config);
-    const serviceWithMetrics = new MetricsEmailServiceDecorator(
-      service,
-      this.metrics,
-    );
-    return new LoggingEmailServiceDecorator(serviceWithMetrics, this.logger);
+    const service = new EmailService(this.logger, this.transport, this.config);
+    return new MetricsEmailServiceDecorator(service, this.metrics);
   }
 }
