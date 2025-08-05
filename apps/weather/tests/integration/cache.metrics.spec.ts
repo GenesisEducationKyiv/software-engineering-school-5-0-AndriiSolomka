@@ -21,7 +21,7 @@ describe('MetricsService (integration)', () => {
     metricsService = app.get<CacheMetrics>(CacheMetrics);
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     metricsService.clearAllMetrics();
   });
 

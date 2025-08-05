@@ -7,7 +7,6 @@ import {
 
 import { KAFKA_PUBLISHER } from '../kafka/kafka.module';
 import { MetricsPublisherDecorator } from './infrastructure/decorators/metrics-publisher.decorator';
-import { LoggingEmailPublisherDecorator } from './infrastructure/decorators/publisher-logging.decorator';
 import { NotificationMetrics } from './infrastructure/metrics/notification-metrics';
 import { EmailPublisher } from './infrastructure/publisher/email.publisher';
 
