@@ -2,103 +2,35 @@ name: CD - Deploy to Stage
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
 
 jobs:
-  deploy-stage:
-    name: Deploy to Stage Server
+  deploy:
+    name: Deploy to Stage
     runs-on: self-hosted
-    environment:
-      name: staging
-      url: ${{ secrets.STAGE_URL }}
     
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js and dependencies
-        uses: ./.github/actions/setup-node
-
-      - name: Build project
-        run: npm run build
+      - name: Stop old containers
+        run: docker compose down || true
 
       - name: Build Docker images
-        run: |
-          docker compose -f docker-compose.yml build
+        run: docker compose build
 
-      - name: Tag images with version
-        run: |
-          VERSION="${GITHUB_SHA::7}"
-          echo "VERSION=$VERSION" >> $GITHUB_ENV
-          
-          # Tag all service images
-          docker tag weather-weather:latest weather-weather:$VERSION
-          docker tag weather-gateway:latest weather-gateway:$VERSION
-          docker tag weather-subscription:latest weather-subscription:$VERSION
-          docker tag weather-notification:latest weather-notification:$VERSION
-          docker tag weather-email:latest weather-email:$VERSION
+      - name: Start services
+        run: docker compose up -d
 
-      - name: Stop running containers
-        run: |
-          docker compose -f docker-compose.yml down || true
+      - name: Wait for services
+        run: sleep 20
 
-      - name: Start new containers
-        run: |
-          docker compose -f docker-compose.yml up -d
+      - name: Run migrations
+        run: docker compose exec -T subscription npm run subscription:migration"
 
-      - name: Wait for services to be healthy
+      - name: Show deployment info
         run: |
-          echo "Waiting for services to start..."
-          sleep 30
-          
-          # Check if services are running
-          docker compose -f docker-compose.yml ps
-
-      - name: Run database migrations
-        run: |
-          docker compose -f docker-compose.yml exec -T subscription npm run subscription:migration || true
-
-      - name: Health check
-        run: |
-          # Check if main services are responding
-          max_attempts=10
-          attempt=1
-          
-          while [ $attempt -le $max_attempts ]; do
-            echo "Health check attempt $attempt of $max_attempts"
-            
-            if curl -f http://localhost:3000/health 2>/dev/null; then
-              echo "Gateway is healthy!"
-              exit 0
-            fi
-            
-            attempt=$((attempt + 1))
-            sleep 5
-          done
-          
-          echo "Health check failed after $max_attempts attempts"
-          exit 1
-
-      - name: Cleanup old images
-        if: success()
-        run: |
-          docker image prune -f --filter "dangling=true"
-
-      - name: Notify deployment status
-        if: always()
-        run: |
-          if [ "${{ job.status }}" == "success" ]; then
-            echo "✅ Deployment to stage successful!"
-            echo "Version: ${GITHUB_SHA::7}"
-            echo "Commit: ${{ github.event.head_commit.message }}"
-          else
-            echo "❌ Deployment to stage failed!"
-          fi
-
-      - name: Rollback on failure
-        if: failure()
-        run: |
-          echo "Rolling back to previous version..."
-          docker compose -f docker-compose.yml down
-          # You can add logic to pull and start previous version
+          echo "================================================"
+          echo "✅ Deployed version: ${GITHUB_SHA::7}"
+          echo "📝 Commit: ${{ github.event.head_commit.message }}"
