@@ -1,0 +1,122 @@
+name: CI Pipeline
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  commitlint:
+    name: Validate Commits
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.13.0'
+
+      - name: Install commitlint
+        run: |
+          npm install --save-dev @commitlint/{cli,config-conventional}
+
+      - name: Validate PR commits
+        run: |
+          npx commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+  prettier:
+    name: Code Format Check
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Run Prettier check
+        run: npx prettier --check "apps/**/*.ts" "libs/**/*.ts"
+
+  lint:
+    name: ESLint
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Run ESLint
+        run: npm run lint
+
+  build:
+    name: Build Check
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Build project
+        run: npm run build
+
+  unit-tests:
+    name: Unit Tests
+    runs-on: self-hosted
+    needs: [lint, prettier]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+  integration-tests:
+    name: Integration Tests
+    runs-on: self-hosted
+    needs: [build]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build images
+        run: docker compose -f docker-compose.test.yml build
+
+      - name: Start Integration Tests
+        run: docker compose -f docker-compose.test.yml up --abort-on-container-exit test-runner
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker-compose.test.yml down -v
+
+  architecture-tests:
+    name: Architecture Tests
+    runs-on: self-hosted
+    needs: [lint]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js and dependencies
+        uses: ./.github/actions/setup-node
+
+      - name: Run architecture tests
+        run: npm run test:architecture
+
+  ci-success:
+    name: CI Success
+    runs-on: self-hosted
+    needs: [commitlint, prettier, lint, build, unit-tests, integration-tests, architecture-tests]
+    if: success()
+    steps:
+      - name: CI Passed
+        run: echo "All CI checks passed successfully!"
