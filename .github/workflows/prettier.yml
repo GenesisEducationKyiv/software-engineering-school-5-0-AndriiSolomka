@@ -1,4 +1,4 @@
-name: Unit Tests
+name: Prettier
 
 on:
   pull_request:
@@ -8,15 +8,14 @@ on:
       - main
 
 jobs:
-  unit-tests:
+  prettier:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Node.js and dependencies
         uses: ./.github/actions/setup-node
 
-      - name: Run unit tests
-        run: npm run test:unit
+      - name: Run Prettier check
+        run: npx prettier --check "apps/**/*.ts" "libs/**/*.ts"
