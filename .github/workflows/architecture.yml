@@ -1,7 +1,7 @@
 name: Architecture Tests
 
 on:
-  push:
+  pull_request:
 
 jobs:
   architecture-tests:
