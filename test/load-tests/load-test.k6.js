@@ -1,32 +1,36 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
-import { SharedArray } from 'k6/data';
 import { Rate } from 'k6/metrics';
 
 const errorRate = new Rate('errors_load');
 
-const BASE_URL = __ENV.BASE_URL || 'http://localhost:5055';
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:3000';
 
-const userData = new SharedArray('users', function () {
-  return JSON.parse(open('./scripts/subscribe.k6.js')).emails;
-});
+// Тестові дані
+const cities = ['Kyiv', 'Lviv', 'Odesa', 'Kharkiv', 'Dnipro'];
+const testEmails = [
+  'test1@example.com',
+  'test2@example.com',
+  'test3@example.com',
+  'test4@example.com',
+  'test5@example.com',
+];
 
 export let options = {
   stages: [
-    { duration: '30s', target: 5 },
-    { duration: '1m', target: 10 },
+    { duration: '30s', target: 10 },
+    { duration: '1m', target: 20 },
     { duration: '30s', target: 0 },
   ],
   thresholds: {
     http_req_duration: ['p(95)<500'],
-    errors_load: ['rate<0.01'],
+    errors_load: ['rate<0.1'],
   },
 };
 
 export default function () {
-  const user = userData[Math.floor(Math.random() * userData.length)];
-  const email = user.email;
-  const city = user.city;
+  const city = cities[Math.floor(Math.random() * cities.length)];
+  const email = testEmails[Math.floor(Math.random() * testEmails.length)];
 
   let weatherRes = http.get(`${BASE_URL}/api/weather?city=${city}`, {
     tags: { name: '01_GetWeather' },

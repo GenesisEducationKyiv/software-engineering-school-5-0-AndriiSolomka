@@ -4,7 +4,7 @@ import { Rate } from 'k6/metrics';
 
 const errorRate = new Rate('errors_stress');
 
-const BASE_URL = __ENV.BASE_URL || 'http://localhost:5055';
+const BASE_URL = __ENV.BASE_URL || 'http://localhost:3000';
 
 export const options = {
   stages: [
