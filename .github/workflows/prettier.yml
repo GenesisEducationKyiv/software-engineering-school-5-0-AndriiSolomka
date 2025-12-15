@@ -1,19 +1,17 @@
-name: Architecture Tests
+name: Prettier
 
 on:
   pull_request:
 
 jobs:
-  architecture-tests:
+  prettier:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up Node.js and dependencies
         uses: ./.github/actions/setup-node
 
-      - name: Run architecture tests
-        run: npm run test:architecture
-        shell: bash
+      - name: Run Prettier check
+        run: npx prettier --check "apps/**/*.ts" "libs/**/*.ts"
