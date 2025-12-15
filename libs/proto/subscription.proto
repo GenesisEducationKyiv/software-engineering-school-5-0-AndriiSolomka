@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package subscription;
+
+import "google/protobuf/empty.proto";
+
+enum Frequency {
+  hourly = 0;
+  daily = 1;
+}
+
+message TokenEntity {
+  string token = 1;
+}
+
+message SubscriptionEntity {
+  string email = 1;
+  string city = 2;
+  repeated TokenEntity tokens = 3;
+}
+
+service SubscriptionService {
+  rpc Subscribe (SubscribeRequest) returns (SubscribeResponse);
+  rpc Confirm (ConfirmRequest) returns (ActionResponse);
+  rpc Unsubscribe (UnsubscribeRequest) returns (ActionResponse);
+
+  rpc GetByFrequency (GetByFrequencyRequest) returns (GetByFrequencyResponse);
+  rpc DeleteUnconfirmed (google.protobuf.Empty) returns (DeleteUnconfirmedResponse);
+}
+
+message SubscribeRequest {
+  string email = 1;
+  string city = 2;
+  Frequency frequency = 3;
+}
+
+message ConfirmRequest {
+  string token = 1;
+}
+
+message UnsubscribeRequest {
+  string token = 1;
+}
+
+message GetByFrequencyRequest {
+  Frequency frequency = 1;
+}
+
+message GetByFrequencyResponse {
+  repeated SubscriptionEntity subscriptions = 1;
+}
+
+message DeleteUnconfirmedResponse {
+  int32 count = 1;
+}
+
+message ActionResponse {
+  string message = 1;
+}
+
+message SubscribeResponse {
+  string email = 1;
+  string token = 2;
+}

@@ -1,0 +1,174 @@
+networks:
+  dev-network-test:
+    driver: bridge
+  weather-api-test:
+    driver: bridge
+
+services:
+  redis-test:
+    container_name: redis-test
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6380:6379
+    command: ['redis-server', '--save', '60', '1', '--appendonly', 'yes']
+    networks:
+      - weather-api-test
+
+  db-test:
+    container_name: db-test
+    image: postgres:17-alpine
+    restart: always
+    shm_size: 128mb
+    env_file:
+      - apps/subscription/.env.test
+    ports:
+      - 5435:5432
+    user: postgres
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -d postgres']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - weather-api-test
+
+  weather-test:
+    container_name: weather-test
+    build:
+      context: .
+      dockerfile: apps/weather/Dockerfile.test
+    env_file:
+      - apps/weather/.env.test
+    ports:
+      - '30001:3001'
+      - '50051:5051'
+    depends_on:
+      redis-test:
+        condition: service_started
+    networks:
+      - weather-api-test
+
+  subscription-test:
+    container_name: subscription-test
+    build:
+      context: .
+      dockerfile: apps/subscription/Dockerfile.test
+    env_file:
+      - apps/subscription/.env.test
+    ports:
+      - '30002:3002'
+      - '50052:5052'
+    depends_on:
+      db-test:
+        condition: service_healthy
+    networks:
+      - weather-api-test
+
+  email-test:
+    container_name: email-test
+    build:
+      context: .
+      dockerfile: apps/email/Dockerfile.test
+    env_file:
+      - apps/email/.env.test
+    ports:
+      - '3004:3004'
+      - '50054:5054'
+    depends_on:
+      notification-test:
+        condition: service_started
+    networks:
+      - weather-api-test
+
+  gateway-test:
+    container_name: gateway-test
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile.test
+    env_file:
+      - apps/gateway/.env.test
+    ports:
+      - '50055:5055'
+    depends_on:
+      email-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+    networks:
+      - weather-api-test
+
+  notification-test:
+    container_name: notification-test
+    build:
+      context: .
+      dockerfile: apps/notification/Dockerfile.test
+    env_file:
+      - apps/notification/.env.test
+    ports:
+      - '50053:5055'
+    depends_on:
+      kafka-test:
+        condition: service_healthy
+      subscription-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+    networks:
+      - weather-api-test
+
+  kafka-test:
+    image: bitnamilegacy/kafka:3.9.0-debian-12-r4
+    networks:
+      - weather-api-test
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka-test:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          '/opt/bitnami/kafka/bin/kafka-topics.sh --bootstrap-server kafka-test:9092 --list',
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  test-runner:
+    image: node:22.13.0
+    container_name: test-runner
+    working_dir: /app
+    volumes:
+      - ./:/app
+    env_file:
+      - apps/subscription/.env.test
+      - apps/weather/.env.test
+      - apps/email/.env.test
+      - apps/gateway/.env.test
+      - apps/notification/.env.test
+    depends_on:
+      db-test:
+        condition: service_healthy
+      redis-test:
+        condition: service_started
+      weather-test:
+        condition: service_started
+      subscription-test:
+        condition: service_started
+      email-test:
+        condition: service_started
+      gateway-test:
+        condition: service_started
+      notification-test:
+        condition: service_started
+      kafka-test:
+        condition: service_healthy
+    command: sh -c "npm ci && npm run subscription:migration && npm run test:integration"
+    networks:
+      - weather-api-test
