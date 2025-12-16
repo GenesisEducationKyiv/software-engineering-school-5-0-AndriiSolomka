@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import * as notificationBuilder from '@weather-utils/core';
 import { EmailConfig } from 'apps/notification/config/email.config';
 import { NotificationInterface } from 'apps/notification/src/notification/core/notification.interface';
 import { EmailPublisher } from 'apps/notification/src/notification/infrastructure/publisher/email.publisher';
@@ -6,7 +7,6 @@ import { NotificationService } from 'apps/notification/src/notification/infrastr
 import { SubscriptionClientService } from 'apps/notification/src/subscription/infrastructure/subscription.grpc.client';
 import { WeatherClientService } from 'apps/notification/src/weather/infrastructure/weather.grpc.client';
 import { Frequency } from 'apps/subscription/src/core/entities/subscription.entity';
-import * as notificationBuilder from 'libs/utils/notification/notification-builder';
 
 jest.mock('libs/utils/notification/notification-builder', () => ({
   buildWeatherNotification: jest.fn(),

@@ -1,8 +1,10 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  HTTP_LOG_FILE_PATH,
+  createPinoLogger,
+  logHttpRequest,
+} from '@weather-utils/core';
 import { NextFunction, Request, Response } from 'express';
-import { logHttpRequest } from 'libs/utils/logger/http-logger';
-import { HTTP_LOG_FILE_PATH } from 'libs/utils/logger/logger.config';
-import { createPinoLogger } from 'libs/utils/logger/logger.factory';
 
 @Injectable()
 export class HttpLoggerMiddleware implements NestMiddleware {

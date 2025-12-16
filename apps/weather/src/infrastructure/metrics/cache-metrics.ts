@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { measureDuration } from '@weather-utils/core';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { measureDuration } from 'libs/utils/prom/prom.duration';
 import { Counter, Gauge, Histogram } from 'prom-client';
 
 import { CACHE_METRIC_NAMES } from './constants/metrics.constants';

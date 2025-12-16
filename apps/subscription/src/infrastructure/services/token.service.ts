@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { randomByteGenerator } from 'libs/utils/generator/random-generator';
+import { generateRandomHex } from '@weather-utils/core';
 
 import { TokenEntity } from '../../core/entities/subscription.entity';
 import { TokenInterface } from '../../core/token/token-interface';
@@ -17,7 +17,7 @@ export class TokenService implements TokenInterface {
   ) {}
 
   async create(subscriptionId: string): Promise<string> {
-    const token = randomByteGenerator();
+    const token = generateRandomHex();
     await this.tokenRepo.create(token, subscriptionId);
     return token;
   }

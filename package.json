@@ -49,6 +49,7 @@
     "subscription:migration": "npx prisma generate --schema ./apps/subscription/prisma/schema.prisma && npx prisma migrate deploy --schema ./apps/subscription/prisma/schema.prisma"
   },
   "dependencies": {
+    "@weather-utils/core": "file:./packages/weather-utils",
     "@bufbuild/protobuf": "^2.6.0",
     "@grpc/grpc-js": "^1.13.4",
     "@grpc/proto-loader": "^0.7.15",

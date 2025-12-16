@@ -1,4 +1,5 @@
 import { Test } from '@nestjs/testing';
+import { mockLogger } from '@weather-utils/core';
 import {
   Frequency,
   TokenEntity,
@@ -9,7 +10,6 @@ import { SubscriptionService } from 'apps/subscription/src/infrastructure/servic
 import { TokenService } from 'apps/subscription/src/infrastructure/services/token.service';
 import { randomUUID } from 'crypto';
 import { LoggerToken } from 'libs/core/logger/logger.interface';
-import { mockLogger } from 'libs/utils/logger/mock.logger';
 
 function makeToken(
   id = randomUUID(),

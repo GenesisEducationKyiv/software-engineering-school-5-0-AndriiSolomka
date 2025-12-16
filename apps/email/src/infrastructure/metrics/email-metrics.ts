@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { measureDuration } from '@weather-utils/core';
 import { InjectMetric } from '@willsoto/nestjs-prometheus';
-import { measureDuration } from 'libs/utils/prom/prom.duration';
 import { Counter, Histogram } from 'prom-client';
 
 import {
@@ -28,7 +28,7 @@ export class EmailMetrics {
   }
 
   async withDuration<T>(method: string, fn: () => Promise<T> | T): Promise<T> {
-    return measureDuration(this.operationDuration, { method }, fn);
+    return await measureDuration(this.operationDuration, { method }, fn);
   }
 
   clearAllMetrics(): void {

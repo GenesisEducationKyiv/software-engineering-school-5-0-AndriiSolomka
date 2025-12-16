@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { mockLogger } from '@weather-utils/core';
 import { EmailConfig } from 'apps/email/config/email.config';
 import { EmailTransportToken } from 'apps/email/src/core/email-transport.interface';
 import {
@@ -7,7 +8,6 @@ import {
 } from 'apps/email/src/core/email.interface';
 import { EmailService } from 'apps/email/src/infrastructure/services/email.service';
 import { LoggerToken } from 'libs/core/logger/logger.interface';
-import { mockLogger } from 'libs/utils/logger/mock.logger';
 
 describe('EmailService', () => {
   let service: EmailInterface;

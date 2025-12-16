@@ -1,0 +1,46 @@
+{
+  "name": "@weather-utils/core",
+  "version": "1.0.0",
+  "description": "Utility library for weather application - generators, loggers, notification builders and Prometheus helpers",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "weather",
+    "utilities",
+    "logger",
+    "prometheus",
+    "notification",
+    "random-generator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "pino": "^8.0.0 || ^9.0.0",
+    "pino-pretty": "^10.0.0 || ^11.0.0",
+    "prom-client": "^14.0.0 || ^15.0.0"
+  },
+  "peerDependenciesMeta": {
+    "pino-pretty": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@types/node": "^20.0.0",
+    "pino": "^9.0.0",
+    "pino-pretty": "^11.0.0",
+    "prom-client": "^15.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
+}

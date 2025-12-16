@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import { createPinoLogger } from '@weather-utils/core';
 import { LoggerConfig } from 'libs/config/logger.config';
 import { LoggerInterface } from 'libs/core/logger/logger.interface';
-import { createPinoLogger } from 'libs/utils/logger/logger.factory';
 import { Logger } from 'pino';
 
 @Injectable()
