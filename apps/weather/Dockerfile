@@ -8,6 +8,9 @@ RUN npm ci
 
 COPY . .
 
+# Build the weather-utils library first
+RUN cd packages/weather-utils && npm ci && npm run build
+
 RUN npm run build weather
 
 FROM node:20-alpine AS production
