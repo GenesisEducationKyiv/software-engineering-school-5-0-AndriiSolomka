@@ -26,10 +26,8 @@ export function createLogConfig(basePath: string = process.cwd()): LogConfig {
  * Ensures that the log directory exists
  * @param logDir - Path to the log directory
  */
-export function ensureLogDirExists(logDir: string): void {
-  if (!fs.existsSync(logDir)) {
-    fs.mkdirSync(logDir, { recursive: true });
-  }
+export function ensureLogDirExists(): void {
+  if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
 }
 
 // Default configuration

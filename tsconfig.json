@@ -17,9 +17,10 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {}
+    "paths": {
+      "@weather-utils/core": ["packages/weather-utils/src/index.ts"],
+      "@weather-utils/core/*": ["packages/weather-utils/src/*"]
+    }
   },
-  "exclude": [
-    "public"
-  ]
+  "exclude": ["public"]
 }
