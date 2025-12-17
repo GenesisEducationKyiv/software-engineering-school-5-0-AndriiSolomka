@@ -48,7 +48,30 @@ cd Weather_API_Application
 
 ---
 
-### 2. Environment Variables
+### 2. Setup Shared Libraries
+
+This project uses a shared libraries package (`@weather-api/shared`) for common code across microservices.
+
+**Quick setup:**
+
+```bash
+./setup-libs.sh
+```
+
+Or manually:
+
+```bash
+cd libs
+npm run build
+cd ..
+npm install
+```
+
+> 📚 For detailed information about the libs package, see [LIBS_MIGRATION.md](./LIBS_MIGRATION.md)
+
+---
+
+### 3. Environment Variables
 
 Copy `.env.example` to `.env` and `.env.test.example` to `.env.test`:
 
@@ -64,7 +87,7 @@ To ensure the project runs smoothly, you need to provide the following secrets i
 
 ---
 
-### 3. Local Development (with Docker)
+### 4. Local Development (with Docker)
 
 **Build and start all services:**
 
@@ -84,7 +107,7 @@ docker compose -f docker-compose.dev.yml down -v
 
 ---
 
-### 4. Running Tests
+### 5. Running Tests
 
 All tests run in isolation via Docker Compose.
 
@@ -114,7 +137,7 @@ docker compose -f docker-compose.test.yml down -v
 
 ---
 
-### 5. Manual Local Run (without Docker)
+### 6. Manual Local Run (without Docker)
 
 #### Install dependencies
 

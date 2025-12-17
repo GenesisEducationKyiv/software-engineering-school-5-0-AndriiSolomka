@@ -68,6 +68,7 @@
     "@nestjs/schedule": "^6.0.0",
     "@nestjs/swagger": "^11.2.0",
     "@prisma/client": "^6.7.0",
+    "@weather-api/shared": "file:./libs",
     "@willsoto/nestjs-prometheus": "^6.0.2",
     "autocannon": "^8.0.0",
     "cache-manager": "^6.4.3",
