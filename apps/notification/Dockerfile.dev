@@ -3,6 +3,8 @@ FROM node:20-alpine
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+COPY libs/ ./libs/
+
 RUN npm ci
 
 COPY . .
@@ -10,4 +12,3 @@ COPY . .
 EXPOSE 5053
 
 CMD ["npm", "run", "start:notification:dev"]
-
