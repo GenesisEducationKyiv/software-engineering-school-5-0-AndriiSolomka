@@ -48,7 +48,30 @@ cd Weather_API_Application
 
 ---
 
-### 2. Environment Variables
+### 2. Setup Shared Libraries
+
+This project uses a shared libraries package (`@weather-api/shared`) for common code across microservices.
+
+**Quick setup:**
+
+```bash
+./setup-libs.sh
+```
+
+Or manually:
+
+```bash
+cd libs
+npm run build
+cd ..
+npm install
+```
+
+> 📚 For detailed information about the libs package, see [LIBS_MIGRATION.md](./LIBS_MIGRATION.md)
+
+---
+
+### 3. Environment Variables
 
 Copy `.env.example` to `.env` and `.env.test.example` to `.env.test`:
 
@@ -64,7 +87,7 @@ To ensure the project runs smoothly, you need to provide the following secrets i
 
 ---
 
-### 3. Local Development (with Docker)
+### 4. Local Development (with Docker)
 
 **Build and start all services:**
 
@@ -84,7 +107,7 @@ docker compose -f docker-compose.dev.yml down -v
 
 ---
 
-### 4. Running Tests
+### 5. Running Tests
 
 All tests run in isolation via Docker Compose.
 
@@ -114,7 +137,7 @@ docker compose -f docker-compose.test.yml down -v
 
 ---
 
-### 5. Manual Local Run (without Docker)
+### 6. Manual Local Run (without Docker)
 
 #### Install dependencies
 
@@ -141,14 +164,15 @@ npm run start:dev
 ## 📚 API Documentation
 
 - **Swagger UI:** [http://35.207.129.35:3000/api/docs](http://35.207.129.35:3000/api/docs)
+
 ### Main Endpoints
 
-| Method | Endpoint                | Description                                 |
-|--------|-------------------------|---------------------------------------------|
-| GET    | `/api/weather`          | Get current weather for a city              |
-| POST   | `/api/subscribe`        | Subscribe to weather updates                |
-| GET    | `/api/confirm/{token}`  | Confirm email subscription                  |
-| GET    | `/api/unsubscribe/{token}` | Unsubscribe from weather updates         |
+| Method | Endpoint                   | Description                      |
+| ------ | -------------------------- | -------------------------------- |
+| GET    | `/api/weather`             | Get current weather for a city   |
+| POST   | `/api/subscribe`           | Subscribe to weather updates     |
+| GET    | `/api/confirm/{token}`     | Confirm email subscription       |
+| GET    | `/api/unsubscribe/{token}` | Unsubscribe from weather updates |
 
 #### Example: `/api/weather?city=London`
 
@@ -193,26 +217,31 @@ npm run start:dev
 ---
 
 ## Observability
+
 ---
 
 ### Alerts
 
 #### **Critical System Alerts**
+
 - **Service Availability:** Alert if any service (weather, email, subscription, notification) is down or `/metrics` endpoint is unavailable for more than 30 seconds.
 - **High Error Rate:** Alert if error logs or error metrics (e.g., `*_operation_total{status="error"}`) exceed 5% of total operations in any service over 5 minutes.
 
 #### **Performance Alerts**
+
 - **API Response Time:** Alert if `/api/weather`, `/api/subscribe`, or notification publishing p95 latency exceeds 1s.
 - **Email/Notification Delivery Time:** Alert if `email_send_duration_seconds` or `notification_email_publish_duration_seconds` p95 > 2s.
 - **Subscription Processing Delay:** Alert if `subscription_operation_duration_seconds` p95 > 10s.
 - **Database/Redis/Kafka Issues:** Alert on connection errors or high latency (from logs or metrics).
 
 #### **Dependency Alerts**
+
 - **PostgreSQL/Redis/Kafka Connectivity:** Alert if connection errors are logged or metrics indicate failures.
 - **Kafka Consumer Lag:** Alert if notification queue lag >100 messages.
 - **Redis Memory Usage:** Alert if Redis memory usage >75% of maxmemory.
 
 #### **Log-based Alerts**
+
 - **Error Logs:** Alert if error logs exceed N/hour in any service.
 - **Warning Logs:** Alert if warning logs spike.
 - **No Info/Debug Logs:** Alert if no info/debug logs for >10 minutes (may indicate service freeze).
@@ -222,29 +251,34 @@ npm run start:dev
 ### Log Retention Policy
 
 **Retention Durations:**
+
 - **Error Logs:** Stored for 14 days to support incident analysis and regulatory needs.
 - **Warning Logs:** Kept for 14 days to enable proactive monitoring and capacity planning.
 - **Info Logs:** Retained for 7 days, providing operational insights and supporting sprint reviews.
 - **Debug Logs:** Held for 3 days, with log sampling enabled to reduce storage, focused on short-term troubleshooting.
 
 **Cleanup & Archival Automation:**
+
 - **Every day at 04:30 UTC:** Debug logs older than 3 days are deleted.
 - **Each Wednesday at 01:00 UTC:** Info logs exceeding 7 days are purged.
 - **On the 2nd and 16th of each month at 06:00 UTC:** Warning logs are archived to cold storage, then deleted after 14 days.
 - **On the 2nd and 16th at 02:30 UTC:** Error logs are archived before removal at the 14-day mark.
 
 **Lifecycle & Storage Strategy:**
+
 - **Debug/Info:** Removed permanently after their retention period due to high volume and lower long-term value.
 - **Warning/Error:** First archived to cold storage, then deleted after full retention, ensuring critical data is available for audits or investigations.
 - **Critical Errors:** Immediately archived post-incident for compliance and forensic purposes.
 
 **Why Cold Storage?**
+
 - **Cost Savings:** Cold storage is up to 90% less expensive than hot storage, yet remains accessible for audits.
 - **Regulatory Compliance:** Satisfies requirements for historical log retention.
 - **Forensics & Legal:** Supports in-depth incident analysis and maintains a defensible audit trail.
 - **Operational Analytics:** Enables long-term trend analysis for reliability and capacity planning.
 
 **Retention Choices Explained:**
+
 - **Short debug/info periods** keep storage lean while supporting daily ops and troubleshooting.
 - **Longer warning/error retention** balances the need for incident review with storage efficiency.
 - **Archival** ensures compliance and cost control.
@@ -260,7 +294,6 @@ All microservices expose Prometheus metrics at `/metrics`:
 - **Email:** sent emails, send errors, send durations (by type/status).
 - **Subscription:** operation counts and durations (by method/status).
 - **Notification:** published emails, publish errors, publish durations.
-
 
 ---
 
