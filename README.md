@@ -52,23 +52,6 @@ cd Weather_API_Application
 
 This project uses a shared libraries package (`@weather-api/shared`) for common code across microservices.
 
-**Quick setup:**
-
-```bash
-./setup-libs.sh
-```
-
-Or manually:
-
-```bash
-cd libs
-npm run build
-cd ..
-npm install
-```
-
-> 📚 For detailed information about the libs package, see [LIBS_MIGRATION.md](./LIBS_MIGRATION.md)
-
 ---
 
 ### 3. Environment Variables
