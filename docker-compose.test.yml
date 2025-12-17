@@ -169,6 +169,6 @@ services:
         condition: service_started
       kafka-test:
         condition: service_healthy
-    command: sh -c "npm ci && npm run subscription:migration && npm run test:integration"
+    command: sh -c "npm i && npm run subscription:migration && npm run test:integration"
     networks:
       - weather-api-test
