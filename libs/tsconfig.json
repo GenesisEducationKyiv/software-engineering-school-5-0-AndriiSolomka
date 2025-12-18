@@ -2,6 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
+    "declarationMap": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -10,18 +11,15 @@
     "sourceMap": true,
     "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
+    "rootDir": "./",
     "skipLibCheck": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "libs/*": ["libs/*"],
-      "@weather-api/shared": ["libs/index.ts"],
-      "@weather-api/shared/*": ["libs/*"]
-    }
+    "esModuleInterop": true
   },
-  "exclude": ["public"]
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules", "dist"]
 }

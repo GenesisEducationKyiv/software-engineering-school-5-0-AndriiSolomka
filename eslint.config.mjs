@@ -6,7 +6,7 @@ import importPlugin from 'eslint-plugin-import';
 
 export default tseslint.config(
   {
-    ignores: ['eslint.config.mjs', 'public/**'],
+    ignores: ['eslint.config.mjs', 'public/**', 'libs/**'],
   },
   eslint.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
