@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY libs/ ./libs/
 
-RUN npm i
+RUN npm ci
 
 COPY . .
 
@@ -23,7 +23,7 @@ COPY --from=builder /app/package-lock.json ./
 COPY --from=builder /app/libs/proto ./libs/proto
 
 
-RUN npm i --only=production
+RUN npm ci --only=production
 
 EXPOSE 5054
 
