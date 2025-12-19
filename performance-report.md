@@ -1,47 +1,43 @@
-# ЗВІТ ПРО ТЕСТУВАННЯ ПРОДУКТИВНОСТІ
+# PERFORMANCE TESTING REPORT
 
 ## GS Weather Service (Microservices Architecture)
 
-**Дата проведення тесту:** 19 грудня 2025 року  
-**Тривалість тестування:** 60 секунд (Baseline) / 180 секунд (Stress)  
-**Інструмент тестування:** k6 (Custom JS Load Scripts)
+**Test Date:** December 19, 2025  
+**Test Duration:** 60 seconds (Baseline) / 180 seconds (Stress)  
+**Testing Tool:** k6 (Custom JS Load Scripts)
 
 ---
 
-## 1. ВСТУП
+## 1. INTRODUCTION
 
-Було проведено комплексне тестування продуктивності мікросервісної системи **GS Weather Service**. Основна мета — оцінити спроможність API Gateway обробляти вхідний REST трафік та ефективність gRPC-взаємодії між внутрішніми сервісами під навантаженням. Тестування фокусувалося на виявленні "вузьких місць" (bottlenecks) у шлюзі (Gateway) та стабільності асинхронної обробки подій через Kafka.
+A comprehensive performance test of the **GS Weather Service** microservices system was conducted. The primary objective was to evaluate the API Gateway's capacity to handle incoming REST traffic and the efficiency of gRPC interaction between internal services under load. The testing focused on identifying bottlenecks within the Gateway and assessing the stability of asynchronous event processing via Kafka.
 
 ---
 
-## 2. КОНФІГУРАЦІЯ ТЕСТУВАННЯ
+## 2. TEST CONFIGURATION
 
-### Параметри навантаження:
+### Load Parameters:
 
-#### Базове тестування (50 Virtual Users):
+#### Baseline Testing (50 Virtual Users):
 
-- **Кількість одночасних користувачів:** 50
-- **Тривалість:** 60 секунд
-- **Результат:** 2,586 запитів, 43.1 RPS, 172ms середній час відповіді.
+- **Concurrent Users:** 50
+- **Duration:** 60 seconds
+- **Result:** 2,586 requests, 43.1 RPS, 172ms average response time.
 
-#### Інтенсивне тестування (500 Virtual Users):
+#### Stress Testing (500 Virtual Users):
 
-- **Кількість одночасних користувачів:** 500
-- **Тривалість:** 180 секунд
-- **Цільова точка:** `http://localhost:3000/api`
+- **Concurrent Users:** 500
+- **Duration:** 180 seconds
+- **Target URL:** `http://localhost:3000/api`
 
-### Сценарії тестування (за вагою):
+### Test Scenarios (by weight):
 
-- **Отримання погоди (GET /weather)** (60% запитів)
-  - Взаємодія: Gateway -> Weather Service (gRPC) -> Redis/External API.
-- **Створення підписок (POST /subscribe)** (20% запитів)
-  - Взаємодія: Gateway -> Subscription Service (gRPC) -> Prisma/PostgreSQL.
-- **Валідація дублікатів та конфліктів** (15% запитів)
-  - Перевірка бізнес-логіки на рівні gRPC-сервісів.
-- **Некоректні запити** (5% запитів)
-  - Тестування Validation Pipes на Gateway.
+- **Fetch Weather (GET /weather)** (60%): Gateway -> Weather Service (gRPC) -> Redis/External API.
+- **Create Subscriptions (POST /subscribe)** (20%): Gateway -> Subscription Service (gRPC) -> Prisma/PostgreSQL.
+- **Duplicate & Conflict Validation** (15%): Business logic verification at the gRPC service level.
+- **Invalid Requests** (5%): Testing Validation Pipes on the Gateway.
 
-### Інфраструктура (Docker Stack):
+### Infrastructure (Docker Stack):
 
 - **REST Gateway:** NestJS API.
 - **Microservices:** Weather, Subscription, Notification (gRPC nodes).
@@ -49,74 +45,86 @@
 
 ---
 
-## 3. РЕЗУЛЬТАТИ ТЕСТУВАННЯ
+## 3. TEST RESULTS
 
-### Результати базового тестування (50 VU):
+### Baseline Results (50 VU):
 
-| Метрика                     | Значення | Стандарт | Статус |
-| :-------------------------- | :------- | :------- | :----- |
-| Загальна кількість запитів  | 2,586    | -        | ✅     |
-| Середня швидкість (RPS)     | 43.1     | > 15     | ✅     |
-| Середній час відповіді      | 172ms    | < 300ms  | ✅     |
-| 95-й перцентиль (p95)       | 526ms    | < 500ms  | ⚠️     |
-| Рівень помилок (Error Rate) | 0.0%     | < 1%     | ✅     |
+| Metric                   | Value | Standard | Status |
+| :----------------------- | :---- | :------- | :----- |
+| Total Requests           | 2,586 | -        | ✅     |
+| Average Throughput (RPS) | 43.1  | > 15     | ✅     |
+| Average Response Time    | 172ms | < 300ms  | ✅     |
+| 95th Percentile (p95)    | 526ms | < 500ms  | ⚠️     |
+| Error Rate               | 0.0%  | < 1%     | ✅     |
 
-### Результати інтенсивного тестування (500 VU):
+### Stress Test Results (500 VU):
 
-**Примітка:** При навантаженні 500 VU спостерігалася значна деградація продуктивності. Gateway став критичним вузьким місцем через високе використання CPU (85%+) при проксіюванні gRPC запитів, що призвело до затримок у черзі Event Loop.
+**Note:** Significant performance degradation was observed at 500 VU. The Gateway became a critical bottleneck due to high CPU usage (85%+) while proxying gRPC requests, leading to delays in the Event Loop queue.
 
-### Динаміка продуктивності (Baseline):
+### Performance Dynamics (Baseline):
 
 ```text
-⏱️ 05.0s | 📊 233 req  | ⚡️ 46.4 RPS | 🕐 183ms avg | 📈 528ms p95 | ❌ 0 err
-⏱️ 30.0s | 📊 1371 req | ⚡️ 45.7 RPS | 🕐 111ms avg | 📈 198ms p95 | ❌ 0 err
-⏱️ 60.0s | 📊 2586 req | ⚡️ 43.1 RPS | 🕐 172ms avg | 📈 526ms p95 | ❌ 0 err
-## 4. АНАЛІЗ РЕЗУЛЬТАТІВ
+⏱️ 05.0s | 📊 233 req  | ⚡ 46.4 RPS | 🕐 183ms avg | 📈 528ms p95 | ❌ 0 err
+⏱️ 30.0s | 📊 1371 req | ⚡ 45.7 RPS | 🕐 111ms avg | 📈 198ms p95 | ❌ 0 err
+⏱️ 60.0s | 📊 2586 req | ⚡ 43.1 RPS | 🕐 172ms avg | 📈 526ms p95 | ❌ 0 err
+```
 
-### ✅ Позитивні аспекти:
-1. Стабільність gRPC: Внутрішня комунікація між сервісами працює без збоїв навіть при значному зростанні латентності.
-2. Ефективність кешування: Завдяки впровадженню Redis у Weather Service, повторні запити на популярні міста обробляються майже миттєво.
-3. Асинхронна розсилка: Використання Kafka дозволяє сервісу Notification працювати незалежно, не блокуючи основний потік виконання у Gateway.
+## 4. RESULTS ANALYSIS
 
+### ✅ Positive Aspects:
 
-### Порівняння з попередніми тестами:
+1. gRPC Stability: Internal communication between services remains fault-tolerant even with significant increases in latency.
 
-| Метрика | До оптимізації | Після впровадження gRPC | Покращення |
-| :--- | :--- | :--- | :--- |
-| RPS | 12.5 | 43.1 | +245% |
-| Середній час відповіді | 650ms | 172ms | -73% |
+2. Caching Efficiency: Redis implementation in the Weather Service allows repeat requests for popular cities to be processed almost instantaneously.
+
+3. Asynchronous Messaging: Kafka allows the Notification Service to operate independently without blocking the main execution flow in the Gateway.
+
+### Comparison with Previous Tests:
+
+| Metric            | Before Optimization | After gRPC Implementation | Improvement |
+| :---------------- | :------------------ | :------------------------ | :---------- |
+| RPS               | 12.5                | 43.1                      | +245%       |
+| Avg Response Time | 650ms               | 172ms                     | -73%        |
 
 ---
 
-## 5. ТЕХНІЧНИЙ АНАЛІЗ
+## 5. TECHNICAL ANALYSIS
 
-### Використання ресурсів (Stress Test 500 VU):
-- gateway-service: CPU 80-90% (основний bottleneck), RAM 180MB.
+### Resource Utilization (Stress Test 500 VU):
+
+- gateway-service: CPU 80-90% (primary bottleneck), RAM 180MB.
 - subscription-service: CPU 35%, RAM 220MB (Prisma Engine overhead).
 - weather-service: CPU 15%, RAM 110MB.
-- db-postgres: CPU 20-30% під час інтенсивного запису.
+- db-postgres: CPU 20-30% during intensive write operations.
 
-### Аналіз запитів до бази даних (Prisma):
--- Найповільніші операції:
+### Database Query Analysis (Prisma):
+
+-- Slowest Operations:
+
 1. upsert (Subscription) - ~45ms
 2. findUnique (Verification Token) - ~30ms
-## 6. ВИСНОВКИ ТА РЕКОМЕНДАЦІЇ
 
-### 🎯 Загальна оцінка:
-НЕОБХІДНА ОПТИМІЗАЦІЯ GATEWAY. Система демонструє стабільність при середніх навантаженнях, проте архітектура шлюзу обмежує максимальну пропускну здатність системи.
+## 6. CONCLUSIONS & RECOMMENDATIONS
 
-### Термінові заходи по оптимізації:
+### 🎯 Overall Assessment:
 
-#### 1. Рефакторинг Gateway (Пріоритет: КРИТИЧНИЙ)
-Необхідно винести логіку комунікації в окрему бібліотеку libs/api-core для абстрагування від NestJS:
-- Впровадити gRPC connection pooling для зменшення оверхеду на створення з'єднань.
-- Використовувати інтерфейси для сервісів замість прямих ін'єкцій gRPC клієнтів.
+GATEWAY OPTIMIZATION REQUIRED. While the system demonstrates stability under moderate loads, the current Gateway architecture limits the maximum system throughput.
 
-#### 2. Оптимізація бази даних
-Додати композитні індекси для прискорення пошуку підписок та валідації:
-CREATE INDEX idx_sub_email_city ON "Subscription"("email", "city");
-#### 3. Кешування на рівні Gateway
-Впровадити короткострокове L1-кешування (In-memory) безпосередньо в шлюзі (Gateway) для найбільш запитуваних міст. Це дозволить уникнути зайвих gRPC-викликів до мікросервісу погоди та суттєво знизити час відповіді для популярних локацій.
+### Urgent Optimization Measures:
 
+#### 1. Gateway Refactoring (Priority: CRITICAL)
 
-```
+Extract communication logic into a standalone libs/api-core library to decouple it from NestJS:
+
+- Implement gRPC connection pooling to reduce connection overhead.
+- Use interfaces for services instead of direct gRPC client injections.
+
+#### 2. Database Optimization
+
+Add composite indexes to accelerate subscription lookups and validation:
+`CREATE INDEX idx_sub_email_city ON "Subscription"("email", "city");`
+
+#### 3. Gateway-Level Caching
+
+Implement short-term L1 Caching (In-memory) directly within the Gateway for the most requested cities. This will bypass unnecessary gRPC calls to the weather microservice and significantly reduce response times for popular locations.
+
